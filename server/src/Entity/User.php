@@ -27,6 +27,12 @@ class User
     #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'role_id', nullable: false)]
     private ?Role $role = null;
 
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $fgcolor = null;
+
+    #[ORM\Column(length: 50, nullable: true)]
+    private ?string $bgcolor = null;
+
     public function getId(): ?int
     {
         return $this->user_id;
@@ -76,6 +82,30 @@ class User
     public function setRole(?Role $role): self
     {
         $this->role = $role;
+
+        return $this;
+    }
+
+    public function getFgcolor(): ?string
+    {
+        return $this->fgcolor;
+    }
+
+    public function setFgcolor(?string $fgcolor): self
+    {
+        $this->fgcolor = $fgcolor;
+
+        return $this;
+    }
+
+    public function getBgcolor(): ?string
+    {
+        return $this->bgcolor;
+    }
+
+    public function setBgcolor(?string $bgcolor): self
+    {
+        $this->bgcolor = $bgcolor;
 
         return $this;
     }
