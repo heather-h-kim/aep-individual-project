@@ -58,7 +58,10 @@ class UserController extends ApiController
     #[Route('api/users/{id}', methods: ['PATCH', 'PUT'])]
     public function updateUser(Request $request, int $id): Response
     {
-        $dto = $this->getValidatedDto($request, CreateUserDto::class);
+        /**
+         * @var UpdateUserDto $dto
+         */
+        $dto = $this->getValidatedDto($request, UpdateUserDto::class);
 //        return $this->json($dto);
         return $this->json($this->userService->updateUser($dto, $id));
     }

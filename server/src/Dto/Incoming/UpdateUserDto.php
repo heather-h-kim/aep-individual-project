@@ -6,38 +6,32 @@ use Symfony\Component\Validator\Constraints\Type;
 
 class UpdateUserDto
 {
-    #[Type('string')]
-    private string $first_name;
+    private ?string $first_name;
 
-    #[Type('string')]
-    private string $last_name;
+    private ?string $last_name;
 
-    #[Type('string')]
-    private string $email;
+    private ?string $email;
 
-    #[Type('string')]
-    private string $fgcolor;
+    private ?string $fgcolor;
 
-    #[Type('string')]
-    private string $bgcolor;
+    private ?string $bgcolor;
 
-    #[Type('int')]
-    private int $role_id;
+    private ?int $role_id;
 
-//    public function __construct(string $first_name = "" , string $last_name = "", string $email = "", string $fgcolor = "", string $bgcolor = "", int $role_id = )
-//    {
-//        $this->first_name = $first_name;
-//        $this->last_name = $last_name;
-//        $this->email = $email;
-//        $this->fgcolor = $fgcolor;
-//        $this->bgcolor = $bgcolor;
-//        $this->role_id = $role_id;
-//    }
+    public function __construct(string $first_name = null , string $last_name = null, string $email = null, string $fgcolor = null, string $bgcolor = null, int $role_id = null )
+    {
+        $this->first_name = $first_name;
+        $this->last_name = $last_name;
+        $this->email = $email;
+        $this->fgcolor = $fgcolor;
+        $this->bgcolor = $bgcolor;
+        $this->role_id = $role_id;
+    }
 
     /**
      * @return string
      */
-    public function getFirstName(): string
+    public function getFirstName(): ?string
     {
         return $this->first_name;
     }
@@ -53,7 +47,7 @@ class UpdateUserDto
     /**
      * @return string
      */
-    public function getLastName(): string
+    public function getLastName(): ?string
     {
         return $this->last_name;
     }
@@ -69,7 +63,7 @@ class UpdateUserDto
     /**
      * @return string
      */
-    public function getEmail(): string
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -85,7 +79,7 @@ class UpdateUserDto
     /**
      * @return string
      */
-    public function getFgcolor(): string
+    public function getFgcolor(): ?string
     {
         return $this->fgcolor;
     }
@@ -101,7 +95,7 @@ class UpdateUserDto
     /**
      * @return string
      */
-    public function getBgcolor(): string
+    public function getBgcolor(): ?string
     {
         return $this->bgcolor;
     }
@@ -117,7 +111,7 @@ class UpdateUserDto
     /**
      * @return int
      */
-    public function getRoleId(): int
+    public function getRoleId(): ?int
     {
         return $this->role_id;
     }
