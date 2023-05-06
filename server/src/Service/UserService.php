@@ -48,55 +48,49 @@ class UserService
         return $this->userRepository->find($id);
     }
 
-    public function updateUser(CreateUserDto $createUserDto, int $id): ?User
+    public function updateUser(UpdateUserDto $updateUserDto, int $id): ?User
     {
-//        $first_name = $createUserDto->getFirstName() ?? null;
-//        $last_name = $createUserDto->getLastName() ?? null;
-//        $email = $createUserDto->getEmail() ?? null;
-//        $fgcolor = $createUserDto->getFgcolor() ?? null;
-//        $bgcolor = $createUserDto->getBgcolor() ?? null;
-//        $role_id = $createUserDto->getRoleId() ?? null;
-
-//        $first_name = $createUserDto->getFirstName();
-//        $last_name = $createUserDto->getLastName();
-//        $email = $createUserDto->getEmail();
-//        $fgcolor = $createUserDto->getFgcolor();
-//        $bgcolor = $createUserDto->getBgcolor();
-//        $role_id = $createUserDto->getRoleId();
-
-        $role = $this->roleService->getRole($createUserDto->getRoleId());
+        $first_name = $updateUserDto->getFirstName();
+        $last_name = $updateUserDto->getLastName();
+        $email = $updateUserDto->getEmail();
+        $fgcolor = $updateUserDto->getFgcolor();
+        $bgcolor = $updateUserDto->getBgcolor();
+        $role_id = $updateUserDto->getRoleId();
 
         $userToUpdate = $this->userRepository->find($id);
-        $userToUpdate->setFirstName($createUserDto->getFirstName());
-        $userToUpdate->setLastName($createUserDto->getLastName());
-        $userToUpdate->setEmail($createUserDto->getEmail());
-        $userToUpdate->setFgcolor($createUserDto->getFgcolor());
-        $userToUpdate->setBgcolor($createUserDto->getBgcolor());
-        $userToUpdate->setRole($role);
+
+//        $role = $this->roleService->getRole($createUserDto->getRoleId());
+//
+//        $userToUpdate->setFirstName($createUserDto->getFirstName());
+//        $userToUpdate->setLastName($createUserDto->getLastName());
+//        $userToUpdate->setEmail($createUserDto->getEmail());
+//        $userToUpdate->setFgcolor($createUserDto->getFgcolor());
+//        $userToUpdate->setBgcolor($createUserDto->getBgcolor());
+//        $userToUpdate->setRole($role);
 
 
-//        if(!$userToUpdate){
-//            return null;
-//        }
-//        if($first_name){
-//            $userToUpdate->setFirstName($first_name);
-//        }
-//        if($last_name){
-//            $userToUpdate->setLastName($last_name);
-//        }
-//        if($email){
-//            $userToUpdate->setEmail($email);
-//        }
-//        if($fgcolor){
-//            $userToUpdate->setFgcolor($fgcolor);
-//        }
-//        if($bgcolor){
-//            $userToUpdate->setBgcolor($bgcolor);
-//        }
-//        if($role_id){
-//            $role = $this->roleService->getRole($role_id);
-//            $userToUpdate->setRole($role);
-//        }
+        if(!$userToUpdate){
+            return null;
+        }
+        if($first_name){
+            $userToUpdate->setFirstName($first_name);
+        }
+        if($last_name){
+            $userToUpdate->setLastName($last_name);
+        }
+        if($email){
+            $userToUpdate->setEmail($email);
+        }
+        if($fgcolor){
+            $userToUpdate->setFgcolor($fgcolor);
+        }
+        if($bgcolor){
+            $userToUpdate->setBgcolor($bgcolor);
+        }
+        if($role_id){
+            $role = $this->roleService->getRole($role_id);
+            $userToUpdate->setRole($role);
+        }
 
         $this->userRepository->save($userToUpdate, true);
 
