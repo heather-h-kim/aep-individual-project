@@ -26,7 +26,7 @@ class RoleController extends ApiController
      * @throws JsonException
      */
 
-    #[Route('api/roles',methods: ('POST'))]
+    #[Route('api/roles',methods: ['POST'])]
     public function createRole(Request $request): Response
     {
         /**
@@ -36,13 +36,13 @@ class RoleController extends ApiController
         return $this->json($this->roleService->createRole($dto));
     }
 
-    #[Route('api/roles',methods: ('GET'))]
+    #[Route('api/roles',methods: ['GET'])]
     public function getRoles(): Response
     {
         return $this->json($this->roleService->getRoles());
     }
 
-    #[Route('api/roles/{id}',methods: ('GET'))]
+    #[Route('api/roles/{id}',methods: ['GET'])]
     public function getOneRole(int $id): Response
     {
         return $this->json($this->roleService->getRole($id));

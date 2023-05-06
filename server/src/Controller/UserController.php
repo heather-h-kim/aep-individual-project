@@ -2,44 +2,71 @@
 
 namespace App\Controller;
 
+use App\Dto\Incoming\CreateUserDto;
+use App\Dto\Incoming\UpdateUserDto;
+use App\Exception\InvalidRequestDataException;
+use App\Serialization\SerializationService;
+use App\Service\UserService;
+use JsonException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Serialization\SerializationService;
-use App\Repository\UserRepository;
-use App\Repository\RoleRepository;
-use App\Entity\User;
-use App\Entity\Role;
+
+
 
 class UserController extends ApiController
 {
-    private SerializationService $serializationService;
+    private UserService $userService;
 
-    #[Route('api/user', methods: ('POST'))]
-    public function createUser(Request $request, UserRepository $user): Response
+    public function __construct(SerializationService $serializationService, UserService $userService)
     {
-        $data = json_decode($request->getContent(), true, 512, JSON_THROW_ON_ERROR);
-//        $first_name = $data['first_name'] ?? null;
-//        $last_name = $data['last_name'] ?? null;
-//        $email = $data['email'] ?? null;
-//        $fgcolor = $data['fgcolor'] ?? null;
-//        $bgcolor = $data['bgcolor'] ?? null;
-//
-//        $role_id = $data['role_id'] ?? null;
-//
-//        $roleToUse = $this->json($role->findOneBy(['role_id'=>$id], null));
-//
-//
-//        $testUser = new User();
-//        $testUser->setFirstName($first_name);
-//        $testUser->setLastName($last_name);
-//        $testUser->setEmail($email);
-//        $testUser->setFgcolor($fgcolor);
-//        $testUser->setBgcolor($bgcolor);
-//        $testUser->setRole($roleToUse);
-//
-//        $user->save($testUser, true);
-
-        return new Response($data);
+        parent::__construct($serializationService);
+        $this->userService = $userService;
     }
+
+    /**
+     * @throws InvalidRequestDataException
+     * @throws JsonException
+     */
+
+    #[Route('api/users', methods: ['POST'])]
+    public function createUser(Request $request): Response
+    {
+        /**
+         * @var CreateUserDto $dto
+         */
+        $dto = $this->getValidatedDto($request, CreateUserDto::class);
+        return $this->json($this->userService->createUser($dto));
+    }
+
+    #[Route('api/users', methods: ['GET'])]
+    public function getUsers(): Response
+    {
+        return $this->json($this->userService->getUsers());
+    }
+
+    #[Route('api/users/{id}', methods: ['GET'])]
+    public function getOneUser(int $id): Response
+    {
+        return $this->json($this->userService->getUser($id));
+    }
+
+    /**
+     * @throws JsonException
+     * @throws InvalidRequestDataException
+     */
+    #[Route('api/users/{id}', methods: ['PATCH', 'PUT'])]
+    public function updateUser(Request $request, int $id): Response
+    {
+        $dto = $this->getValidatedDto($request, CreateUserDto::class);
+//        return $this->json($dto);
+        return $this->json($this->userService->updateUser($dto, $id));
+    }
+
+    #[Route('api/users/{id}', methods: ['DELETE'])]
+    public function deleteUser(int $id): Response
+    {
+        return $this->json($this->userService->deleteUser($id));
+    }
+
 }
