@@ -124,48 +124,5 @@ class UpdateUserDto
         $this->role_id = $role_id;
     }
 
-//    public function __construct(string $first_name, string $last_name, string $email, string $fgcolor, string $bgcolor, int $role_id)
-//    {
-//        $this->first_name = $first_name;
-//        $this->last_name = $last_name;
-//        $this->email = $email;
-//        $this->fgcolor = $fgcolor;
-//        $this->bgcolor = $bgcolor;
-//        $this->role_id = $role_id;
-//    }
-//
-//
-//
-//    public function getFirstName(): ?string
-//    {
-//        return $this->first_name;
-//    }
-//
-//    public function getLastName(): ?string
-//    {
-//        return $this->last_name;
-//    }
-//
-//    public function getEmail(): ?string
-//    {
-//        return $this->email;
-//    }
-//
-//    public function getFgColor(): ?string
-//    {
-//        return $this->fgcolor;
-//    }
-//
-//    public function getBgColor(): ?string
-//    {
-//        return $this->bgcolor;
-//    }
-//
-//    public function getRoleId(): ?int
-//    {
-//        return $this->role_id;
-//    }
-
-
 
 }
