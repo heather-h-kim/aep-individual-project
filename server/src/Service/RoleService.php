@@ -3,12 +3,13 @@
 namespace App\Service;
 
 use App\Dto\Incoming\CreateUpdateRoleDto;
+use App\Dto\Outgoing\RoleDto;
 use App\Entity\Role;
 use App\Repository\RoleRepository;
 use Psr\Log\LoggerInterface;
 
 
-class RoleService
+class RoleService extends AbstractDtoTransformers
 {
     private RoleRepository $roleRepository;
 //    private LoggerInterface $logger;
@@ -24,29 +25,32 @@ class RoleService
 //        $this->logger = $logger;
     }
 
-    public function createRole(CreateUpdateRoleDto $createRoleDto): ?Role
+    public function createRole(CreateUpdateRoleDto $createRoleDto): ?RoleDto
     {
         $newRole = new Role();
         $newRole->setName($createRoleDto->getName());
         $this->roleRepository->save($newRole, true);
 
-        return $newRole;
+        return $this->transformToDto($newRole);
     }
 
     /**
-     * @return Role[]
+     * @return RoleDto[]
      */
-    public function getRoles(): array
+    public function getRoles(): iterable
     {
-        return $this->roleRepository->findAll();
+        $allUsers = $this->roleRepository->findAll();
+        return $this->transformToDtos($allUsers);
     }
 
-    public function getRole(int $role_id): ?Role
+    public function getRole(int $role_id): ?RoleDto
     {
-        return $this->roleRepository->find($role_id);
+        $role = $this->roleRepository->find($role_id);
+        return $this->transformToDto($role);
+//        return $role;
     }
 
-    public function updateRole(CreateUpdateRoleDto $updateRoleDto, int $id): ?Role
+    public function updateRole(CreateUpdateRoleDto $updateRoleDto, int $id): ?RoleDto
     {
         $roleToUpdate = $this->roleRepository->find($id);
         if(!$roleToUpdate){
@@ -55,7 +59,7 @@ class RoleService
         $roleToUpdate->setName($updateRoleDto->getName());
         $this->roleRepository->save($roleToUpdate, true);
 
-        return $roleToUpdate;
+        return $this->transformToDto($roleToUpdate);
     }
 
     public function deleteRole(int $id): string
@@ -67,6 +71,11 @@ class RoleService
         $this->roleRepository->remove($roleToDelete, true);
 
         return "Role ID {$id} is deleted";
+    }
+
+    public function transformToDto($object): RoleDto
+    {
+        return new RoleDto($object->getId(), $object->getName());
     }
 
 }
