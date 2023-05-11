@@ -4,25 +4,31 @@ namespace App\Service;
 
 use App\Dto\Incoming\CreateUserDto;
 use App\Dto\Incoming\UpdateUserDto;
+use App\Dto\Outgoing\UserDto;
+use App\Entity\Role;
 use App\Entity\User;
+use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class UserService
+class UserService extends AbstractDtoTransformers
 {
     private RoleService $roleService;
     private UserRepository $userRepository;
+    private RoleRepository $roleRepository;
 
 
-    public function __construct(RoleService $roleService, UserRepository $userRepository)
+    public function __construct(RoleService $roleService, UserRepository $userRepository, RoleRepository $roleRepository)
     {
         $this->roleService = $roleService;
         $this->userRepository = $userRepository;
+        $this->roleRepository = $roleRepository;
     }
 
-    public function createUser(CreateUserDto $createUserDto): ?User
+    public function createUser(CreateUserDto $createUserDto): ?UserDto
     {
-        $role = $this->roleService->getRole($createUserDto->getRoleId());
+        $role = $this->roleRepository->find($createUserDto->getRoleId());
+
         if(!$role){
             throw new BadRequestHttpException('Role not found');
         }
@@ -32,45 +38,45 @@ class UserService
         $newUser->setEmail($createUserDto->getEmail());
         $newUser->setFgcolor($createUserDto->getFgColor());
         $newUser->setBgcolor($createUserDto->getBgColor());
+        $newUser->setUsername($createUserDto->getUsername());
+        $newUser->setAuthenticated($createUserDto->getAuthenticated());
         $newUser->setRole($role);
         $this->userRepository->save($newUser,true);
 
-        return $newUser;
+        return $this->transformToDto($newUser);
     }
 
-    public function getUsers(): array
+    public function getUsers(): iterable
     {
-        return $this->userRepository->findAll();
+        $allUsers = $this->userRepository->findAll();
+        return $this->transformToDtos($allUsers);
     }
 
-    public function getUser(int $id): ?User
+    public function getUser(int $id): ?UserDto
     {
-        return $this->userRepository->find($id);
+        $user = $this->userRepository->find($id);
+        return $this->transformToDto($user);
     }
 
-    public function updateUser(UpdateUserDto $updateUserDto, int $id): ?User
+    public function updateUser(UpdateUserDto $updateUserDto, int $id): ?UserDto
     {
+        $role_id = $updateUserDto->getRoleId();
         $first_name = $updateUserDto->getFirstName();
         $last_name = $updateUserDto->getLastName();
         $email = $updateUserDto->getEmail();
         $fgcolor = $updateUserDto->getFgcolor();
         $bgcolor = $updateUserDto->getBgcolor();
-        $role_id = $updateUserDto->getRoleId();
+        $username = $updateUserDto->getUsername();
+        $authenticated = $updateUserDto->getAuthenticated();
 
         $userToUpdate = $this->userRepository->find($id);
 
-//        $role = $this->roleService->getRole($createUserDto->getRoleId());
-//
-//        $userToUpdate->setFirstName($createUserDto->getFirstName());
-//        $userToUpdate->setLastName($createUserDto->getLastName());
-//        $userToUpdate->setEmail($createUserDto->getEmail());
-//        $userToUpdate->setFgcolor($createUserDto->getFgcolor());
-//        $userToUpdate->setBgcolor($createUserDto->getBgcolor());
-//        $userToUpdate->setRole($role);
-
-
         if(!$userToUpdate){
             return null;
+        }
+        if($role_id){
+            $role = $this->roleRepository->find($updateUserDto->getRoleId());
+            $userToUpdate->setRole($role);
         }
         if($first_name){
             $userToUpdate->setFirstName($first_name);
@@ -87,14 +93,16 @@ class UserService
         if($bgcolor){
             $userToUpdate->setBgcolor($bgcolor);
         }
-        if($role_id){
-            $role = $this->roleService->getRole($role_id);
-            $userToUpdate->setRole($role);
+        if($username){
+            $userToUpdate->setUsername($username);
+        }
+        if($authenticated){
+            $userToUpdate->setAuthenticated($authenticated);
         }
 
         $this->userRepository->save($userToUpdate, true);
 
-        return $userToUpdate;
+        return $this->transformToDto($userToUpdate);
     }
 
     public function deleteUser(int $id): string
@@ -106,6 +114,21 @@ class UserService
         $this->userRepository->remove($userToDelete, true);
 
         return "User ID {$id} is deleted";
+    }
+
+    public function transformToDto($object): UserDto
+    {
+        return new UserDto(
+            $object->getId(),
+            $this->roleService->transformToDto($object->getRole()),
+            $object->getFirstName(),
+            $object->getLastName(),
+            $object->getEmail(),
+            $object->getFgcolor(),
+            $object->getBgcolor(),
+            $object->getUsername(),
+            $object->isAuthenticated()
+        );
     }
 
 }

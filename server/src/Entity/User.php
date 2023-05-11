@@ -33,6 +33,12 @@ class User
     #[ORM\Column(length: 50, nullable: true)]
     private ?string $bgcolor = null;
 
+    #[ORM\Column(length: 50)]
+    private ?string $username = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $authenticated = null;
+
     public function getId(): ?int
     {
         return $this->user_id;
@@ -106,6 +112,30 @@ class User
     public function setBgcolor(?string $bgcolor): self
     {
         $this->bgcolor = $bgcolor;
+
+        return $this;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function setUsername(string $username): self
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
+    public function isAuthenticated(): ?bool
+    {
+        return $this->authenticated;
+    }
+
+    public function setAuthenticated(bool $authenticated): self
+    {
+        $this->authenticated = $authenticated;
 
         return $this;
     }
