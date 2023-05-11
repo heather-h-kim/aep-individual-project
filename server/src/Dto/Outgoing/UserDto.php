@@ -1,56 +1,73 @@
 <?php
 
-namespace App\Dto\Incoming;
+namespace App\Dto\Outgoing;
 
-use Symfony\Component\Validator\Constraints\NotNull;
-use Symfony\Component\Validator\Constraints\Type;
-
-class CreateUserDto
+class UserDto
 {
-    #[NotNull]
-    #[Type('int')]
-    private int $role_id;
-
-    #[NotNull]
-    #[Type('string')]
+    private int $user_id;
+    private RoleDto $roll;
     private string $first_name;
-
-    #[NotNull]
-    #[Type('string')]
     private string $last_name;
-
-    #[NotNull]
-    #[Type('string')]
     private string $email;
-
-    #[Type('string')]
     private ?string $fgcolor;
-
-    #[Type('string')]
     private ?string $bgcolor;
-
-    #[NotNull]
-    #[Type('string')]
     private string $username;
+    private bool $authenticated;
 
-    #[NotNull]
-    #[Type('bool')]
-    private ?bool $authenticated = FALSE;
+    /**
+     * @param int $user_id
+     * @param RoleDto $roll
+     * @param string $first_name
+     * @param string $last_name
+     * @param string $email
+     * @param string|null $fgcolor
+     * @param string|null $bgcolor
+     * @param string $username
+     * @param bool $authenticated
+     */
+    public function __construct(int $user_id, RoleDto $roll, string $first_name, string $last_name, string $email, ?string $fgcolor, ?string $bgcolor, string $username, bool $authenticated)
+    {
+        $this->user_id = $user_id;
+        $this->roll = $roll;
+        $this->first_name = $first_name;
+        $this->last_name = $last_name;
+        $this->email = $email;
+        $this->fgcolor = $fgcolor;
+        $this->bgcolor = $bgcolor;
+        $this->username = $username;
+        $this->authenticated = $authenticated;
+    }
 
     /**
      * @return int
      */
-    public function getRoleId(): int
+    public function getUserId(): int
     {
-        return $this->role_id;
+        return $this->user_id;
     }
 
     /**
-     * @param int $role_id
+     * @param int $user_id
      */
-    public function setRoleId(int $role_id): void
+    public function setUserId(int $user_id): void
     {
-        $this->role_id = $role_id;
+        $this->user_id = $user_id;
+    }
+
+    /**
+     * @return RoleDto
+     */
+    public function getRoll(): RoleDto
+    {
+        return $this->roll;
+    }
+
+    /**
+     * @param RoleDto $roll
+     */
+    public function setRoll(RoleDto $roll): void
+    {
+        $this->roll = $roll;
     }
 
     /**
@@ -102,33 +119,33 @@ class CreateUserDto
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getFgcolor(): string
+    public function getFgcolor(): ?string
     {
         return $this->fgcolor;
     }
 
     /**
-     * @param string $fgcolor
+     * @param string|null $fgcolor
      */
-    public function setFgcolor(string $fgcolor): void
+    public function setFgcolor(?string $fgcolor): void
     {
         $this->fgcolor = $fgcolor;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getBgcolor(): string
+    public function getBgcolor(): ?string
     {
         return $this->bgcolor;
     }
 
     /**
-     * @param string $bgcolor
+     * @param string|null $bgcolor
      */
-    public function setBgcolor(string $bgcolor): void
+    public function setBgcolor(?string $bgcolor): void
     {
         $this->bgcolor = $bgcolor;
     }
@@ -152,7 +169,7 @@ class CreateUserDto
     /**
      * @return bool
      */
-    public function getAuthenticated(): ?bool
+    public function isAuthenticated(): bool
     {
         return $this->authenticated;
     }
@@ -160,10 +177,11 @@ class CreateUserDto
     /**
      * @param bool $authenticated
      */
-    public function setAuthenticated(?bool $authenticated): void
+    public function setAuthenticated(bool $authenticated): void
     {
         $this->authenticated = $authenticated;
     }
+
 
 
 
