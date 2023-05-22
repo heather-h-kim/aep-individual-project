@@ -9,7 +9,7 @@ class CreateUserDto
 {
     #[NotNull]
     #[Type('int')]
-    private int $role_id;
+    private int $role_id = 1;
 
     #[NotNull]
     #[Type('string')]
@@ -24,18 +24,18 @@ class CreateUserDto
     private string $email;
 
     #[Type('string')]
-    private ?string $fgcolor;
+    private ?string $fgcolor = null;
 
     #[Type('string')]
-    private ?string $bgcolor;
+    private ?string $bgcolor = null;
 
     #[NotNull]
     #[Type('string')]
     private string $username;
 
     #[NotNull]
-    #[Type('bool')]
-    private ?bool $authenticated = FALSE;
+    #[Type('string')]
+    private ?string $auth0token;
 
     /**
      * @return int
@@ -104,7 +104,7 @@ class CreateUserDto
     /**
      * @return string
      */
-    public function getFgcolor(): string
+    public function getFgcolor(): ?string
     {
         return $this->fgcolor;
     }
@@ -120,7 +120,7 @@ class CreateUserDto
     /**
      * @return string
      */
-    public function getBgcolor(): string
+    public function getBgcolor(): ?string
     {
         return $this->bgcolor;
     }
@@ -150,20 +150,24 @@ class CreateUserDto
     }
 
     /**
-     * @return bool
+     * @return string|null
      */
-    public function getAuthenticated(): ?bool
+    public function getAuth0token(): ?string
     {
-        return $this->authenticated;
+        return $this->auth0token;
     }
 
     /**
-     * @param bool $authenticated
+     * @param string|null $auth0token
      */
-    public function setAuthenticated(?bool $authenticated): void
+    public function setAuth0token(?string $auth0token): void
     {
-        $this->authenticated = $authenticated;
+        $this->auth0token = $auth0token;
     }
+
+
+
+
 
 
 

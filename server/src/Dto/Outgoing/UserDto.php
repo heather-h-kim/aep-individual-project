@@ -5,27 +5,27 @@ namespace App\Dto\Outgoing;
 class UserDto
 {
     private int $user_id;
-    private RoleDto $roll;
+    private ?RoleDto $roll;
     private string $first_name;
     private string $last_name;
     private string $email;
     private ?string $fgcolor;
     private ?string $bgcolor;
     private string $username;
-    private bool $authenticated;
+    private ?string $auth0token;
 
     /**
      * @param int $user_id
-     * @param RoleDto $roll
+     * @param RoleDto|null $roll
      * @param string $first_name
      * @param string $last_name
      * @param string $email
      * @param string|null $fgcolor
      * @param string|null $bgcolor
      * @param string $username
-     * @param bool $authenticated
+     * @param string|null $auth0token
      */
-    public function __construct(int $user_id, RoleDto $roll, string $first_name, string $last_name, string $email, ?string $fgcolor, ?string $bgcolor, string $username, bool $authenticated)
+    public function __construct(int $user_id, ?RoleDto $roll, string $first_name, string $last_name, string $email, ?string $fgcolor, ?string $bgcolor, string $username, ?string $auth0token)
     {
         $this->user_id = $user_id;
         $this->roll = $roll;
@@ -35,7 +35,7 @@ class UserDto
         $this->fgcolor = $fgcolor;
         $this->bgcolor = $bgcolor;
         $this->username = $username;
-        $this->authenticated = $authenticated;
+        $this->auth0token = $auth0token;
     }
 
     /**
@@ -55,17 +55,17 @@ class UserDto
     }
 
     /**
-     * @return RoleDto
+     * @return RoleDto|null
      */
-    public function getRoll(): RoleDto
+    public function getRoll(): ?RoleDto
     {
         return $this->roll;
     }
 
     /**
-     * @param RoleDto $roll
+     * @param RoleDto|null $roll
      */
-    public function setRoll(RoleDto $roll): void
+    public function setRoll(?RoleDto $roll): void
     {
         $this->roll = $roll;
     }
@@ -167,20 +167,23 @@ class UserDto
     }
 
     /**
-     * @return bool
+     * @return string|null
      */
-    public function isAuthenticated(): bool
+    public function getAuth0token(): ?string
     {
-        return $this->authenticated;
+        return $this->auth0token;
     }
 
     /**
-     * @param bool $authenticated
+     * @param string|null $auth0token
      */
-    public function setAuthenticated(bool $authenticated): void
+    public function setAuth0token(?string $auth0token): void
     {
-        $this->authenticated = $authenticated;
+        $this->auth0token = $auth0token;
     }
+
+
+
 
 
 
