@@ -45,11 +45,19 @@ class UserController extends ApiController
         return $this->json($this->userService->getUsers());
     }
 
-    #[Route('api/users/{id}', methods: ['GET'])]
-    public function getOneUser(int $id): Response
+    #[Route('api/user/id/{id}', methods: ['GET'])]
+    public function getUserById(int $id): Response
     {
-        return $this->json($this->userService->getUser($id));
+        return $this->json($this->userService->getUserById($id));
     }
+
+    #[Route('api/user/email/{email}', methods: ['GET'])]
+    public function getUserByEmail(string $email): Response
+    {
+        return $this->json($this->userService->getUserByEmail($email));
+    }
+
+
 
     /**
      * @throws JsonException

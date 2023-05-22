@@ -20,7 +20,7 @@ class UpdateUserDto
 
     private ?string $username = null;
 
-    private ?bool $authenticated = null;
+    private ?string $auth0token = null;
 
     /**
      * @return int|null
@@ -135,20 +135,21 @@ class UpdateUserDto
     }
 
     /**
-     * @return bool|null
+     * @return string|null
      */
-    public function getAuthenticated(): ?bool
+    public function getAuth0token(): ?string
     {
-        return $this->authenticated;
+        return $this->auth0token;
     }
 
     /**
-     * @param bool|null $authenticated
+     * @param string|null $auth0token
      */
-    public function setAuthenticated(?bool $authenticated): void
+    public function setAuth0token(?string $auth0token): void
     {
-        $this->authenticated = $authenticated;
+        $this->auth0token = $auth0token;
     }
+
 
 
 

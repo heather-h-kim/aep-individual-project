@@ -24,7 +24,7 @@ class User
     private ?string $email = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
-    #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'role_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'role_id')]
     private ?Role $role = null;
 
     #[ORM\Column(length: 50, nullable: true)]
@@ -36,8 +36,9 @@ class User
     #[ORM\Column(length: 50)]
     private ?string $username = null;
 
-    #[ORM\Column(nullable: true)]
-    private ?bool $authenticated = null;
+    #[ORM\Column(length: 100, nullable: true)]
+    private ?string $auth0token = null;
+
 
     public function getId(): ?int
     {
@@ -128,15 +129,16 @@ class User
         return $this;
     }
 
-    public function isAuthenticated(): ?bool
+    public function getAuth0token(): ?string
     {
-        return $this->authenticated;
+        return $this->auth0token;
     }
 
-    public function setAuthenticated(bool $authenticated): self
+    public function setAuth0token(?string $auth0token): self
     {
-        $this->authenticated = $authenticated;
+        $this->auth0token = $auth0token;
 
         return $this;
     }
+
 }
