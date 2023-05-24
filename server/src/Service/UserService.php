@@ -27,9 +27,15 @@ class UserService extends AbstractDtoTransformers
 
     public function createUser(CreateUserDto $createUserDto): ?UserDto
     {
+        $userWithToken = $this->getUserByToken($createUserDto->getAuth0token());
+
+        if ($userWithToken) {
+            return $userWithToken;
+        }
+
         $role = $this->roleRepository->find($createUserDto->getRoleId());
 
-        if(!$role){
+        if (!$role) {
             throw new BadRequestHttpException('Role not found');
         }
         $newUser = new User();
@@ -39,12 +45,13 @@ class UserService extends AbstractDtoTransformers
         $newUser->setFgcolor($createUserDto->getFgColor());
         $newUser->setBgcolor($createUserDto->getBgColor());
         $newUser->setUsername($createUserDto->getUsername());
-        $newUser->setAuthenticated($createUserDto->getAuthenticated());
+        $newUser->setAuth0token($createUserDto->getAuth0token());
         $newUser->setRole($role);
-        $this->userRepository->save($newUser,true);
+        $this->userRepository->save($newUser, true);
 
-        return $this->transformToDto($newUser);
+       return $this->transformToDto($newUser);
     }
+
 
     public function getUsers(): iterable
     {
@@ -52,9 +59,20 @@ class UserService extends AbstractDtoTransformers
         return $this->transformToDtos($allUsers);
     }
 
-    public function getUser(int $id): ?UserDto
+    public function getUserById(int $id): ?UserDto
     {
         $user = $this->userRepository->find($id);
+        return $this->transformToDto($user);
+    }
+
+    public function getUserByToken(string $token): ?UserDto
+    {
+        $user = $this->userRepository->findOneBy(['auth0token' => $token]);
+
+        if(!$user) {
+            return $user;
+        }
+
         return $this->transformToDto($user);
     }
 
@@ -67,7 +85,7 @@ class UserService extends AbstractDtoTransformers
         $fgcolor = $updateUserDto->getFgcolor();
         $bgcolor = $updateUserDto->getBgcolor();
         $username = $updateUserDto->getUsername();
-        $authenticated = $updateUserDto->getAuthenticated();
+        $auth0token = $updateUserDto->getAuth0token();
 
         $userToUpdate = $this->userRepository->find($id);
 
@@ -96,8 +114,8 @@ class UserService extends AbstractDtoTransformers
         if($username){
             $userToUpdate->setUsername($username);
         }
-        if($authenticated){
-            $userToUpdate->setAuthenticated($authenticated);
+        if($auth0token){
+            $userToUpdate->setAuth0token($auth0token);
         }
 
         $this->userRepository->save($userToUpdate, true);
@@ -127,7 +145,7 @@ class UserService extends AbstractDtoTransformers
             $object->getFgcolor(),
             $object->getBgcolor(),
             $object->getUsername(),
-            $object->isAuthenticated()
+            $object->getAuth0token()
         );
     }
 
