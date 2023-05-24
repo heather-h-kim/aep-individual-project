@@ -24,3 +24,21 @@ export async function addUser(data: createUser) {
     // throw error;
   }
 }
+
+export async function getUserByToken(token) {
+  try {
+    const url = `http://localhost:8000/api/user/auth0/${token}`;
+    const response = await fetch(url + token, {
+      headers: {
+        'content-type': 'application/json',
+      },
+      method: 'GET',
+    });
+    console.log(response);
+    const jsonResponse = await response.json();
+    console.log(jsonResponse);
+  } catch (error) {
+    console.log('Something went wrong', error);
+    throw error;
+  }
+}

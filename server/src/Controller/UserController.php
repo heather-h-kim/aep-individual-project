@@ -51,10 +51,10 @@ class UserController extends ApiController
         return $this->json($this->userService->getUserById($id));
     }
 
-    #[Route('api/user/email/{email}', methods: ['GET'])]
-    public function getUserByEmail(string $email): Response
+    #[Route('api/user/auth0/{token}', methods: ['GET'])]
+    public function getUserByToken(string $token): Response
     {
-        return $this->json($this->userService->getUserByEmail($email));
+        return $this->json($this->userService->getUserByToken($token));
     }
 
 

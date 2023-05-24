@@ -1,8 +1,51 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React, { useState, useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
+import { addUser, createUser } from '../services/userApi';
 
 const Profile = () => {
-  const { user, isAuthenticated, isLoading } = useAuth0();
+  const { user, isAuthenticated, isLoading, error, getAccessTokenSilently } =
+    useAuth0();
+  const [userMetadata, setUserMetadata] = useState(null);
+  const { data, mutate } = useMutation({
+    mutationFn: (data: createUser) => addUser(data),
+    onMutate: data => console.log('mutate', data),
+    onError: (error, variables, context) => {
+      console.log(error, variables, context);
+    },
+    onSettled: (data, error, variables, context) => console.log('complete'),
+  });
+
+  useEffect(() => {
+    const getUserMetadata = async () => {
+      const domain = import.meta.env.VITE_AUTH0_DOMAIN;
+      try {
+        const accessToken = await getAccessTokenSilently({
+          authorizationParams: {
+            audience: `https://${domain}/api/v2/`,
+            scope: 'read:current_user',
+          },
+        });
+
+        const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user.sub}`;
+
+        const metadataResponse = await fetch(userDetailsByIdUrl, {
+          headers: {
+            Authoriziation: `Bearer ${accessToken}`,
+          },
+        });
+
+        const { user_metadata } = await metadataResponse.json();
+
+        setUserMetadata(user_metadata);
+      } catch (error) {
+        console.log(error.message);
+        throw error;
+      }
+    };
+
+    getUserMetadata();
+  }, [getAccessTokenSilently, user?.sub]);
 
   if (isLoading) {
     return <div>Loading ...</div>;
@@ -13,7 +56,12 @@ const Profile = () => {
       <div>
         <img src={user.picture} alt={user.name} />
         <h2>{user.email}</h2>
-        <p>{JSON.stringify(user)}</p>
+        <h3>User Metadata</h3>
+        {userMetadata ? (
+          <pre>{JSON.stringify(userMetadata, null, 2)}</pre>
+        ) : (
+          'No user metadata defined'
+        )}
       </div>
     );
   }

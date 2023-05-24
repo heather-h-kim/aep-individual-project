@@ -15,7 +15,11 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
     <Auth0Provider
       domain={domain}
       clientId={clientID}
-      authorizationParams={{ redirect_uri: window.location.origin }}
+      authorizationParams={{
+        redirect_uri: window.location.origin,
+        audience: 'dev-ff8syq7chgjrkwev.us.auth0.com/api/v2',
+        scope: 'read:current_user update:current_user_metadata',
+      }}
     >
       <QueryClientProvider client={queryClient}>
         <App />

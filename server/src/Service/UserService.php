@@ -58,9 +58,9 @@ class UserService extends AbstractDtoTransformers
         return $this->transformToDto($user);
     }
 
-    public function getUserByEmail(string $email): ?UserDto
+    public function getUserByToken(string $token): ?UserDto
     {
-        $user = $this->userRepository->findOneBy(['email' => $email]);
+        $user = $this->userRepository->findOneBy(['auth0token' => $token]);
         return $this->transformToDto($user);
     }
 
