@@ -3,8 +3,8 @@ import Logout from './components/Logout.tsx';
 import Profile from './components/Profile';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuth0 } from '@auth0/auth0-react';
-import { useQuery, useMutation } from '@tanstack/react-query';
-import { addUser, createUser, getUserByToken } from './services/userApi';
+import { useMutation } from '@tanstack/react-query';
+import { addUser, createUser } from './services/userApi';
 import { useEffect, useState } from 'react';
 
 const queryClient = new QueryClient();
@@ -12,13 +12,20 @@ const queryClient = new QueryClient();
 export default function App() {
   const { user, isAuthenticated, isLoading, error, getAccessTokenSilently } =
     useAuth0();
+  const [fetchedUser, setFetchedUser] = useState('null');
   const { data, mutate } = useMutation({
     mutationFn: (data: createUser) => addUser(data),
     onMutate: data => console.log('mutate', data),
     onError: (error, variables, context) => {
-      console.log(error, variables, context);
+      console.log('Something went wrong...', error, variables, context);
     },
-    onSettled: (data, error, variables, context) => console.log('complete'),
+    onSuccess: variables => {
+      console.log(variables);
+      setFetchedUser(variables);
+    },
+    onSettled: (data, error, variables, context) => {
+      console.log('complete');
+    },
   });
 
   // const { data: tokenUser, refetch } = useQuery({
@@ -49,6 +56,8 @@ export default function App() {
   if (error) {
     return <div>Something went wrong...{error.message}</div>;
   }
+
+  console.log(fetchedUser);
 
   return (
     <QueryClientProvider client={queryClient}>
