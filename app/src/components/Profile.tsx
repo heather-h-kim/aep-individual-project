@@ -1,11 +1,17 @@
 import { useAuth0 } from '@auth0/auth0-react';
 import React, { useState, useEffect } from 'react';
+import { useUserStore } from '../store/userStore';
 import { useMutation } from '@tanstack/react-query';
 import { addUser, createUser } from '../services/userApi';
 
 const Profile = () => {
   const { user, isAuthenticated, isLoading, error, getAccessTokenSilently } =
     useAuth0();
+  const globalUser = useUserStore(state => state.user);
+  const updateGlobalUser = useUserStore(state => state.updateUser);
+
+  console.log(globalUser);
+
   // const [userMetadata, setUserMetadata] = useState(null);
   // const { data, mutate } = useMutation({
   //   mutationFn: (data: createUser) => addUser(data),
@@ -55,10 +61,10 @@ const Profile = () => {
   if (isAuthenticated) {
     return (
       <div>
-        <img src={user.picture} alt={user.name} />
-        <h2>{user.email}</h2>
+        {/*<img src={user.picture} alt={user.name} />*/}
+        {/*<h2>{globalUser.email}</h2>*/}
         <h3>User data</h3>
-        <p>{JSON.stringify(user)}</p>
+        <p>{JSON.stringify(globalUser)}</p>
         {/*{userMetadata ? (*/}
         {/*  <pre>{JSON.stringify(userMetadata, null, 2)}</pre>*/}
         {/*) : (*/}

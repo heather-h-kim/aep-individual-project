@@ -5,14 +5,16 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation } from '@tanstack/react-query';
 import { addUser, createUser } from './services/userApi';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useUserStore } from './store/userStore';
 
 const queryClient = new QueryClient();
 
 export default function App() {
   const { user, isAuthenticated, isLoading, error, getAccessTokenSilently } =
     useAuth0();
-  const [fetchedUser, setFetchedUser] = useState('null');
+  const globalUser = useUserStore(state => state.user);
+  const updateGlobalUser = useUserStore(state => state.updateUser);
   const { data, mutate } = useMutation({
     mutationFn: (data: createUser) => addUser(data),
     onMutate: data => console.log('mutate', data),
@@ -21,18 +23,12 @@ export default function App() {
     },
     onSuccess: variables => {
       console.log(variables);
-      setFetchedUser(variables);
+      updateGlobalUser(variables);
     },
     onSettled: (data, error, variables, context) => {
       console.log('complete');
     },
   });
-
-  // const { data: tokenUser, refetch } = useQuery({
-  //   queryKey: ['tokenUser'],
-  //   queryFn: () => getUserByToken(user.sub),
-  //   enabled: false,
-  // });
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -44,7 +40,7 @@ export default function App() {
         auth0token: user.sub,
         username: user.nickname,
       };
-      console.log('authenticated, createUser is', createUser);
+      // console.log('authenticated, createUser is', createUser);
       mutate(createUser);
     }
   }, [isAuthenticated, user]);
@@ -57,7 +53,7 @@ export default function App() {
     return <div>Something went wrong...{error.message}</div>;
   }
 
-  console.log(fetchedUser);
+  // console.log(globalUser);
 
   return (
     <QueryClientProvider client={queryClient}>
