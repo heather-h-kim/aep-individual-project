@@ -9,7 +9,7 @@ class CreateUserDto
 {
     #[NotNull]
     #[Type('int')]
-    private int $role_id = 1;
+    private int $role_id = 2;
 
     #[NotNull]
     #[Type('string')]
