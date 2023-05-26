@@ -2,28 +2,28 @@ import { create } from 'zustand';
 
 interface FetchedUser {
   user: {
-    userId: number | null;
-    username: string | null;
-    firstName: string | null;
-    lastName: string | null;
-    email: string | null;
-    fgcolor: string | null;
-    bgcolor: string | null;
-    auth0token: string | null;
+    userId: number | undefined;
+    username: string | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    email: string | undefined;
+    fgcolor: string | undefined;
+    bgcolor: string | undefined;
+    auth0token: string | undefined;
   };
   updateUser: (newUser: object) => void;
 }
 
 export const useUserStore = create<FetchedUser>((set, get) => ({
   user: {
-    userId: null,
-    username: null,
-    firstName: null,
-    lastName: null,
-    email: null,
-    fgcolor: null,
-    bgcolor: null,
-    auth0token: null,
+    userId: undefined,
+    username: undefined,
+    firstName: undefined,
+    lastName: undefined,
+    email: undefined,
+    fgcolor: undefined,
+    bgcolor: undefined,
+    auth0token: undefined,
   },
   updateUser: (newUser: object) => {
     const userState = get().user;

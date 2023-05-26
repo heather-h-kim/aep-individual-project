@@ -23,11 +23,13 @@ class CreateUserDto
     #[Type('string')]
     private string $email;
 
+    #[NotNull]
     #[Type('string')]
-    private ?string $fgcolor = null;
+    private ?string $fgcolor = '#000000';
 
+    #[NotNull]
     #[Type('string')]
-    private ?string $bgcolor = null;
+    private ?string $bgcolor = '#E5F2FC';
 
     #[NotNull]
     #[Type('string')]
