@@ -4,12 +4,14 @@ import { useUserStore } from '../store/userStore';
 import { useMutation } from '@tanstack/react-query';
 import { addUser, createUser } from '../services/userApi';
 import Avatar from './Avatar';
-import { SliderPicker } from 'react-color';
+import { SketchPicker } from 'react-color';
 
 const Profile = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
   const globalUser = useUserStore(state => state.user);
   const updateGlobalUser = useUserStore(state => state.updateUser);
+  const [bgcolor, setBgcolor] = useState('#E5F2FC');
+  const [fgcolor, setFgcolor] = useState('#000000');
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -30,16 +32,17 @@ const Profile = () => {
 
   if (isAuthenticated && globalUser.userId) {
     console.log(formData);
+    console.log(bgcolor);
     return (
       <div>
         <h2>User Profile</h2>
         <Avatar />
-        <ul>
-          <li>Username: {globalUser.username} </li>
-          <li>First name: {globalUser.firstName} </li>
-          <li>Last name: {globalUser.lastName}</li>
-          <li>Email: {globalUser.email}</li>
-        </ul>
+        {/*<ul>*/}
+        {/*  <li>Username: {globalUser.username} </li>*/}
+        {/*  <li>First name: {globalUser.firstName} </li>*/}
+        {/*  <li>Last name: {globalUser.lastName}</li>*/}
+        {/*  <li>Email: {globalUser.email}</li>*/}
+        {/*</ul>*/}
 
         <form>
           <div className="mb-6 grid gap-6 md:grid-cols-2">
@@ -105,25 +108,23 @@ const Profile = () => {
                 onChange={handleChange}
               />
             </label>
+
+            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+              Avatar background color:
+              <SketchPicker
+                color={bgcolor}
+                onChangeComplete={color => setBgcolor(color.hex)}
+              />
+            </label>
+
+            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
+              Avatar font color:
+              <SketchPicker
+                color={fgcolor}
+                onChangeComplete={color => setFgcolor(color.hex)}
+              />
+            </label>
           </div>
-          <label>
-            Background color:
-            <input
-              className="border border-slate-600"
-              type="text"
-              value={globalUser.bgcolor}
-              onChange={handleChange}
-            />
-          </label>
-          <label>
-            Foreground color:
-            <input
-              className="border border-slate-600"
-              type="text"
-              value={globalUser.fgcolor}
-              onChange={handleChange}
-            />
-          </label>
         </form>
       </div>
     );
