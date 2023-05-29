@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React, { useState, useEffect } from 'react';
 import { useUserStore } from '../store/userStore';
 import { useMutation } from '@tanstack/react-query';
-import { updateUser, id, updateUserProfile } from '../services/userApi';
+import { updateUser, updateUserProfile } from '../services/userApi';
 import Avatar from './Avatar';
 import { SketchPicker } from 'react-color';
 
@@ -10,16 +10,15 @@ const Profile = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
   const globalUser = useUserStore(state => state.user);
   const updateGlobalUser = useUserStore(state => state.updateUser);
-  const [bgcolor, setBgcolor] = useState('#E5F2FC');
-  const [fgcolor, setFgcolor] = useState('#000000');
+  const [bgcolor, setBgcolor] = useState(globalUser.bgcolor);
+  const [fgcolor, setFgcolor] = useState(globalUser.fgcolor);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     username: '',
     email: '',
-    // bgcolor: '',
-    // fgcolor: '',
   });
+  const [clicked, setClicked] = useState(false);
 
   const { data, mutate } = useMutation({
     mutationFn: (body: updateUser) => updateUserProfile(body),
@@ -27,18 +26,25 @@ const Profile = () => {
     onError: (error, variables, context) =>
       console.log('Something went wrong...', error, variables, context),
     onSuccess: variables => {
-      console.log(variables);
+      console.log('Success');
       updateGlobalUser(variables);
     },
     onSettled: (data, error, variables, context) =>
       console.log('Complete', data),
   });
 
+  //set avatar's bgcolor and fgcolor first using the globalUser
+  useEffect(() => {
+    setBgcolor(globalUser.bgcolor);
+    setFgcolor(globalUser.fgcolor);
+  }, [globalUser]);
+
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
+  //Function to create an object consist of updated fields only
   type Entry<T> = {
     [K in keyof T]: [K, T[K]];
   }[keyof T];
@@ -55,18 +61,28 @@ const Profile = () => {
   const handleSubmit = e => {
     e.preventDefault();
     console.log('Submit button is clicked');
+
+    //notEnmptyStrings is an object consists only of the fields to be updated
     const notEmptyStrings = filterObject(formData, ([k, v]) => v !== '');
+
     const colors = {
       bgcolor: bgcolor,
       fgcolor: fgcolor,
     };
+
     const userID = {
       user_id: globalUser.userId,
     };
+
+    //combine the above three objects to create a request body
     const rqBody = { ...userID, ...notEmptyStrings, ...colors };
-    console.log(rqBody);
+
     mutate(rqBody);
 
+    //triggers the confirmation modal
+    setClicked(!clicked);
+
+    //reset the formData so that updated placeholders can be shown
     setFormData({
       firstName: '',
       lastName: '',
@@ -80,18 +96,14 @@ const Profile = () => {
   }
 
   if (isAuthenticated && globalUser.userId) {
+    console.log(globalUser);
     console.log(formData);
     console.log(bgcolor);
+    console.log(fgcolor);
     return (
       <div>
         <h2>User Profile</h2>
         <Avatar />
-        {/*<ul>*/}
-        {/*  <li>Username: {globalUser.username} </li>*/}
-        {/*  <li>First name: {globalUser.firstName} </li>*/}
-        {/*  <li>Last name: {globalUser.lastName}</li>*/}
-        {/*  <li>Email: {globalUser.email}</li>*/}
-        {/*</ul>*/}
 
         <form onSubmit={handleSubmit}>
           <div className="mb-6 grid gap-6 md:grid-cols-2">
