@@ -32,8 +32,8 @@ export interface updateUser {
   last_name?: string;
   email?: string;
   username?: string;
-  bgcolor: string;
-  fgcolor: string;
+  bgcolor: string | undefined;
+  fgcolor: string | undefined;
 }
 
 export async function updateUserProfile(body: updateUser) {
