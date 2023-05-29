@@ -29,7 +29,7 @@ class UserController extends ApiController
      * @throws JsonException
      */
 
-    #[Route('api/users', methods: ['POST'])]
+    #[Route('api/user', methods: ['POST'])]
     public function createUser(Request $request): Response
     {
         /**
@@ -63,18 +63,18 @@ class UserController extends ApiController
      * @throws JsonException
      * @throws InvalidRequestDataException
      */
-    #[Route('api/users/{id}', methods: ['PATCH', 'PUT'])]
-    public function updateUser(Request $request, int $id): Response
+    #[Route('api/user', methods: ['PATCH', 'PUT'])]
+    public function updateUser(Request $request): Response
     {
         /**
          * @var UpdateUserDto $dto
          */
         $dto = $this->getValidatedDto($request, UpdateUserDto::class);
 //        return $this->json($dto);
-        return $this->json($this->userService->updateUser($dto, $id));
+        return $this->json($this->userService->updateUser($dto));
     }
 
-    #[Route('api/users/{id}', methods: ['DELETE'])]
+    #[Route('api/user/{id}', methods: ['DELETE'])]
     public function deleteUser(int $id): Response
     {
         return $this->json($this->userService->deleteUser($id));
