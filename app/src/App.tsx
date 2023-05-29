@@ -16,8 +16,8 @@ export default function App() {
   const globalUser = useUserStore(state => state.user);
   const updateGlobalUser = useUserStore(state => state.updateUser);
   const { data, mutate } = useMutation({
-    mutationFn: (data: createUser) => addUser(data),
-    onMutate: data => console.log('mutate', data),
+    mutationFn: (body: createUser) => addUser(body),
+    onMutate: body => console.log('mutate', body),
     onError: (error, variables, context) => {
       console.log('Something went wrong...', error, variables, context);
     },

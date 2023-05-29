@@ -8,6 +8,7 @@ const Avatar = () => {
   const avLastCharacter = lastNameString.charAt(0);
   const avatar = avFirstCharacter.concat(avLastCharacter);
   // console.log(avatar);
+  console.log(globalUser.bgcolor);
   return (
     <>
       <div

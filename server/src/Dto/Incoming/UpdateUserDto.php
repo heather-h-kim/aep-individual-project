@@ -6,6 +6,8 @@ use Symfony\Component\Validator\Constraints\Type;
 
 class UpdateUserDto
 {
+    private ?int $user_id = null;
+
     private ?int $role_id = null;
 
     private ?string $first_name = null;
@@ -21,6 +23,23 @@ class UpdateUserDto
     private ?string $username = null;
 
     private ?string $auth0token = null;
+
+    /**
+     * @return int|null
+     */
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @param int|null $user_id
+     */
+    public function setUserId(?int $user_id): void
+    {
+        $this->user_id = $user_id;
+    }
+
 
     /**
      * @return int|null

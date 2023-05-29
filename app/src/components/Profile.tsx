@@ -2,7 +2,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import React, { useState, useEffect } from 'react';
 import { useUserStore } from '../store/userStore';
 import { useMutation } from '@tanstack/react-query';
-import { addUser, createUser } from '../services/userApi';
+import { updateUser, id, updateUserProfile } from '../services/userApi';
 import Avatar from './Avatar';
 import { SketchPicker } from 'react-color';
 
@@ -21,9 +21,58 @@ const Profile = () => {
     // fgcolor: '',
   });
 
+  const { data, mutate } = useMutation({
+    mutationFn: (body: updateUser) => updateUserProfile(body),
+    onMutate: body => console.log('mutate', body),
+    onError: (error, variables, context) =>
+      console.log('Something went wrong...', error, variables, context),
+    onSuccess: variables => {
+      console.log(variables);
+      updateGlobalUser(variables);
+    },
+    onSettled: (data, error, variables, context) =>
+      console.log('Complete', data),
+  });
+
   const handleChange = e => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  type Entry<T> = {
+    [K in keyof T]: [K, T[K]];
+  }[keyof T];
+
+  function filterObject<T extends object>(
+    obj: T,
+    fn: (entry: Entry<T>, i: number, arr: Entry<T>[]) => boolean,
+  ) {
+    return Object.fromEntries(
+      (Object.entries(obj) as Entry<T>[]).filter(fn),
+    ) as Partial<T>;
+  }
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    console.log('Submit button is clicked');
+    const notEmptyStrings = filterObject(formData, ([k, v]) => v !== '');
+    const colors = {
+      bgcolor: bgcolor,
+      fgcolor: fgcolor,
+    };
+    const userID = {
+      user_id: globalUser.userId,
+    };
+    const rqBody = { ...userID, ...notEmptyStrings, ...colors };
+    console.log(rqBody);
+    mutate(rqBody);
+
+    setFormData({
+      firstName: '',
+      lastName: '',
+      username: '',
+      email: '',
+    });
   };
 
   if (isLoading) {
@@ -44,7 +93,7 @@ const Profile = () => {
         {/*  <li>Email: {globalUser.email}</li>*/}
         {/*</ul>*/}
 
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-6 grid gap-6 md:grid-cols-2">
             <div>
               <label
@@ -125,6 +174,12 @@ const Profile = () => {
               />
             </label>
           </div>
+          <button
+            type="submit"
+            className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+          >
+            Update Profile
+          </button>
         </form>
       </div>
     );

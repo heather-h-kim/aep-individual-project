@@ -76,8 +76,9 @@ class UserService extends AbstractDtoTransformers
         return $this->transformToDto($user);
     }
 
-    public function updateUser(UpdateUserDto $updateUserDto, int $id): ?UserDto
+    public function updateUser(UpdateUserDto $updateUserDto): ?UserDto
     {
+        $user_id = $updateUserDto->getUserId();
         $role_id = $updateUserDto->getRoleId();
         $first_name = $updateUserDto->getFirstName();
         $last_name = $updateUserDto->getLastName();
@@ -87,7 +88,7 @@ class UserService extends AbstractDtoTransformers
         $username = $updateUserDto->getUsername();
         $auth0token = $updateUserDto->getAuth0token();
 
-        $userToUpdate = $this->userRepository->find($id);
+        $userToUpdate = $this->userRepository->find($user_id);
 
         if(!$userToUpdate){
             return null;
