@@ -25,22 +25,35 @@ class UserService extends AbstractDtoTransformers
         $this->roleRepository = $roleRepository;
     }
 
-    public function createUser(CreateUserDto $createUserDto): ?UserDto
+    public function createUser(CreateUserDto $createUserDto): UserDto | string
     {
+
         $userWithToken = $this->getUserByToken($createUserDto->getAuth0token());
 
         if ($userWithToken) {
             return $userWithToken;
         }
 
+
         $role = $this->roleRepository->find($createUserDto->getRoleId());
 
         if (!$role) {
             throw new BadRequestHttpException('Role not found');
         }
+
         $newUser = new User();
-        $newUser->setFirstName($createUserDto->getFirstName());
-        $newUser->setLastName($createUserDto->getLastName());
+
+        $firstName = $createUserDto->getFirstName();
+
+        if($firstName){
+            $newUser->setFirstName($firstName);
+        }
+//        $newUser->setFirstName($createUserDto->getFirstName());
+        $lastName = $createUserDto->getLastName();
+        if($lastName){
+            $newUser->setLastName($lastName);
+        }
+//        $newUser->setLastName($createUserDto->getLastName());
         $newUser->setEmail($createUserDto->getEmail());
         $newUser->setFgcolor($createUserDto->getFgColor());
         $newUser->setBgcolor($createUserDto->getBgColor());
@@ -76,7 +89,7 @@ class UserService extends AbstractDtoTransformers
         return $this->transformToDto($user);
     }
 
-    public function updateUser(UpdateUserDto $updateUserDto): ?UserDto
+    public function updateUser(UpdateUserDto $updateUserDto): UserDto | string
     {
         $user_id = $updateUserDto->getUserId();
         $role_id = $updateUserDto->getRoleId();
@@ -91,7 +104,7 @@ class UserService extends AbstractDtoTransformers
         $userToUpdate = $this->userRepository->find($user_id);
 
         if(!$userToUpdate){
-            return null;
+            return 'No user to update';
         }
         if($role_id){
             $role = $this->roleRepository->find($updateUserDto->getRoleId());
@@ -104,6 +117,10 @@ class UserService extends AbstractDtoTransformers
             $userToUpdate->setLastName($last_name);
         }
         if($email){
+            $user = $this->userRepository->findBy(['email' => $email]);
+            if($user) {
+                return 'User with the same email exists. Please use a different email';
+            }
             $userToUpdate->setEmail($email);
         }
         if($fgcolor){
@@ -113,6 +130,16 @@ class UserService extends AbstractDtoTransformers
             $userToUpdate->setBgcolor($bgcolor);
         }
         if($username){
+            $userByUsername = $this->userRepository->findOneBy(['username' => $username]);
+
+            if($userByUsername !== null && $userByUsername != $userToUpdate) {
+                return 'User with the same username exists. Please use a different username';
+            }
+
+            if($userByUsername === null){
+                $userToUpdate->setUsername($username);
+            }
+
             $userToUpdate->setUsername($username);
         }
         if($auth0token){
