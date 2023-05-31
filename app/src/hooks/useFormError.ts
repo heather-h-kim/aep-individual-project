@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { omit } from 'lodash';
 
-const useForm = () => {
+const useFormError = () => {
   const [errors, setErrors] = useState({
     firstName: '',
     lastName: '',
@@ -16,9 +16,13 @@ const useForm = () => {
             ...errors,
             firstName: 'First name cannot be empty',
           });
+        } else if (value.trim().length > 50) {
+          setErrors({
+            ...errors,
+            firstName: 'First name cannot be longer than 50 characters',
+          });
         } else {
-          const newObj = omit(errors, 'firstName');
-          setErrors(newObj);
+          setErrors({ ...errors, firstName: '' });
         }
         break;
       case 'lastName':
@@ -28,8 +32,7 @@ const useForm = () => {
             lastName: 'Last name cannot be empty',
           });
         } else {
-          const newObj = omit(errors, 'lastName');
-          setErrors(newObj);
+          setErrors({ ...errors, lastName: '' });
         }
         break;
       case 'username':
@@ -39,8 +42,7 @@ const useForm = () => {
             userName: 'Username cannot be empty',
           });
         } else {
-          const newObj = omit(errors, 'userName');
-          setErrors(newObj);
+          setErrors({ ...errors, userName: '' });
         }
         break;
       default:
@@ -54,4 +56,4 @@ const useForm = () => {
   };
 };
 
-export default useForm;
+export default useFormError;
