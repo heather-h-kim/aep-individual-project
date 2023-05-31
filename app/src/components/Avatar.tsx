@@ -15,8 +15,9 @@ const Avatar = () => {
         style={{
           color: globalUser.fgcolor,
           backgroundColor: globalUser.bgcolor,
+          borderColor: globalUser.fgcolor,
         }}
-        className="h-16 w-16 border-none p-2 text-3xl font-extrabold"
+        className="h-16 w-16 border-2 p-2 text-3xl font-extrabold"
       >
         {avatar}
       </div>
