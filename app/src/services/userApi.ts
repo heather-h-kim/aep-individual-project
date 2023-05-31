@@ -1,6 +1,6 @@
 export interface createUser {
-  first_name: string;
-  last_name: string;
+  first_name?: string;
+  last_name?: string;
   email: string;
   auth0token: string;
   username: string;
@@ -27,13 +27,13 @@ export async function addUser(body: createUser) {
 }
 
 export interface updateUser {
-  user_id: number | undefined;
-  first_name?: string;
-  last_name?: string;
-  email?: string;
-  username?: string;
-  bgcolor: string | undefined;
-  fgcolor: string | undefined;
+  user_id?: number | undefined;
+  first_name?: string | undefined;
+  last_name?: string | undefined;
+  email?: string | undefined;
+  username?: string | undefined;
+  bgcolor?: string | undefined;
+  fgcolor?: string | undefined;
 }
 
 export async function updateUserProfile(body: updateUser) {

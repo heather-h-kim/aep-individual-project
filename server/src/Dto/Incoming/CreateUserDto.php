@@ -13,11 +13,11 @@ class CreateUserDto
 
     #[NotNull]
     #[Type('string')]
-    private string $first_name;
+    private ?string  $first_name = 'first name';
 
     #[NotNull]
     #[Type('string')]
-    private string $last_name;
+    private ?string  $last_name = 'last name';
 
     #[NotNull]
     #[Type('string')]

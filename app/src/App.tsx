@@ -21,27 +21,43 @@ export default function App() {
     onError: (error, variables, context) => {
       console.log('Something went wrong...', error, variables, context);
     },
-    onSuccess: variables => {
-      console.log(variables);
-      updateGlobalUser(variables);
+    onSuccess: data => {
+      console.log(data);
+      updateGlobalUser(data);
     },
     onSettled: (data, error, variables, context) => {
-      console.log('complete');
+      console.log('complete', data);
     },
   });
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      // console.log('user is', user);
-      const createUser = {
-        first_name: user.given_name,
-        last_name: user.family_name,
-        email: user.email,
-        auth0token: user.sub,
-        username: user.nickname,
-      };
-      // console.log('authenticated, createUser is', createUser);
-      mutate(createUser);
+      console.log('user is', user);
+
+      //When a user logs in by manually signing up for Auth0
+      if (user.given_name === undefined && user.family_name === undefined) {
+        const createUser = {
+          email: user.email,
+          auth0token: user.sub,
+          username: user.nickname,
+        };
+        console.log(createUser);
+        mutate(createUser);
+      }
+
+      //When a user logs in through google-auth0 connection
+      if (user.given_name && user.family_name) {
+        const createUser = {
+          first_name: user.given_name,
+          last_name: user.family_name,
+          email: user.email,
+          auth0token: user.sub,
+          username: user.nickname,
+        };
+
+        console.log('authenticated, createUser is', createUser);
+        mutate(createUser);
+      }
     }
   }, [isAuthenticated, user]);
 
