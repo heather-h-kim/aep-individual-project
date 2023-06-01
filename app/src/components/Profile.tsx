@@ -79,12 +79,15 @@ const Profile = () => {
 
   const handleChange = e => {
     const { name, value } = e.target;
+
+    //input validation
     validate(e, name, value);
     if (
       errors.firstName !== '' ||
       errors.lastName !== '' ||
       errors.userName !== ''
     ) {
+      //disable the update button if there's any error
       setButtonDisabled(true);
       console.log(buttonDisabled);
     } else if (
@@ -92,12 +95,14 @@ const Profile = () => {
       errors.lastName === '' &&
       errors.userName === ''
     ) {
+      //un-disable the button if there's no error
       setButtonDisabled(false);
       console.log(buttonDisabled);
     }
     setFormData({ ...formData, [name]: value });
   };
 
+  //close the modal when cancel option is clicked
   const handleOnClose = () => {
     setShowModal(!showModal);
     console.log('cancel clicked, formData is', formData);
@@ -127,6 +132,7 @@ const Profile = () => {
     }
   };
 
+  //update the user profile when update option in the modal is clicked
   const handleOnUpdate = () => {
     console.log('update clicked', formData);
     delete formData.email;
@@ -149,6 +155,7 @@ const Profile = () => {
     return <div>Loading ...</div>;
   }
 
+  //show spinner while fetching the user
   if (isAuthenticated && !globalUser.userId) {
     return (
       <div className="text-center">
@@ -283,7 +290,8 @@ const Profile = () => {
           {/*>*/}
           {/*  Update Profile*/}
           {/*</button>*/}
-
+          //if the form is being submitted, render the update button with
+          spinner in it, otherwise, just show the button
           {isUpdating ? (
             <button
               disabled
