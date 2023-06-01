@@ -7,11 +7,14 @@ import Avatar from './Avatar';
 import { SketchPicker } from 'react-color';
 import { UpdateUserModal } from './UpdateUserModal';
 import useFormError from '../hooks/useFormError';
+import { useColorsStore } from '../store/colorStore';
 
 const Profile = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
   const globalUser = useUserStore(state => state.user);
   const updateGlobalUser = useUserStore(state => state.updateUser);
+  const themeColors = useColorsStore(state => state.colors);
+  const updateThemeColors = useColorsStore(state => state.updateColors);
   const [formData, setFormData] = useState({
     userId: 0,
     firstName: '',
@@ -24,9 +27,7 @@ const Profile = () => {
 
   const [showModal, setShowModal] = useState(false);
   const { errors, validate } = useFormError();
-
   const [buttonDisabled, setButtonDisabled] = useState(false);
-
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { data, mutate } = useMutation({
@@ -176,7 +177,7 @@ const Profile = () => {
 
   if (isAuthenticated && globalUser.userId) {
     // console.log('formData is', formData);
-    console.log('globalUser is', globalUser);
+
     return (
       <div style={{ backgroundColor: globalUser.bgcolor }} className="m-8 p-5">
         <h2>User Profile</h2>
