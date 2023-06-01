@@ -82,6 +82,7 @@ const Profile = () => {
 
     //input validation
     validate(e, name, value);
+    console.log('error', errors);
     if (
       errors.firstName !== '' ||
       errors.lastName !== '' ||
@@ -184,7 +185,7 @@ const Profile = () => {
 
   if (isAuthenticated && globalUser.userId) {
     // console.log('formData is', formData);
-
+    console.log('error', errors);
     return (
       <div style={{ backgroundColor: globalUser.bgcolor }} className="m-8 p-5">
         <h2>User Profile</h2>
@@ -283,15 +284,8 @@ const Profile = () => {
               />
             </label>
           </div>
-          {/*<button*/}
-          {/*  type="submit"*/}
-          {/*  disabled={buttonDisabled}*/}
-          {/*  className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"*/}
-          {/*>*/}
-          {/*  Update Profile*/}
-          {/*</button>*/}
-          //if the form is being submitted, render the update button with
-          spinner in it, otherwise, just show the button
+          {/*//if the form is being submitted, render the update button with*/}
+          {/*a spinner in it, otherwise, just show the button*/}
           {isUpdating ? (
             <button
               disabled
