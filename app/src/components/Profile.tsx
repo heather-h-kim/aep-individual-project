@@ -13,8 +13,12 @@ const Profile = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
   const globalUser = useUserStore(state => state.user);
   const updateGlobalUser = useUserStore(state => state.updateUser);
-  const themeColors = useColorsStore(state => state.colors);
-  const updateThemeColors = useColorsStore(state => state.updateColors);
+  const themeBgColor = useColorsStore(state => state.bgcolor);
+  const themeFgColor = useColorsStore(state => state.fgcolor);
+  const preview = useColorsStore(state => state.preview);
+  const updateThemeBgColor = useColorsStore(state => state.updateBgcolor);
+  const updateThemeFgColor = useColorsStore(state => state.updateFgcolor);
+  const updatePreviewState = useColorsStore(state => state.updatePreview);
   const [formData, setFormData] = useState({
     userId: 0,
     firstName: '',
@@ -40,11 +44,13 @@ const Profile = () => {
     onError: (error, variables, context) => {
       console.log('Something went wrong...', error, variables, context);
       setIsUpdating(false);
+      updatePreviewState(false);
     },
 
     onSuccess: data => {
       console.log('Success', data);
       updateGlobalUser(data);
+      updatePreviewState(false);
     },
     onSettled: (data, error, variables, context) => {
       console.log('Complete', data);
@@ -100,7 +106,22 @@ const Profile = () => {
       setButtonDisabled(false);
       console.log(buttonDisabled);
     }
+
     setFormData({ ...formData, [name]: value });
+  };
+
+  const onChangeCompleteBgColor = color => {
+    setFormData({ ...formData, bgcolor: color.hex });
+    console.log('selected bgcolor is', color.hex);
+    updateThemeBgColor(color.hex);
+    updatePreviewState(true);
+  };
+
+  const onChangeCompleteFgColor = color => {
+    setFormData({ ...formData, fgcolor: color.hex });
+    console.log('selected fgcolor is', color.hex);
+    updateThemeFgColor(color.hex);
+    updatePreviewState(true);
   };
 
   //close the modal when cancel option is clicked
@@ -108,6 +129,7 @@ const Profile = () => {
     setShowModal(!showModal);
     console.log('cancel clicked, formData is', formData);
     console.log('cancel clicked globalUser is', globalUser);
+    updatePreviewState(false);
 
     //reset the formData
     if (
@@ -136,10 +158,12 @@ const Profile = () => {
   //update the user profile when update option in the modal is clicked
   const handleOnUpdate = () => {
     console.log('update clicked', formData);
+    //Don't send email to the backend as it should not be updated
     delete formData.email;
     console.log('new formData', formData);
 
     mutate(formData);
+    // updatePreviewState(false);
 
     setShowModal(!showModal);
   };
@@ -185,9 +209,21 @@ const Profile = () => {
 
   if (isAuthenticated && globalUser.userId) {
     // console.log('formData is', formData);
-    console.log('error', errors);
+    // console.log('error', errors);
+    // console.log('theme colors are', themeColors);
+    console.log('selected bgcolor is', formData.bgcolor);
+    console.log('new theme bgcolor', themeBgColor);
+    console.log('preview is', preview);
     return (
-      <div style={{ backgroundColor: globalUser.bgcolor }} className="m-8 p-5">
+      // <div style={{ backgroundColor: globalUser.bgcolor }} className="m-8 p-5">
+      <div
+      // style={
+      //   preview
+      //     ? { backgroundColor: themeColors.bgcolor }
+      //     : { backgroundColor: globalUser.bgcolor }
+      // }
+      // className="m-8 p-5"
+      >
         <h2>User Profile</h2>
         <Avatar />
         <form onSubmit={handleSubmit}>
@@ -268,9 +304,10 @@ const Profile = () => {
               Avatar background color:
               <SketchPicker
                 color={formData.bgcolor}
-                onChangeComplete={color =>
-                  setFormData({ ...formData, bgcolor: color.hex })
-                }
+                // onChangeComplete={color =>
+                //   setFormData({ ...formData, bgcolor: color.hex })
+                // }
+                onChangeComplete={onChangeCompleteBgColor}
               />
             </label>
 
@@ -278,9 +315,10 @@ const Profile = () => {
               Avatar font color:
               <SketchPicker
                 color={formData.fgcolor}
-                onChangeComplete={color =>
-                  setFormData({ ...formData, fgcolor: color.hex })
-                }
+                // onChangeComplete={color =>
+                //   setFormData({ ...formData, fgcolor: color.hex })
+                // }
+                onChangeComplete={onChangeCompleteFgColor}
               />
             </label>
           </div>

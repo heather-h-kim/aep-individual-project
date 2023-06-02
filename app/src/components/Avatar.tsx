@@ -1,4 +1,5 @@
 import { useUserStore } from '../store/userStore';
+import { useColorsStore } from '../store/colorStore';
 
 const Avatar = () => {
   const globalUser = useUserStore(state => state.user);
@@ -7,17 +8,28 @@ const Avatar = () => {
   const lastNameString = new String(globalUser.lastName);
   const avLastCharacter = lastNameString.charAt(0);
   const avatar = avFirstCharacter.concat(avLastCharacter);
+  const themeBgColor = useColorsStore(state => state.bgcolor);
+  const themeFgColor = useColorsStore(state => state.fgcolor);
+  const preview = useColorsStore(state => state.preview);
   // console.log(avatar);
   // console.log(globalUser.bgcolor);
 
   return (
     <>
       <div
-        style={{
-          color: globalUser.fgcolor,
-          backgroundColor: globalUser.bgcolor,
-          borderColor: globalUser.fgcolor,
-        }}
+        style={
+          preview
+            ? {
+                color: themeFgColor,
+                backgroundColor: themeBgColor,
+                borderColor: themeFgColor,
+              }
+            : {
+                color: globalUser.fgcolor,
+                backgroundColor: globalUser.bgcolor,
+                borderColor: globalUser.fgcolor,
+              }
+        }
         className="h-16 w-16 border-2 p-2 text-3xl font-extrabold"
       >
         {avatar}
