@@ -7,6 +7,7 @@ import { useMutation } from '@tanstack/react-query';
 import { addUser, createUser } from './services/userApi';
 import { useEffect } from 'react';
 import { useUserStore } from './store/userStore';
+import { useColorsStore } from './store/colorStore';
 
 const queryClient = new QueryClient();
 
@@ -14,6 +15,12 @@ export default function App() {
   const { user, isAuthenticated, isLoading, error, getAccessTokenSilently } =
     useAuth0();
   const globalUser = useUserStore(state => state.user);
+  const themeBgColor = useColorsStore(state => state.bgcolor);
+  const themeFgColor = useColorsStore(state => state.fgcolor);
+  const preview = useColorsStore(state => state.preview);
+  const updateThemeBgColor = useColorsStore(state => state.updateBgcolor);
+  const updateThemeFgColor = useColorsStore(state => state.updateFgcolor);
+
   const updateGlobalUser = useUserStore(state => state.updateUser);
   const { data, mutate } = useMutation({
     mutationFn: (body: createUser) => addUser(body),
@@ -22,8 +29,10 @@ export default function App() {
       console.log('Something went wrong...', error, variables, context);
     },
     onSuccess: data => {
-      console.log(data);
+      console.log('success', data);
       updateGlobalUser(data);
+      updateThemeBgColor(data.bgcolor);
+      updateThemeFgColor(data.fgcolor);
     },
     onSettled: (data, error, variables, context) => {
       console.log('complete', data);
@@ -69,12 +78,28 @@ export default function App() {
     return <div>Something went wrong...{error.message}</div>;
   }
 
-  // console.log(globalUser);
-
+  // console.log('in App', globalUser);
+  // console.log('preview bgcolor in App', themeBgColor);
+  // console.log('preview fgcolor in App', themeFgColor);
+  // console.log('preview in App', preview);
   return (
     <QueryClientProvider client={queryClient}>
-      <div>
-        <h1 className="text-3xl font-bold underline">Hello world!</h1>
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="m-8 p-5"
+      >
+        <h1
+          style={
+            preview ? { color: themeFgColor } : { color: globalUser.fgcolor }
+          }
+          className="text-3xl font-bold underline"
+        >
+          Hello world!
+        </h1>
         <Login />
         <Logout />
         <Profile />
