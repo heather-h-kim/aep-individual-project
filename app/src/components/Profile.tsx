@@ -161,17 +161,13 @@ const Profile = () => {
     //Don't send email to the backend as it should not be updated
     delete formData.email;
     console.log('new formData', formData);
-
     mutate(formData);
-    // updatePreviewState(false);
-
     setShowModal(!showModal);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     console.log('Submit button is clicked');
-
     //triggers the confirmation modal
     setShowModal(!showModal);
   };

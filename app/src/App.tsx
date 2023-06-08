@@ -8,12 +8,13 @@ import { addUser, createUser } from './services/userApi';
 import { useEffect } from 'react';
 import { useUserStore } from './store/userStore';
 import { useColorsStore } from './store/colorStore';
+import { rootRoute, router } from './routes/rootRoute';
+import { RouterProvider } from '@tanstack/react-router';
 
 const queryClient = new QueryClient();
 
 export default function App() {
-  const { user, isAuthenticated, isLoading, error, getAccessTokenSilently } =
-    useAuth0();
+  const { user, isAuthenticated, isLoading, error } = useAuth0();
   const globalUser = useUserStore(state => state.user);
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const themeFgColor = useColorsStore(state => state.fgcolor);
@@ -100,9 +101,10 @@ export default function App() {
         >
           Hello world!
         </h1>
-        <Login />
-        <Logout />
-        <Profile />
+        <RouterProvider router={router} />
+        {/*<Login />*/}
+        {/*<Logout />*/}
+        {/*<Profile />*/}
       </div>
     </QueryClientProvider>
   );
