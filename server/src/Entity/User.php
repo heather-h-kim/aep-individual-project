@@ -14,7 +14,7 @@ class User
     #[ORM\Column]
     private ?int $user_id = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 50)]
     private ?string $first_name = null;
 
     #[ORM\Column(length: 100)]
@@ -27,10 +27,10 @@ class User
     #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'role_id')]
     private ?Role $role = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 50)]
     private ?string $fgcolor = null;
 
-    #[ORM\Column(length: 50, nullable: true)]
+    #[ORM\Column(length: 50)]
     private ?string $bgcolor = null;
 
     #[ORM\Column(length: 50)]
