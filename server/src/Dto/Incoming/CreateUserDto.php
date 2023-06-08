@@ -9,25 +9,27 @@ class CreateUserDto
 {
     #[NotNull]
     #[Type('int')]
-    private int $role_id = 1;
+    private int $role_id = 2;
 
     #[NotNull]
     #[Type('string')]
-    private string $first_name;
+    private ?string  $first_name = 'first name';
 
     #[NotNull]
     #[Type('string')]
-    private string $last_name;
+    private ?string  $last_name = 'last name';
 
     #[NotNull]
     #[Type('string')]
     private string $email;
 
+    #[NotNull]
     #[Type('string')]
-    private ?string $fgcolor = null;
+    private ?string $fgcolor = '#000000';
 
+    #[NotNull]
     #[Type('string')]
-    private ?string $bgcolor = null;
+    private ?string $bgcolor = '#E5F2FC';
 
     #[NotNull]
     #[Type('string')]

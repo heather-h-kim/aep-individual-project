@@ -1,45 +1,76 @@
 export interface createUser {
-  first_name: string;
-  last_name: string;
+  first_name?: string;
+  last_name?: string;
   email: string;
   auth0token: string;
   username: string;
 }
 
-export async function addUser(data: createUser) {
+export async function addUser(body: createUser) {
   try {
-    const url = 'http://localhost:8000/api/users';
+    const url = 'http://localhost:8000/api/user';
     const response = await fetch(url, {
       headers: {
         'Content-type': 'application/json',
       },
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(body),
     });
-    console.log(response);
+    // console.log(response);
     const jsonResponse = await response.json();
     console.log(jsonResponse);
+    return jsonResponse;
   } catch (error) {
     console.log('Something went wrong', error);
     // throw error;
   }
 }
 
-export async function getUserByToken(token) {
-  console.log(token);
+export interface updateUser {
+  user_id?: number | undefined;
+  first_name?: string | undefined;
+  last_name?: string | undefined;
+  email?: string | undefined;
+  username?: string | undefined;
+  bgcolor?: string | undefined;
+  fgcolor?: string | undefined;
+}
+
+export async function updateUserProfile(body: updateUser) {
   try {
-    const url = `http://localhost:8000/api/user/auth0/${token}`;
+    const url = `http://localhost:8000/api/user`;
     const response = await fetch(url, {
       headers: {
-        'content-type': 'application/json',
+        'Content-type': 'application/json',
       },
-      method: 'GET',
+      method: 'PATCH',
+      body: JSON.stringify(body),
     });
-    console.log(response);
+
     const jsonResponse = await response.json();
     console.log(jsonResponse);
+    return jsonResponse;
   } catch (error) {
     console.log('Something went wrong', error);
     throw error;
   }
 }
+
+// export async function getUserByToken(token) {
+//   console.log(token);
+//   try {
+//     const url = `http://localhost:8000/api/user/auth0/${token}`;
+//     const response = await fetch(url, {
+//       headers: {
+//         'content-type': 'application/json',
+//       },
+//       method: 'GET',
+//     });
+//     console.log(response);
+//     const jsonResponse = await response.json();
+//     console.log(jsonResponse);
+//   } catch (error) {
+//     console.log('Something went wrong', error);
+//     throw error;
+//   }
+// }
