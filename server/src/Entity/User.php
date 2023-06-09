@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
@@ -38,6 +40,15 @@ class User
 
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $auth0token = null;
+
+    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Game::class)]
+    #[ORM\JoinColumn(name:'game_id', referencedColumnName: 'game_id' )]
+    private Collection $Games;
+
+    public function __construct()
+    {
+        $this->Games = new ArrayCollection();
+    }
 
 
     public function getId(): ?int
@@ -137,6 +148,36 @@ class User
     public function setAuth0token(?string $auth0token): self
     {
         $this->auth0token = $auth0token;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Game>
+     */
+    public function getGames(): Collection
+    {
+        return $this->Games;
+    }
+
+    public function addGame(Game $game): self
+    {
+        if (!$this->Games->contains($game)) {
+            $this->Games->add($game);
+            $game->setUserId($this);
+        }
+
+        return $this;
+    }
+
+    public function removeGame(Game $game): self
+    {
+        if ($this->Games->removeElement($game)) {
+            // set the owning side to null (unless already changed)
+            if ($game->getUserId() === $this) {
+                $game->setUserId(null);
+            }
+        }
 
         return $this;
     }
