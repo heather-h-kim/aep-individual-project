@@ -15,20 +15,19 @@ class Level
     #[ORM\Column]
     private ?int $level_id = null;
 
-    #[ORM\Column]
-    private ?int $level_number = null;
 
     #[ORM\ManyToOne(inversedBy: 'Levels')]
     #[ORM\JoinColumn(name: 'game_id', referencedColumnName: 'game_id', nullable: false)]
     private ?Game $game_id = null;
 
-    #[ORM\OneToOne(inversedBy: 'Level', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name: 'unit_score_id', referencedColumnName: 'unit_score_id')]
-    private ?UnitScore $unit_score_id = null;
 
     #[ORM\OneToMany(mappedBy: 'level_id', targetEntity: Round::class)]
     #[ORM\JoinColumn(name:'round_id', referencedColumnName: 'round_id')]
     private Collection $Rounds;
+
+    #[ORM\OneToOne(inversedBy: 'level', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name: 'level_lookup_id', referencedColumnName: 'level_lookup_id', nullable: false)]
+    private ?LevelLookup $level_lookup_id = null;
 
     public function __construct()
     {
@@ -38,18 +37,6 @@ class Level
     public function getId(): ?int
     {
         return $this->level_id;
-    }
-
-    public function getLevelNumber(): ?int
-    {
-        return $this->level_number;
-    }
-
-    public function setLevelNumber(int $level_number): self
-    {
-        $this->level_number = $level_number;
-
-        return $this;
     }
 
     public function getGameId(): ?Game
@@ -64,17 +51,7 @@ class Level
         return $this;
     }
 
-    public function getUnitScoreId(): ?UnitScore
-    {
-        return $this->unit_score_id;
-    }
 
-    public function setUnitScoreId(?UnitScore $unit_score_id): self
-    {
-        $this->unit_score_id = $unit_score_id;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Round>
@@ -102,6 +79,18 @@ class Level
                 $round->setLevelId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLevelLookupId(): ?LevelLookup
+    {
+        return $this->level_lookup_id;
+    }
+
+    public function setLevelLookupId(LevelLookup $level_lookup_id): self
+    {
+        $this->level_lookup_id = $level_lookup_id;
 
         return $this;
     }

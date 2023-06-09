@@ -15,9 +15,6 @@ class Round
     private ?int $round_id = null;
 
     #[ORM\Column]
-    private ?int $round_number = null;
-
-    #[ORM\Column]
     private ?int $is_correct = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
@@ -33,21 +30,13 @@ class Round
     #[ORM\JoinColumn(name: 'level_id', referencedColumnName: 'level_id', nullable: false)]
     private ?Level $level_id = null;
 
+    #[ORM\OneToOne(inversedBy: 'Round', cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name:'round_lookup_id', referencedColumnName: 'round_lookup_id', nullable: false)]
+    private ?RoundLookup $round_lookup_id = null;
+
     public function getId(): ?int
     {
         return $this->round_id;
-    }
-
-    public function getRoundNumber(): ?int
-    {
-        return $this->round_number;
-    }
-
-    public function setRoundNumber(int $round_number): self
-    {
-        $this->round_number = $round_number;
-
-        return $this;
     }
 
     public function getIsCorrect(): ?int
@@ -106,6 +95,18 @@ class Round
     public function setLevelId(?Level $level_id): self
     {
         $this->level_id = $level_id;
+
+        return $this;
+    }
+
+    public function getRoundLookupId(): ?RoundLookup
+    {
+        return $this->round_lookup_id;
+    }
+
+    public function setRoundLookupId(RoundLookup $round_lookup_id): self
+    {
+        $this->round_lookup_id = $round_lookup_id;
 
         return $this;
     }
