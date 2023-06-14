@@ -7,7 +7,12 @@ const LoginButton = () => {
   if (!isAuthenticated) {
     return (
       <div>
-        <button onClick={() => loginWithRedirect()}>Log In</button>
+        <button
+          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-white"
+          onClick={() => loginWithRedirect()}
+        >
+          Log In
+        </button>
       </div>
     );
   }
