@@ -4,6 +4,7 @@ import indexRoute from './indexRoute';
 import loginRoute from './loginRoute';
 import logoutRoute from './logoutRoute';
 import profileRoute from './profileRoute';
+import demoRoute from './demoRoute';
 
 export const rootRoute = new RootRoute({
   component: () => (
@@ -19,6 +20,7 @@ export const routeTree = rootRoute.addChildren([
   loginRoute,
   logoutRoute,
   profileRoute,
+  demoRoute,
 ]);
 
 export const router = new Router({ routeTree });
