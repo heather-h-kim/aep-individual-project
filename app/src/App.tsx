@@ -8,7 +8,7 @@ import { addUser, createUser } from './services/userApi';
 import { useEffect } from 'react';
 import { useUserStore } from './store/userStore';
 import { useColorsStore } from './store/colorStore';
-import { rootRoute, router } from './routes/rootRoute';
+import { router } from './routes/rootRoute';
 import { RouterProvider } from '@tanstack/react-router';
 
 const queryClient = new QueryClient();
@@ -83,6 +83,7 @@ export default function App() {
   // console.log('preview bgcolor in App', themeBgColor);
   // console.log('preview fgcolor in App', themeFgColor);
   // console.log('preview in App', preview);
+
   return (
     <QueryClientProvider client={queryClient}>
       <div
@@ -99,8 +100,9 @@ export default function App() {
           }
           className="text-3xl font-bold underline"
         >
-          Hello world!
+          Welcome to number memory game!
         </h1>
+
         <RouterProvider router={router} />
         {/*<Login />*/}
         {/*<Logout />*/}
