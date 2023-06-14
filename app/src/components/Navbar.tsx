@@ -40,7 +40,7 @@ const Navbar = () => {
     );
   }
 
-  if (isAuthenticated) {
+  if (isAuthenticated && globalUser.roll.roleName === 'User') {
     return (
       <nav>
         <ul className="flex">
@@ -67,7 +67,61 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="mr-3">
-            <Logout />
+            <Link
+              style={
+                preview
+                  ? {
+                      color: themeBgColor,
+                      backgroundColor: themeFgColor,
+                    }
+                  : {
+                      color: globalUser.bgcolor,
+                      backgroundColor: globalUser.fgcolor,
+                    }
+              }
+              className="inline-block rounded px-3 py-1 "
+              to="/demo"
+            >
+              Demo
+            </Link>
+          </li>
+          <li className="mr-3">
+            <Link
+              style={
+                preview
+                  ? {
+                      color: themeBgColor,
+                      backgroundColor: themeFgColor,
+                    }
+                  : {
+                      color: globalUser.bgcolor,
+                      backgroundColor: globalUser.fgcolor,
+                    }
+              }
+              className="inline-block rounded px-3 py-1 "
+              to="/game"
+            >
+              Game
+            </Link>
+          </li>
+          <li className="mr-3">
+            <Link
+              style={
+                preview
+                  ? {
+                      color: themeBgColor,
+                      backgroundColor: themeFgColor,
+                    }
+                  : {
+                      color: globalUser.bgcolor,
+                      backgroundColor: globalUser.fgcolor,
+                    }
+              }
+              className="inline-block rounded px-3 py-1 "
+              to="/rankings"
+            >
+              Rankings
+            </Link>
           </li>
           <li className="mr-3">
             <Link
@@ -87,6 +141,121 @@ const Navbar = () => {
             >
               Profile
             </Link>
+          </li>
+          <li className="mr-3">
+            <Logout />
+          </li>
+        </ul>
+      </nav>
+    );
+  }
+
+  if (isAuthenticated && globalUser.roll.roleName === 'Admin') {
+    return (
+      <nav>
+        <ul className="flex">
+          <li className="mr-3">
+            <Avatar />
+          </li>
+          <li className="mr-3">
+            <Link
+              style={
+                preview
+                  ? {
+                      color: themeBgColor,
+                      backgroundColor: themeFgColor,
+                    }
+                  : {
+                      color: globalUser.bgcolor,
+                      backgroundColor: globalUser.fgcolor,
+                    }
+              }
+              className="inline-block rounded px-3 py-1 "
+              to="/"
+            >
+              Home
+            </Link>
+          </li>
+          <li className="mr-3">
+            <Link
+              style={
+                preview
+                  ? {
+                      color: themeBgColor,
+                      backgroundColor: themeFgColor,
+                    }
+                  : {
+                      color: globalUser.bgcolor,
+                      backgroundColor: globalUser.fgcolor,
+                    }
+              }
+              className="inline-block rounded px-3 py-1 "
+              to="/game"
+            >
+              Game
+            </Link>
+          </li>
+          <li className="mr-3">
+            <Link
+              style={
+                preview
+                  ? {
+                      color: themeBgColor,
+                      backgroundColor: themeFgColor,
+                    }
+                  : {
+                      color: globalUser.bgcolor,
+                      backgroundColor: globalUser.fgcolor,
+                    }
+              }
+              className="inline-block rounded px-3 py-1 "
+              to="/rankings"
+            >
+              Rankings
+            </Link>
+          </li>
+          <li className="mr-3">
+            <Link
+              style={
+                preview
+                  ? {
+                      color: themeBgColor,
+                      backgroundColor: themeFgColor,
+                    }
+                  : {
+                      color: globalUser.bgcolor,
+                      backgroundColor: globalUser.fgcolor,
+                    }
+              }
+              className="inline-block rounded px-3 py-1 "
+              to="/admin"
+            >
+              Admin
+            </Link>
+          </li>
+
+          <li className="mr-3">
+            <Link
+              style={
+                preview
+                  ? {
+                      color: themeBgColor,
+                      backgroundColor: themeFgColor,
+                    }
+                  : {
+                      color: globalUser.bgcolor,
+                      backgroundColor: globalUser.fgcolor,
+                    }
+              }
+              className="inline-block rounded px-3 py-1 "
+              to="/profile"
+            >
+              Profile
+            </Link>
+          </li>
+
+          <li className="mr-3">
+            <Logout />
           </li>
         </ul>
       </nav>

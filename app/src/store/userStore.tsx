@@ -10,6 +10,10 @@ interface FetchedUser {
     fgcolor: string | undefined;
     bgcolor: string | undefined;
     auth0token: string | undefined;
+    roll: {
+      roleId: number | undefined;
+      roleName: string | undefined;
+    };
   };
   updateUser: (newUser: object) => void;
 }
@@ -24,6 +28,10 @@ export const useUserStore = create<FetchedUser>((set, get) => ({
     fgcolor: undefined,
     bgcolor: undefined,
     auth0token: undefined,
+    roll: {
+      roleId: undefined,
+      roleName: undefined,
+    },
   },
   updateUser: (newUser: object) => {
     const userState = get().user;
