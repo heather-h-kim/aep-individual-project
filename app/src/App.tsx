@@ -79,6 +79,8 @@ export default function App() {
     return <div>Something went wrong...{error.message}</div>;
   }
 
+  console.log('global user is', globalUser);
+  console.log('global user roll name is', globalUser.roll.roleName);
   // console.log('in App', globalUser);
   // console.log('preview bgcolor in App', themeBgColor);
   // console.log('preview fgcolor in App', themeFgColor);
