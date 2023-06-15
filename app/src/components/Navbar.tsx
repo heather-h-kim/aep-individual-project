@@ -1,4 +1,4 @@
-import { Link } from '@tanstack/react-router';
+import { Link, Navigate } from '@tanstack/react-router';
 import Login from './Login';
 import Logout from './Logout';
 import { useAuth0 } from '@auth0/auth0-react';
@@ -41,6 +41,13 @@ const Navbar = () => {
   }
 
   if (isAuthenticated && globalUser.roll.roleName === 'User') {
+    if (
+      globalUser.firstName === 'first name' ||
+      globalUser.lastName === 'last name'
+    ) {
+      return <Navigate to="/profile" />;
+    }
+
     return (
       <nav>
         <ul className="flex">
