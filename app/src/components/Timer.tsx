@@ -20,34 +20,38 @@ const Timer = () => {
   return (
     <div>
       <svg
-        className="flex h-80 w-80 text-yellow-400"
+        className="flex h-80 w-80"
         fill="none"
         viewBox="0 0 100 101"
-        stroke="currentColor"
-        style={{ transform: `rotateX(180deg) rotateZ(-90deg)` }}
+        style={{ transform: `rotateZ(90deg)` }}
       >
         <path
           strokeWidth="4"
           strokeDasharray="157"
           strokeDashoffset="0"
+          stroke="#E8E8E8"
+          d="M 25, 50 a 25,25 0 1,1 50,0 a 25,25 0 1,1 -50,0"
+        ></path>
+        <path
+          strokeWidth="4"
+          strokeDasharray="157"
+          strokeDashoffset="0"
+          stroke="#03FC52"
           d="M 25, 50 a 25,25 0 1,1 50,0 a 25,25 0 1,1 -50,0"
           className="animate-circle-timer"
         ></path>
-        {/*<text*/}
-        {/*  textAnchor="middle"*/}
-        {/*  x="50"*/}
-        {/*  y="50"*/}
-        {/*  fontSize="20px"*/}
-        {/*  transform="rotate(90 50 50)"*/}
-        {/*  textAnchor="start"*/}
-        {/*  alignmentBaseline="middle"*/}
-
-        {/*  // transform="translate(50, 40) rotate(270)"*/}
-        {/*>*/}
-        {/*  {seconds}*/}
-        {/*</text>*/}
+        <text
+          textAnchor="middle"
+          x="50"
+          y="50"
+          fontSize="20px"
+          fill="#03FC52"
+          transform="rotate(-90 50 50)"
+          alignmentBaseline="middle"
+        >
+          {seconds}
+        </text>
       </svg>
-      <h1>{seconds}</h1>
     </div>
   );
 };
