@@ -1,4 +1,4 @@
 ./.idea
 app/.env
-sever/.env
+server/.env
 server/config/secrets/dev
