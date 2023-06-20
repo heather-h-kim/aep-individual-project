@@ -35,7 +35,6 @@ class GiphyService
 
         $response = $this->client->request(
             'GET',
-//            'https://api.giphy.com/v1/gifs/search?api_key=YooJ3FkUNNkOort3XNhfPXaISWI1divo&q=cat&limit=1&offset=4999&rating=g&lang=en&bundle=messaging_non_clips'
             'https://api.giphy.com/v1/gifs/search', [
                 'query'=> [
                     'api_key'=> $apiKey,
