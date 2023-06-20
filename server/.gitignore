@@ -18,5 +18,3 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
-/server/.env
-/server/config/secrets
