@@ -2,6 +2,7 @@ import Timer from './Timer';
 import Giphy from './Giphy';
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from '@tanstack/react-router';
+import RandomFacts from './RandomFacts';
 
 const Demo = () => {
   // const number = Math.floor(Math.random() * 1000);
@@ -21,7 +22,7 @@ const Demo = () => {
   //
   // return <>{number}</>;
 
-  return <Giphy />;
+  return <RandomFacts />;
 };
 
 export default Demo;
