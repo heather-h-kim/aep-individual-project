@@ -1,12 +1,19 @@
 import Timer from './Timer';
-import Giphy from './Giphy';
 import { useEffect, useState } from 'react';
 import { Navigate, useNavigate } from '@tanstack/react-router';
-import RandomFacts from './RandomFacts';
+import useGetGifs from '../hooks/useGetGifs';
+import useRandomFacts from '../hooks/useRandomFacts';
 
 const Demo = () => {
-  const [number, setNumber] = useState(0);
   const [numbers, setNumbers] = useState([]);
+  const [numberIndex, setNumberIndex] = useState(0);
+  const [showNumber, setShowNumber] = useState(false);
+  const [timer, setTimer] = useState(false);
+  const { giphy } = useGetGifs();
+  const { randomFacts } = useRandomFacts();
+
+  giphy();
+  randomFacts();
 
   const handleClick = () => {
     const n = 3;
@@ -19,33 +26,36 @@ const Demo = () => {
       }
     } while (array.length < n);
     setNumbers(array);
+    setShowNumber(true);
   };
 
-  const randomNumbers = numbers.map((item, index) => (
-    <h1 key={index}>{item}</h1>
-  ));
+  // console.log(gif);
+  // console.log(randomFact);
+  if (!showNumber) {
+    return (
+      <div>
+        <button onClick={handleClick}>START</button>
+      </div>
+    );
+  }
 
-  // const number = Math.floor(Math.random() * 1000);
-  // const [redirect, setRedirect] = useState(false);
-  //
-  // useEffect(() => {
-  //   const timeOut = setTimeout(() => {
-  //     setRedirect(true);
-  //   }, 3000);
-  //
-  //   return () => clearTimeout(timeOut);
-  // }, []);
-  //
-  // if (redirect) {
-  //   return <Navigate to="/timer" />;
-  // }
+  if (showNumber) {
+    setTimeout(() => {
+      setShowNumber(false);
+      setNumberIndex(numberIndex + 1);
+      setTimer(true);
+    }, 3000);
 
-  return (
-    <div>
-      <button onClick={handleClick}>START</button>
-      <div>{randomNumbers}</div>
-    </div>
-  );
+    return (
+      <>
+        <h1>{numbers[{ numberIndex }]}</h1>
+      </>
+    );
+  }
+
+  if (setTimer) {
+    return <Timer />;
+  }
 };
 
 export default Demo;
