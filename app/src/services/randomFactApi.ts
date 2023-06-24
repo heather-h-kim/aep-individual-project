@@ -1,6 +1,6 @@
-export async function getGifs() {
+export async function getRandomFacts() {
   try {
-    const url = `http://localhost:8000/api/giphy`;
+    const url = `http://localhost:8000/api/randomFacts`;
     const response = await fetch(url, {
       headers: {
         'Content-type': 'application/json',
@@ -8,8 +8,9 @@ export async function getGifs() {
       method: 'GET',
     });
     const jsonResponse = await response.json();
-    // console.log(jsonResponse.data[0].images.original.url);
-    return jsonResponse.data[0].images.original.url;
+    const { fact } = jsonResponse[0];
+    // console.log(fact);
+    return fact;
   } catch (error) {
     console.log('Something went wrong', error);
   }

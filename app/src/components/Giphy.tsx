@@ -1,21 +1,14 @@
-import { useQuery } from '@tanstack/react-query';
-import { getGifs } from '../services/giphyApi';
+import { useDemoStore } from '../store/demoStore';
+import React from 'react';
 
-const Giphy = () => {
-  const gifQuery = useQuery({
-    queryKey: ['Gif'],
-    queryFn: getGifs,
-  });
+export const Giphy = () => {
+  const gif = useDemoStore(state => state.gif);
 
-  if (gifQuery.data) {
-    console.log(gifQuery.data);
-
-    return (
-      <div>
-        <img src={gifQuery.data.data[0].images.original.url} />
-      </div>
-    );
-  }
+  return (
+    <div>
+      <img src={gif} alt="cat gif" />
+    </div>
+  );
 };
 
 export default Giphy;
