@@ -38,15 +38,12 @@ const Demo = () => {
   }, []);
 
   const handleClick = () => {
-    console.log('clicked');
     setStart(!start);
     setShowNumber(!showNumber);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('answer submitted', answer);
-    console.log(answer == numberArray[index]);
     setShowQuestion(!showQuestion);
 
     if (answer == numberArray[index]) {
