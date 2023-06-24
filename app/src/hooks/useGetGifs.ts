@@ -5,21 +5,12 @@ import { useDemoStore } from '../store/demoStore';
 const useGetGifs = () => {
   const updateGif = useDemoStore(state => state.updateGif);
 
-  const gifQuery = useQuery({
+  return useQuery({
     queryKey: ['Gif'],
     queryFn: getGifs,
+    onSuccess: data => updateGif(data),
+    refetchOnWindowFocus: false,
   });
-
-  const giphy = () => {
-    if (gifQuery.data) {
-      console.log('querydata is', gifQuery.data);
-      updateGif(gifQuery.data);
-    }
-  };
-
-  return {
-    giphy,
-  };
 };
 
 export default useGetGifs;

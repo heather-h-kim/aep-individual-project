@@ -9,7 +9,7 @@ export async function getRandomFacts() {
     });
     const jsonResponse = await response.json();
     const { fact } = jsonResponse[0];
-    console.log(fact);
+    // console.log(fact);
     return fact;
   } catch (error) {
     console.log('Something went wrong', error);

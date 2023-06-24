@@ -4,21 +4,13 @@ import { useDemoStore } from '../store/demoStore';
 
 const useRandomFacts = () => {
   const updateRandomFact = useDemoStore(state => state.updateRandomFact);
-  const randomFactsQuery = useQuery({
+
+  return useQuery({
     queryKey: ['Random'],
     queryFn: getRandomFacts,
+    onSuccess: data => updateRandomFact(data),
+    refetchOnWindowFocus: false,
   });
-
-  const randomFacts = () => {
-    if (randomFactsQuery.data) {
-      console.log(randomFactsQuery.data);
-      updateRandomFact(randomFactsQuery.data);
-    }
-  };
-
-  return {
-    randomFacts,
-  };
 };
 
 export default useRandomFacts;

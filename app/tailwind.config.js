@@ -10,7 +10,7 @@ export default {
         },
       },
       animation: {
-        'circle-timer': 'circle 30s linear forwards',
+        '15s-circle-timer': 'circle 15s linear forwards',
       },
     },
   },

@@ -1,14 +1,12 @@
 import Timer from './Timer';
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import useGetGifs from '../hooks/useGetGifs';
 import useRandomFacts from '../hooks/useRandomFacts';
-import { useDemoStore } from '../store/demoStore';
+import Giphy from './Giphy';
+import RandomFacts from './RandomFacts';
 
 const Demo = () => {
   const [numberArray, setNumberArray] = useState([]);
-  const [startButton, setStartButton] = useState(true);
-  const { giphy } = useGetGifs();
-  const { randomFacts } = useRandomFacts();
   const [index, setIndex] = useState(0);
   const [answer, setAnswer] = useState('');
   const [start, setStart] = useState(true);
@@ -19,14 +17,14 @@ const Demo = () => {
   const [showQuestion, setShowQuestion] = useState(false);
   const [correct, setCorrect] = useState(false);
   const [incorrect, setIncorrect] = useState(false);
-  const gif = useDemoStore(state => state.gif);
-  const randomFact = useDemoStore(state => state.randomFact);
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
+  const [lastStep, setLastStep] = useState(false);
+
+  useGetGifs();
+  useRandomFacts();
 
   useEffect(() => {
-    // giphy();
-    // randomFacts();
     const n = 3;
     const array = [];
     do {
@@ -59,9 +57,6 @@ const Demo = () => {
 
     setAnswer('');
   };
-
-  // console.log(gif);
-  // console.log(randomFact);
 
   if (start) {
     return (
@@ -99,37 +94,27 @@ const Demo = () => {
     setTimeout(() => {
       setShowTimer(!showTimer);
       setShowQuestion(!showQuestion);
-    }, 1500);
+    }, 15000);
 
     return <Timer />;
   }
 
   if (showGif) {
-    console.log(gif);
     setTimeout(() => {
       setShowGif(!showGif);
       setShowQuestion(!showQuestion);
-    }, 10000);
+    }, 15000);
 
-    return (
-      <div>
-        <img src={gif} alt="cat gif" />
-      </div>
-    );
+    return <Giphy />;
   }
 
   if (showRandomFact) {
-    console.log(randomFact);
     setTimeout(() => {
       setShowRandomFact(!showRandomFact);
       setShowQuestion(!showQuestion);
-    }, 10000);
+    }, 15000);
 
-    return (
-      <div>
-        <h1>{randomFact}</h1>
-      </div>
-    );
+    return <RandomFacts />;
   }
 
   if (showQuestion) {
@@ -171,7 +156,6 @@ const Demo = () => {
         setShowScore(!showScore);
       }
     }, 1000);
-    console.log('index is', index);
 
     return (
       <>
@@ -187,21 +171,30 @@ const Demo = () => {
       if (index < 2) {
         setShowNumber(!showNumber);
       } else {
-        console.log('showScore');
         setShowScore(!showScore);
       }
     }, 1000);
-
-    console.log('index is', index);
 
     return <h1>Wrong...! The number was {numberArray[index]}</h1>;
   }
 
   if (showScore) {
     console.log('score is', score);
+    setTimeout(() => {
+      setShowScore(!showScore);
+      setLastStep(!lastStep);
+    }, 1000);
     return (
       <div>
-        <h1>{score}</h1>
+        <h1>Your score is: {score}</h1>
+      </div>
+    );
+  }
+
+  if (lastStep) {
+    return (
+      <div>
+        <h1>Log in to play more!</h1>
       </div>
     );
   }
