@@ -33,8 +33,11 @@ const PublicHome = () => {
   }
 
   return (
-    <div>
-      <h1>Welcome</h1>
+    <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <h1 className=" pb-8 text-6xl font-bold">
+        Welcome to Number Memory Game!
+      </h1>
+      <h2 className=" text-4xl">Click demo button to play demo game</h2>
     </div>
   );
 };

@@ -96,14 +96,14 @@ export default function App() {
         }
         className="m-8 p-5"
       >
-        <h1
-          style={
-            preview ? { color: themeFgColor } : { color: globalUser.fgcolor }
-          }
-          className="text-3xl font-bold underline"
-        >
-          Welcome to number memory game!
-        </h1>
+        {/*<h1*/}
+        {/*  style={*/}
+        {/*    preview ? { color: themeFgColor } : { color: globalUser.fgcolor }*/}
+        {/*  }*/}
+        {/*  className="text-3xl font-bold underline"*/}
+        {/*>*/}
+        {/*  Welcome to number memory game!*/}
+        {/*</h1>*/}
 
         <RouterProvider router={router} />
         {/*<Login />*/}

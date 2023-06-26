@@ -18,9 +18,9 @@ const Timer = () => {
   }, []);
 
   return (
-    <div>
+    <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
       <svg
-        className="flex h-80 w-80"
+        className="h-90 w-90 flex"
         fill="none"
         viewBox="0 0 100 101"
         style={{ transform: `rotateZ(90deg)` }}

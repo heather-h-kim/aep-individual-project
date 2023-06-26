@@ -14,28 +14,33 @@ const Navbar = () => {
   const preview = useColorsStore(state => state.preview);
   if (!isAuthenticated) {
     return (
-      <nav>
-        <ul className="flex">
-          <li className="mr-3">
-            <Link
-              className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-white"
-              to="/"
-            >
-              Home
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Link
-              className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-white"
-              to="/demo"
-            >
-              Demo
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Login />
-          </li>
-        </ul>
+      <nav class="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between bg-cyan-50 p-4">
+        <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
+          Number Memory Game
+        </span>
+        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
+          <ul class="mt-4 flex flex-col p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
+            <li className="mr-3">
+              <Link
+                className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-white hover:bg-blue-700"
+                to="/"
+              >
+                Home
+              </Link>
+            </li>
+            <li className="mr-3">
+              <Link
+                className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-white hover:bg-blue-700"
+                to="/demo"
+              >
+                Demo
+              </Link>
+            </li>
+            <li className="mr-3">
+              <Login />
+            </li>
+          </ul>
+        </div>
       </nav>
     );
   }

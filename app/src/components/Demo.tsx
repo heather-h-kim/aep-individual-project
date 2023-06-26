@@ -57,8 +57,13 @@ const Demo = () => {
 
   if (start) {
     return (
-      <div>
-        <button onClick={handleClick}>START</button>
+      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+        <button
+          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          onClick={handleClick}
+        >
+          START
+        </button>
       </div>
     );
   }
@@ -81,9 +86,11 @@ const Demo = () => {
     }, 1500);
 
     return (
-      <>
-        <h1>{numberArray[index]}</h1>
-      </>
+      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+        <h1 className="text-8xl font-extrabold tracking-widest">
+          {numberArray[index]}
+        </h1>
+      </div>
     );
   }
 
@@ -116,28 +123,32 @@ const Demo = () => {
 
   if (showQuestion) {
     return (
-      <>
-        <form onSubmit={handleSubmit}>
+      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+        <span className=" pb-8 text-4xl font-medium">What was the number?</span>
+        <form className="flex flex-row space-x-4" onSubmit={handleSubmit}>
           <label
             htmlFor="answer"
             className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+          ></label>
+          <input
+            type="number"
+            id="answer"
+            name="answer"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900  placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            // required
+            value={answer}
+            onChange={e => {
+              setAnswer(e.target.value);
+            }}
+          />
+          <button
+            className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+            type="submit"
           >
-            What was the number?
-            <input
-              type="number"
-              id="answer"
-              name="answer"
-              className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900  placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-              // required
-              value={answer}
-              onChange={e => {
-                setAnswer(e.target.value);
-              }}
-            />
-          </label>
-          <button type="submit">Enter</button>
+            Enter
+          </button>
         </form>
-      </>
+      </div>
     );
   }
 
@@ -155,9 +166,9 @@ const Demo = () => {
     }, 1000);
 
     return (
-      <>
-        <h1>Correct!</h1>
-      </>
+      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+        <h1 className=" pb-8 text-6xl font-medium">Correct!</h1>
+      </div>
     );
   }
 
@@ -172,7 +183,13 @@ const Demo = () => {
       }
     }, 1000);
 
-    return <h1>Wrong...! The number was {numberArray[index]}</h1>;
+    return (
+      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+        <h1 className=" pb-8 text-6xl font-medium">
+          Wrong...! The number was {numberArray[index]}
+        </h1>
+      </div>
+    );
   }
 
   if (showScore) {
@@ -182,16 +199,19 @@ const Demo = () => {
       setLastStep(!lastStep);
     }, 1000);
     return (
-      <div>
-        <h1>Your score is: {score}</h1>
+      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+        <h1 className=" pb-8 text-6xl font-medium">
+          Your score is:{' '}
+          <span className="font-bold text-pink-900">{score}</span>
+        </h1>
       </div>
     );
   }
 
   if (lastStep) {
     return (
-      <div>
-        <h1>Log in to play more!</h1>
+      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+        <h1 className=" pb-8 text-6xl font-medium">Log in to play more!</h1>
       </div>
     );
   }
