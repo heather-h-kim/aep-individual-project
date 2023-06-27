@@ -15,12 +15,12 @@ class LevelLookupService extends AbstractDtoTransformers
         $this->levelLookupRepository = $levelLookupRepository;
     }
 
-    public function getLevels() : iterable {
-        $allLevels = $this->levelLookupRepository->findAll();
-        return $this->transformToDtos($allLevels);
+    public function getLevelNumbers() : iterable {
+        $allLevelNumbers = $this->levelLookupRepository->findAll();
+        return $this->transformToDtos($allLevelNumbers);
     }
 
-    public function getLevelById(int $id): LevelLookupDto
+    public function getLevelNumberById(int $id): LevelLookupDto
     {
         $level=$this->levelLookupRepository->find($id);
         return $this->transformToDto($level);
