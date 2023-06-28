@@ -6,22 +6,22 @@ class RoundDto
 {
     private int $round_number;
     private int $number_shown;
-    private int $number_answered;
+    private int $number_entered;
 
     /**
      * @return int
      */
-    public function getRoundNo(): int
+    public function getRoundNumber(): int
     {
-        return $this->roundNo;
+        return $this->round_number;
     }
 
     /**
-     * @param int $roundNo
+     * @param int $round_number
      */
-    public function setRoundNo(int $roundNo): void
+    public function setRoundNumber(int $round_number): void
     {
-        $this->roundNo = $roundNo;
+        $this->round_number = $round_number;
     }
 
     /**
@@ -43,16 +43,17 @@ class RoundDto
     /**
      * @return int
      */
-    public function getNumberAnswered(): int
+    public function getNumberEntered(): int
     {
-        return $this->number_answered;
+        return $this->number_entered;
     }
 
     /**
-     * @param int $number_answered
+     * @param int $number_entered
      */
-    public function setNumberAnswered(int $number_answered): void
+    public function setNumberEntered(int $number_entered): void
     {
-        $this->number_answered = $number_answered;
+        $this->number_entered = $number_entered;
     }
+
 }
