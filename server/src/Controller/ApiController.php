@@ -25,4 +25,5 @@ class ApiController extends AbstractController
        return $this->serializationService->getValidatedDto($request, $class);
    }
 
+
 }

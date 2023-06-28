@@ -83,7 +83,7 @@ class UserService extends AbstractDtoTransformers
         $user = $this->userRepository->findOneBy(['auth0token' => $token]);
 
         if(!$user) {
-            return $user;
+            return $this->transformToDto($user);
         }
 
         return $this->transformToDto($user);
