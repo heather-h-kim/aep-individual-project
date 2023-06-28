@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\GameRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: GameRepository::class)]
@@ -26,6 +27,9 @@ class Game
     #[ORM\OneToMany(mappedBy: 'game_id', targetEntity: Level::class)]
     #[ORM\JoinColumn(name:'level_id', referencedColumnName: 'level_id')]
     private Collection $Levels;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTime $played_at = null;
 
     public function __construct()
     {
@@ -87,6 +91,18 @@ class Game
                 $level->setGameId(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPlayedAt(): ?\DateTime
+    {
+        return $this->played_at;
+    }
+
+    public function setPlayedAt(\DateTime $played_at): self
+    {
+        $this->played_at = $played_at;
 
         return $this;
     }

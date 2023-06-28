@@ -29,6 +29,7 @@ class SeasonController extends ApiController
     /**
      * @throws \JsonException
      * @throws InvalidRequestDataException
+     * @throws \Exception
      */
     #[Route('api/season', methods:['POST'])]
     public function createSeason(Request $request): Response
