@@ -17,7 +17,7 @@ class Level
 
 
     #[ORM\ManyToOne(inversedBy: 'Levels')]
-    #[ORM\JoinColumn(name: 'game_id', referencedColumnName: 'game_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'game_id', referencedColumnName: 'game_id', nullable: true)]
     private ?Game $game_id = null;
 
 

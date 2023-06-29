@@ -3,6 +3,8 @@
 namespace App\Service;
 
 use App\Dto\Incoming\CreateGameRoundDto;
+use App\Dto\Incoming\LevelDto;
+use App\Dto\Incoming\RoundDto;
 use App\Entity\Game;
 use App\Repository\GameRepository;
 use App\Repository\SeasonRepository;
@@ -33,7 +35,7 @@ class GameService
     /**
      * @throws NonUniqueResultException
      */
-    public function createGame(CreateGameRoundDto $createGameRoundDto): Game
+    public function createGameLevelsRounds(CreateGameRoundDto $createGameRoundDto): string
     {
         $newGame = new Game();
         $user_id = $createGameRoundDto->getUserId();
@@ -46,31 +48,38 @@ class GameService
         $newGame->setSeasonId($season);
         $newGame->setPlayedAt($currentDate);
 
-        $game_id =  $newGame->getId();
+        $this->gameRepository->save($newGame, true);
 
-        // $levels = an array of LevelDtos
+
+        /**
+         * @var LevelDto[] $levels
+         * @var LevelDto $levelDto
+         * @var RoundDto[] $rounds
+         * @var RoundDto $roundDto
+         */
+
+        /** $levels = an array of LevelDtos */
         $levels = $createGameRoundDto->getLevelsRounds();
 
-
-
-        //$level = LevelDto
         foreach( $levels as $levelDto){
-           $createdLevel = $this->levelService->createLevel($levelDto);
-           $createdLevel->setGameId($game_id);
 
-           $level_id = $createdLevel->getId();
+            $newLevel = $this->levelService->createLevel($levelDto, $newGame);
 
-           //$rounds = an array of RoundDtos
-           $rounds = $levelDto->getRounds();
-           foreach( $rounds as $roundDto){
-               $createdRound = $this->roundService->createRound($roundDto);
-               $createdRound->setLevelId($level_id);
-           }
+            /**$rounds = an array of RoundDtos*/
+            $rounds = $levelDto->getRounds();
+            foreach( $rounds as $roundDto){
+                $this->roundService->createRound($roundDto, $newLevel);
+            }
         }
 
-        return $newGame;
+        return 'testing';
+    }
 
 
+
+    public function getGameById(int $id): Game
+    {
+        return $this->gameRepository->find($id);
     }
 
 

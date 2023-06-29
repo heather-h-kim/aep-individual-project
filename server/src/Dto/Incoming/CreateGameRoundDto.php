@@ -4,8 +4,12 @@ namespace App\Dto\Incoming;
 
 class CreateGameRoundDto
 {
+
     private int $played_at;
     private int $user_id;
+    /**
+     * @var LevelDto[] $levels_rounds
+     */
     private array $levels_rounds;
 
     /**

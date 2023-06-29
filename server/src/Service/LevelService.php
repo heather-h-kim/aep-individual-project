@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Dto\Incoming\LevelDto;
+use App\Entity\Game;
 use App\Entity\Level;
 use App\Repository\LevelLookupRepository;
 use App\Repository\LevelRepository;
@@ -21,7 +22,7 @@ class LevelService
         $this->levelLookupRepository = $levelLookupRepository;
     }
 
-    public function createLevel(LevelDto $levelDto): Level
+    public function createLevel(LevelDto $levelDto, Game $game ): Level
     {
         $level = new Level();
 
@@ -29,7 +30,25 @@ class LevelService
 
         $level_lookup_id = $this->levelLookupRepository->findOneBy(['level_number'=> $level_number]);
 
-        return $level->setLevelLookupId($level_lookup_id);
+        $level->setLevelLookupId($level_lookup_id);
+        $level->setGameId($game);
+
+        $this->levelRepository->save($level, true);
+
+        return $level;
     }
+
+    public function getLevelById(int $id): Level
+    {
+        return $this->levelRepository->find($id);
+    }
+
+//    public function transformToDto($object): LevelDto
+//    {
+//       return new LevelDto(
+//           $object->getId(),
+//           $object->getGameId()
+//       );
+//    }
 
 }

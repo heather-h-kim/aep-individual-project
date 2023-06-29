@@ -5,6 +5,9 @@ namespace App\Dto\Incoming;
 class LevelDto
 {
     private int $level_number;
+    /**
+     * @var RoundDto[] $rounds
+     */
     private array $rounds;
 
     /**

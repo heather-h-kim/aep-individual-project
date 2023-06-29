@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Dto\Incoming\RoundDto;
+use App\Entity\Level;
 use App\Entity\Round;
 use App\Repository\RoundLookupRepository;
 use App\Repository\RoundRepository;
@@ -22,7 +23,7 @@ private RoundLookupRepository $roundLookupRepository;
         $this->roundLookupRepository = $roundLookupRepository;
     }
 
-    public function createRound(RoundDto $roundDto): Round
+    public function createRound(RoundDto $roundDto, Level $level): Round
     {
         $round = new Round();
         $round_number = $roundDto->getRoundNumber();
@@ -33,6 +34,9 @@ private RoundLookupRepository $roundLookupRepository;
         $round->setRoundLookupId($round_lookup_id);
         $round->setNumberShown($number_shown);
         $round->setNumberEntered($number_entered);
+        $round->setLevelId($level);
+
+        $this->roundRepository->save($round, true);
 
         return $round;
 

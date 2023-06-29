@@ -21,7 +21,7 @@ class Round
     private ?int $number_entered = null;
 
     #[ORM\ManyToOne(inversedBy: 'Rounds')]
-    #[ORM\JoinColumn(name: 'level_id', referencedColumnName: 'level_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'level_id', referencedColumnName: 'level_id', nullable: true)]
     private ?Level $level_id = null;
 
     #[ORM\OneToOne(inversedBy: 'Round', cascade: ['persist', 'remove'])]
