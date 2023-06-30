@@ -73,7 +73,7 @@ const Navbar = () => {
                     }
               }
               className="inline-block rounded px-3 py-1 "
-              to="/"
+              to="/loginHome"
             >
               Home
             </Link>

@@ -9,6 +9,7 @@ import adminRoute from './adminRoute';
 import gameRoute from './gameRoute';
 import rankingsRoute from './rankingsRoute';
 import timerRoute from './timerRoute';
+import loginHomeRoute from './loginHomeRoute';
 
 export const rootRoute = new RootRoute({
   component: () => (
@@ -29,6 +30,7 @@ export const routeTree = rootRoute.addChildren([
   gameRoute,
   rankingsRoute,
   timerRoute,
+  loginHomeRoute,
 ]);
 
 export const router = new Router({ routeTree });

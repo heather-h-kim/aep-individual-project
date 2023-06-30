@@ -72,19 +72,19 @@ export default function App() {
   }, [isAuthenticated, user]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div className="m-8 p-5 text-lg">Loading...</div>;
   }
 
   if (error) {
-    return <div>Something went wrong...{error.message}</div>;
+    return (
+      <div className="m-8 p-5 text-lg">
+        Something went wrong...{error.message}
+      </div>
+    );
   }
 
-  console.log('global user is', globalUser);
-  console.log('global user roll name is', globalUser.roll.roleName);
-  // console.log('in App', globalUser);
-  // console.log('preview bgcolor in App', themeBgColor);
-  // console.log('preview fgcolor in App', themeFgColor);
-  // console.log('preview in App', preview);
+  // console.log('global user is', globalUser);
+  // console.log('global user roll name is', globalUser.roll.roleName);
 
   return (
     <QueryClientProvider client={queryClient}>
@@ -96,19 +96,7 @@ export default function App() {
         }
         className="m-8 p-5"
       >
-        {/*<h1*/}
-        {/*  style={*/}
-        {/*    preview ? { color: themeFgColor } : { color: globalUser.fgcolor }*/}
-        {/*  }*/}
-        {/*  className="text-3xl font-bold underline"*/}
-        {/*>*/}
-        {/*  Welcome to number memory game!*/}
-        {/*</h1>*/}
-
         <RouterProvider router={router} />
-        {/*<Login />*/}
-        {/*<Logout />*/}
-        {/*<Profile />*/}
       </div>
     </QueryClientProvider>
   );
