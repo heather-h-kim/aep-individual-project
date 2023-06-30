@@ -19,7 +19,7 @@ const Navbar = () => {
           Number Memory Game
         </span>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul class="mt-4 flex flex-col p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
+          <ul className="mt-4 flex flex-col p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
             <li className="mr-3">
               <Link
                 className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-white hover:bg-blue-700"
@@ -54,223 +54,229 @@ const Navbar = () => {
     }
 
     return (
-      <nav>
-        <ul className="flex">
-          <li className="mr-3">
-            <Avatar />
-          </li>
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/loginHome"
-            >
-              Home
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/demo"
-            >
-              Demo
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/game"
-            >
-              Game
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/rankings"
-            >
-              Rankings
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/profile"
-            >
-              Profile
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Logout />
-          </li>
-        </ul>
-      </nav>
+      <div>
+        <Navigate to="/loginHome" />
+        <nav className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between p-4">
+          <Avatar />
+          <div className="hidden w-full md:block md:w-auto" id="navbar-default">
+            <ul className="mt-4 flex flex-col p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/loginHome"
+                >
+                  Home
+                </Link>
+              </li>
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/demo"
+                >
+                  Demo
+                </Link>
+              </li>
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/game"
+                >
+                  Game
+                </Link>
+              </li>
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/rankings"
+                >
+                  Rankings
+                </Link>
+              </li>
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/profile"
+                >
+                  Profile
+                </Link>
+              </li>
+              <li className="mr-3">
+                <Logout />
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
     );
   }
 
   if (isAuthenticated && globalUser.roll.roleName === 'Admin') {
     return (
-      <nav>
-        <ul className="flex">
-          <li className="mr-3">
-            <Avatar />
-          </li>
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/"
-            >
-              Home
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/game"
-            >
-              Game
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/rankings"
-            >
-              Rankings
-            </Link>
-          </li>
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/admin"
-            >
-              Admin
-            </Link>
-          </li>
+      <div>
+        <Navigate to="/loginHome" />
+        <nav className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between p-4">
+          <Avatar />
+          <div className="hidden w-full md:block md:w-auto" id="navbar-default">
+            <ul className="mt-4 flex flex-col p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/loginHome"
+                >
+                  Home
+                </Link>
+              </li>
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/game"
+                >
+                  Game
+                </Link>
+              </li>
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/rankings"
+                >
+                  Rankings
+                </Link>
+              </li>
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/admin"
+                >
+                  Admin
+                </Link>
+              </li>
 
-          <li className="mr-3">
-            <Link
-              style={
-                preview
-                  ? {
-                      color: themeBgColor,
-                      backgroundColor: themeFgColor,
-                    }
-                  : {
-                      color: globalUser.bgcolor,
-                      backgroundColor: globalUser.fgcolor,
-                    }
-              }
-              className="inline-block rounded px-3 py-1 "
-              to="/profile"
-            >
-              Profile
-            </Link>
-          </li>
+              <li className="mr-3">
+                <Link
+                  style={
+                    preview
+                      ? {
+                          color: themeBgColor,
+                          backgroundColor: themeFgColor,
+                        }
+                      : {
+                          color: globalUser.bgcolor,
+                          backgroundColor: globalUser.fgcolor,
+                        }
+                  }
+                  className="inline-block rounded px-3 py-1 "
+                  to="/profile"
+                >
+                  Profile
+                </Link>
+              </li>
 
-          <li className="mr-3">
-            <Logout />
-          </li>
-        </ul>
-      </nav>
+              <li className="mr-3">
+                <Logout />
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </div>
     );
   }
 };

@@ -94,7 +94,7 @@ export default function App() {
             ? { backgroundColor: themeBgColor }
             : { backgroundColor: globalUser.bgcolor }
         }
-        className="m-8 p-5"
+        className="m-10 p-5"
       >
         <RouterProvider router={router} />
       </div>

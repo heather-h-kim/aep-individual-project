@@ -33,7 +33,7 @@ const LoginHome = () => {
   }
 
   return (
-    <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+    <div className="my-10 flex h-screen flex-col items-center justify-center">
       <h1 className=" pb-8 text-6xl font-bold">
         Welcome to Number Memory Game!
       </h1>
