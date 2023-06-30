@@ -27,33 +27,31 @@ class UserService extends AbstractDtoTransformers
 
     public function createUser(CreateUserDto $createUserDto): UserDto | string
     {
-
+        //return the existing user with the token if the user's token matches
         $userWithToken = $this->getUserByToken($createUserDto->getAuth0token());
 
         if ($userWithToken) {
             return $userWithToken;
         }
 
-
+        //get info for the role field
         $role = $this->roleRepository->find($createUserDto->getRoleId());
 
         if (!$role) {
             throw new BadRequestHttpException('Role not found');
         }
 
+        //create a new user
         $newUser = new User();
 
         $firstName = $createUserDto->getFirstName();
-
         if($firstName){
             $newUser->setFirstName($firstName);
         }
-//        $newUser->setFirstName($createUserDto->getFirstName());
         $lastName = $createUserDto->getLastName();
         if($lastName){
             $newUser->setLastName($lastName);
         }
-//        $newUser->setLastName($createUserDto->getLastName());
         $newUser->setEmail($createUserDto->getEmail());
         $newUser->setFgcolor($createUserDto->getFgColor());
         $newUser->setBgcolor($createUserDto->getBgColor());
@@ -83,7 +81,7 @@ class UserService extends AbstractDtoTransformers
         $user = $this->userRepository->findOneBy(['auth0token' => $token]);
 
         if(!$user) {
-            return $user;
+            return $this->transformToDto($user);
         }
 
         return $this->transformToDto($user);
@@ -176,5 +174,4 @@ class UserService extends AbstractDtoTransformers
             $object->getAuth0token()
         );
     }
-
 }

@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\SeaonRepository;
+use App\Repository\SeasonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SeaonRepository::class)]
+#[ORM\Entity(repositoryClass: SeasonRepository::class)]
 class Season
 {
     #[ORM\Id]
@@ -17,10 +17,10 @@ class Season
     private ?int $season_id = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $start_date = null;
+    private ?\DateTime $start_date = null;
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $end_date = null;
+    private ?\DateTime $end_date = null;
 
     #[ORM\OneToMany(mappedBy: 'season_id', targetEntity: Game::class)]
     #[ORM\JoinColumn(name: 'game_id', referencedColumnName: 'game_id')]
@@ -36,24 +36,24 @@ class Season
         return $this->season_id;
     }
 
-    public function getStartDate(): ?\DateTimeInterface
+    public function getStartDate(): ?\DateTime
     {
         return $this->start_date;
     }
 
-    public function setStartDate(\DateTimeInterface $start_date): self
+    public function setStartDate(\DateTime $start_date): self
     {
         $this->start_date = $start_date;
 
         return $this;
     }
 
-    public function getEndDate(): ?\DateTimeInterface
+    public function getEndDate(): ?\DateTime
     {
         return $this->end_date;
     }
 
-    public function setEndDate(\DateTimeInterface $end_date): self
+    public function setEndDate(\DateTime $end_date): self
     {
         $this->end_date = $end_date;
 

@@ -15,19 +15,13 @@ class Round
     private ?int $round_id = null;
 
     #[ORM\Column]
-    private ?int $is_correct = null;
-
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
-    private ?\DateTimeInterface $played_at = null;
-
-    #[ORM\Column]
     private ?int $number_shown = null;
 
     #[ORM\Column]
     private ?int $number_entered = null;
 
     #[ORM\ManyToOne(inversedBy: 'Rounds')]
-    #[ORM\JoinColumn(name: 'level_id', referencedColumnName: 'level_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'level_id', referencedColumnName: 'level_id', nullable: true)]
     private ?Level $level_id = null;
 
     #[ORM\OneToOne(inversedBy: 'Round', cascade: ['persist', 'remove'])]
@@ -37,30 +31,6 @@ class Round
     public function getId(): ?int
     {
         return $this->round_id;
-    }
-
-    public function getIsCorrect(): ?int
-    {
-        return $this->is_correct;
-    }
-
-    public function setIsCorrect(int $is_correct): self
-    {
-        $this->is_correct = $is_correct;
-
-        return $this;
-    }
-
-    public function getPlayedAt(): ?\DateTimeInterface
-    {
-        return $this->played_at;
-    }
-
-    public function setPlayedAt(\DateTimeInterface $played_at): self
-    {
-        $this->played_at = $played_at;
-
-        return $this;
     }
 
     public function getNumberShown(): ?int
