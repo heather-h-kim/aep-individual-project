@@ -2,11 +2,19 @@
 
 namespace App\Dto\Incoming;
 
-class LevelDto
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Type;
+
+class CreateLevelDto
 {
+    #[NotNull]
+    #[Type('int')]
     private int $level_number;
+
+    #[NotNull]
+    #[Type('array')]
     /**
-     * @var RoundDto[] $rounds
+     * @var CreateRoundDto[] $rounds
      */
     private array $rounds;
 
@@ -27,7 +35,7 @@ class LevelDto
     }
 
     /**
-     * @return RoundDto[]
+     * @return CreateRoundDto[]
      */
     public function getRounds(): array
     {
@@ -35,7 +43,7 @@ class LevelDto
     }
 
     /**
-     * @param RoundDto[] $rounds
+     * @param CreateRoundDto[] $rounds
      */
     public function setRounds(array $rounds): void
     {

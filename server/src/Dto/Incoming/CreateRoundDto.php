@@ -2,10 +2,19 @@
 
 namespace App\Dto\Incoming;
 
-class RoundDto
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Type;
+
+class CreateRoundDto
 {
+    #[NotNull]
+    #[Type('int')]
     private int $round_number;
+    #[NotNull]
+    #[Type('int')]
     private int $number_shown;
+    #[NotNull]
+    #[Type('int')]
     private int $number_entered;
 
     /**

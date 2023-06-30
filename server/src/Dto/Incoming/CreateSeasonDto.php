@@ -3,9 +3,16 @@
 namespace App\Dto\Incoming;
 
 
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Type;
+
 class CreateSeasonDto
 {
+    #[NotNull]
+    #[Type('int')]
     private int $start_date;
+    #[NotNull]
+    #[Type('int')]
     private int $end_date;
 
     /**

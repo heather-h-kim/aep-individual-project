@@ -4,8 +4,13 @@ namespace App\Dto\Incoming;
 
 
 
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Type;
+
 class UpdateSeasonDto
 {
+    #[NotNull]
+    #[Type('int')]
     private int $season_id;
     private ?int $start_date = null;
     private ?int $end_date = null;

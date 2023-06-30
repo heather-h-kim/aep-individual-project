@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Dto\Incoming\CreateGameRoundDto;
+use App\Dto\Incoming\CreateGameLevelRoundDto;
 use App\Exception\InvalidRequestDataException;
 use App\Serialization\SerializationService;
 use Doctrine\ORM\NonUniqueResultException;
@@ -33,10 +33,10 @@ class GameController extends ApiController
     public function createGameLevelsRounds(Request $request): Response
     {
         /**
-         * @var CreateGameRoundDto $dto
+         * @var CreateGameLevelRoundDto $dto
          */
-        $dto = $this->getValidatedDto($request, CreateGameRoundDto::class);
-        $dto = $this->getValidatedDto($request, CreateGameRoundDto::class);
+        $dto = $this->getValidatedDto($request, CreateGameLevelRoundDto::class);
+        $dto = $this->getValidatedDto($request, CreateGameLevelRoundDto::class);
         return $this->JSON($this->gameService->createGameLevelsRounds($dto));
     }
 

@@ -2,15 +2,22 @@
 
 namespace App\Dto\Incoming;
 
-class CreateGameRoundDto
-{
+use Symfony\Component\Validator\Constraints\NotNull;
+use Symfony\Component\Validator\Constraints\Type;
 
+class CreateGameLevelRoundDto
+{
+    #[NotNull]
+    #[Type('int')]
     private int $played_at;
+    #[NotNull]
+    #[Type('int')]
     private int $user_id;
     /**
-     * @var LevelDto[] $levels_rounds
+     * @var CreateLevelDto[] $levels_rounds
      */
     private array $levels_rounds;
+
 
     /**
      * @return int
@@ -45,7 +52,7 @@ class CreateGameRoundDto
     }
 
     /**
-     * @return LevelDto[]
+     * @return CreateLevelDto[]
      */
     public function getLevelsRounds(): array
     {
@@ -53,7 +60,7 @@ class CreateGameRoundDto
     }
 
     /**
-     * @param LevelDto[] $levels_rounds
+     * @param CreateLevelDto[] $levels_rounds
      */
     public function setLevelsRounds(array $levels_rounds): void
     {
