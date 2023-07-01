@@ -5,6 +5,7 @@ import { useAuth0 } from '@auth0/auth0-react';
 import Avatar from './Avatar';
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
+import Dropdown from './Dropdown';
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth0();
@@ -99,23 +100,44 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="mr-3">
-                <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
-                  className="inline-block rounded px-3 py-1 "
-                  to="/game"
-                >
-                  Game
-                </Link>
+                <Dropdown />
+                {/*<button*/}
+                {/*  style={*/}
+                {/*    preview*/}
+                {/*      ? {*/}
+                {/*          color: themeBgColor,*/}
+                {/*          backgroundColor: themeFgColor,*/}
+                {/*        }*/}
+                {/*      : {*/}
+                {/*          color: globalUser.bgcolor,*/}
+                {/*          backgroundColor: globalUser.fgcolor,*/}
+                {/*        }*/}
+                {/*  }*/}
+                {/*  className="inline-block rounded px-3 py-1 "*/}
+                {/*  id="dropdownButton"*/}
+                {/*  data-dropdown-toggle="dropdown"*/}
+                {/*>*/}
+                {/*  Game*/}
+                {/*</button>*/}
+                {/*<div*/}
+                {/*  id="dropdown"*/}
+                {/*  className="z-10 hidden w-44 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"*/}
+                {/*>*/}
+                {/*  <ul className="py-1" aria-labelledby="dropdownButton">*/}
+                {/*    <li>*/}
+                {/*      <Link to="/game">Level1</Link>*/}
+                {/*    </li>*/}
+                {/*    <li>*/}
+                {/*      <Link to="/game">Level2</Link>*/}
+                {/*    </li>*/}
+                {/*    <li>*/}
+                {/*      <Link to="/game">Level3</Link>*/}
+                {/*    </li>*/}
+                {/*    <li>*/}
+                {/*      <Link to="/game">Level4</Link>*/}
+                {/*    </li>*/}
+                {/*  </ul>*/}
+                {/*</div>*/}
               </li>
               <li className="mr-3">
                 <Link
