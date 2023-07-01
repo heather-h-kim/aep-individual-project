@@ -6,7 +6,7 @@ import gameRoute from './gameRoute';
 
 const levelTwoRoute = new Route({
   getParentRoute: () => rootRoute,
-  path: '/game/2',
+  path: '/game-level2/$level',
   component: Game,
 });
 

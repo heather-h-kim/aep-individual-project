@@ -10,7 +10,7 @@ const Dropdown = () => {
   const preview = useColorsStore(state => state.preview);
   const [showMenu, setShowMenu] = useState(false);
 
-  const clickHandler = () => {
+  const handleClick = () => {
     setShowMenu(!showMenu);
   };
   return (
@@ -34,6 +34,7 @@ const Dropdown = () => {
           id="menu-button"
           aria-expanded="true"
           aria-haspopup="true"
+          onClick={handleClick}
         >
           Game
           <svg
@@ -61,48 +62,51 @@ const Dropdown = () => {
           </svg>
         </button>
       </div>
-      <div
-        className="absolute right-0 z-10 mt-2 w-24 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="menu-button"
-        tabIndex="-1"
-      >
-        <div className="py-1" role="none">
-          <Link
-            class="block px-4 py-2 text-sm text-gray-700"
-            role="menuitem"
-            tabindex="-1"
-            to="/game/1"
-          >
-            Level 1
-          </Link>
-          <Link
-            class="block px-4 py-2 text-sm text-gray-700"
-            role="menuitem"
-            tabindex="-1"
-            to="/game/2"
-          >
-            Level 2
-          </Link>
-          <Link
-            class="block px-4 py-2 text-sm text-gray-700"
-            role="menuitem"
-            tabindex="-1"
-            to="/game/3"
-          >
-            Level 3
-          </Link>
-          <Link
-            class="block px-4 py-2 text-sm text-gray-700"
-            role="menuitem"
-            tabindex="-1"
-            to="/game/4"
-          >
-            Level 4
-          </Link>
+      {showMenu && (
+        <div
+          className="absolute right-0 z-10 mt-2 w-24 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          role="menu"
+          aria-orientation="vertical"
+          aria-labelledby="menu-button"
+          tabIndex="-1"
+          onClick={handleClick}
+        >
+          <div className="py-1" role="none">
+            <Link
+              className="block px-4 py-2 text-sm text-gray-700"
+              role="menuitem"
+              tabIndex="-1"
+              to="/game-level1/1"
+            >
+              Level 1
+            </Link>
+            <Link
+              className="block px-4 py-2 text-sm text-gray-700"
+              role="menuitem"
+              tabIndex="-1"
+              to="/game-level2/2"
+            >
+              Level 2
+            </Link>
+            <Link
+              className="block px-4 py-2 text-sm text-gray-700"
+              role="menuitem"
+              tabIndex="-1"
+              to="/game-level3/3"
+            >
+              Level 3
+            </Link>
+            <Link
+              className="block px-4 py-2 text-sm text-gray-700"
+              role="menuitem"
+              tabIndex="-1"
+              to="/game-level4/4"
+            >
+              Level 4
+            </Link>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };

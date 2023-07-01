@@ -15,7 +15,7 @@ const Navbar = () => {
   const preview = useColorsStore(state => state.preview);
   if (!isAuthenticated) {
     return (
-      <nav class="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between bg-cyan-50 p-4">
+      <nav className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between bg-cyan-50 p-4">
         <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
           Number Memory Game
         </span>
@@ -101,43 +101,6 @@ const Navbar = () => {
               </li>
               <li className="mr-3">
                 <Dropdown />
-                {/*<button*/}
-                {/*  style={*/}
-                {/*    preview*/}
-                {/*      ? {*/}
-                {/*          color: themeBgColor,*/}
-                {/*          backgroundColor: themeFgColor,*/}
-                {/*        }*/}
-                {/*      : {*/}
-                {/*          color: globalUser.bgcolor,*/}
-                {/*          backgroundColor: globalUser.fgcolor,*/}
-                {/*        }*/}
-                {/*  }*/}
-                {/*  className="inline-block rounded px-3 py-1 "*/}
-                {/*  id="dropdownButton"*/}
-                {/*  data-dropdown-toggle="dropdown"*/}
-                {/*>*/}
-                {/*  Game*/}
-                {/*</button>*/}
-                {/*<div*/}
-                {/*  id="dropdown"*/}
-                {/*  className="z-10 hidden w-44 divide-y divide-gray-100 rounded-lg bg-white shadow dark:bg-gray-700"*/}
-                {/*>*/}
-                {/*  <ul className="py-1" aria-labelledby="dropdownButton">*/}
-                {/*    <li>*/}
-                {/*      <Link to="/game">Level1</Link>*/}
-                {/*    </li>*/}
-                {/*    <li>*/}
-                {/*      <Link to="/game">Level2</Link>*/}
-                {/*    </li>*/}
-                {/*    <li>*/}
-                {/*      <Link to="/game">Level3</Link>*/}
-                {/*    </li>*/}
-                {/*    <li>*/}
-                {/*      <Link to="/game">Level4</Link>*/}
-                {/*    </li>*/}
-                {/*  </ul>*/}
-                {/*</div>*/}
               </li>
               <li className="mr-3">
                 <Link
