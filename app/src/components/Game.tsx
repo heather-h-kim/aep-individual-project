@@ -20,9 +20,11 @@ const Game = () => {
   const [showGif, setShowGif] = useState(false);
   const [showRandomFact, setShowRandomFact] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(0);
   const [correct, setCorrect] = useState(false);
   const [incorrect, setIncorrect] = useState(false);
   const [score, setScore] = useState(0);
+  const [keepPlaying, setKeepPlaying] = useState(false);
   const [showScore, setShowScore] = useState(false);
   const [lastStep, setLastStep] = useState(false);
   const themeBgColor = useColorsStore(state => state.bgcolor);
@@ -208,14 +210,19 @@ const Game = () => {
 
   if (correct) {
     setTimeout(() => {
-      setScore(score + 1);
+      setIsCorrect(isCorrect + 1);
       setCorrect(!correct);
       setIndex(index + 1);
       if (index < 5) {
         setShowNumber(!showNumber);
       } else {
-        console.log('showScore');
-        setShowScore(!showScore);
+        if (isCorrect < 5) {
+          setShowScore(!showScore);
+        }
+
+        if (isCorrect == 5) {
+          setKeepPlaying(!keepPlaying);
+        }
       }
     }, 1000);
 
@@ -246,16 +253,25 @@ const Game = () => {
     );
   }
 
+  if (keepPlaying) {
+    return (
+      <div>
+        <h1>Play next level</h1>
+        <h1>Stop and see my score</h1>
+      </div>
+    );
+  }
+
   if (showScore) {
     console.log('score is', score);
     setTimeout(() => {
       setShowScore(!showScore);
       setLastStep(!lastStep);
-    }, 1000);
+    }, 2000);
     return (
       <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
         <h1 className=" pb-8 text-6xl font-medium">
-          Your score is:{' '}
+          Your score is:
           <span className="font-bold text-pink-900">{score}</span>
         </h1>
       </div>
