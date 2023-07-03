@@ -5,6 +5,8 @@ import useRandomFacts from '../hooks/useRandomFacts';
 import Timer from './Timer';
 import Giphy from './Giphy';
 import RandomFacts from './RandomFacts';
+import { useColorsStore } from '../store/colorStore';
+import { useUserStore } from '../store/userStore';
 
 const Game = () => {
   const param = useParams();
@@ -23,6 +25,9 @@ const Game = () => {
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [lastStep, setLastStep] = useState(false);
+  const themeBgColor = useColorsStore(state => state.bgcolor);
+  const preview = useColorsStore(state => state.preview);
+  const globalUser = useUserStore(state => state.user);
 
   useGetGifs();
   useRandomFacts();
@@ -90,7 +95,14 @@ const Game = () => {
 
   if (start) {
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <button
           className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
           onClick={handleClick}

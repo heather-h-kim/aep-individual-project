@@ -15,7 +15,7 @@ const Navbar = () => {
   const preview = useColorsStore(state => state.preview);
   if (!isAuthenticated) {
     return (
-      <nav className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between bg-cyan-50 p-4">
+      <nav className="mx-auto flex max-w-full flex-wrap items-center justify-between bg-cyan-50 p-4">
         <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
           Number Memory Game
         </span>
@@ -57,7 +57,14 @@ const Navbar = () => {
     return (
       <div>
         <Navigate to="/loginHome" />
-        <nav className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between p-4">
+        <nav
+          style={
+            preview
+              ? { backgroundColor: themeBgColor }
+              : { backgroundColor: globalUser.bgcolor }
+          }
+          className="mx-auto flex max-w-full flex-wrap items-center justify-between p-4"
+        >
           <Avatar />
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             <ul className="mt-4 flex flex-col p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">

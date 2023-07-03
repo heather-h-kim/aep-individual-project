@@ -89,11 +89,11 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
+        // style={
+        //   preview
+        //     ? { backgroundColor: themeBgColor }
+        //     : { backgroundColor: globalUser.bgcolor }
+        // }
         className="m-10 p-5"
       >
         <RouterProvider router={router} />
