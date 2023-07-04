@@ -1,4 +1,4 @@
-import { useParams } from '@tanstack/react-router';
+import { Link, Navigate, useParams } from '@tanstack/react-router';
 import React, { useEffect, useState } from 'react';
 import useGetGifs from '../hooks/useGetGifs';
 import useRandomFacts from '../hooks/useRandomFacts';
@@ -95,6 +95,10 @@ const Game = () => {
     setAnswer('');
   };
 
+  const seeScore = () => {
+    console.log('in seeScore');
+  };
+
   if (start) {
     return (
       <div
@@ -142,7 +146,14 @@ const Game = () => {
     }, 1500);
 
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <h1 className="text-8xl font-extrabold tracking-widest">
           {numberArray[index]}
         </h1>
@@ -179,7 +190,14 @@ const Game = () => {
 
   if (showQuestion) {
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <span className=" pb-8 text-4xl font-medium">What was the number?</span>
         <form className="flex flex-row space-x-4" onSubmit={handleSubmit}>
           <label
@@ -227,7 +245,14 @@ const Game = () => {
     }, 1000);
 
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <h1 className=" pb-8 text-6xl font-medium">Correct!</h1>
       </div>
     );
@@ -245,7 +270,14 @@ const Game = () => {
     }, 1000);
 
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <h1 className=" pb-8 text-6xl font-medium">
           Wrong...! The number was {numberArray[index]}
         </h1>
@@ -255,9 +287,27 @@ const Game = () => {
 
   if (keepPlaying) {
     return (
-      <div>
-        <h1>Play next level</h1>
-        <h1>Stop and see my score</h1>
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-row items-center justify-center"
+      >
+        <Link
+          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          to="/game-level2/2"
+        >
+          {' '}
+          Play next level
+        </Link>
+        <button
+          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          onClick={seeScore}
+        >
+          Stop and see my score
+        </button>
       </div>
     );
   }
@@ -269,7 +319,14 @@ const Game = () => {
       setLastStep(!lastStep);
     }, 2000);
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <h1 className=" pb-8 text-6xl font-medium">
           Your score is:
           <span className="font-bold text-pink-900">{score}</span>

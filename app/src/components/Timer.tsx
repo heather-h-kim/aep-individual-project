@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react';
+import { useColorsStore } from '../store/colorStore';
+import { useUserStore } from '../store/userStore';
 
 const Timer = () => {
+  const themeBgColor = useColorsStore(state => state.bgcolor);
+  const globalUser = useUserStore(state => state.user);
+  const preview = useColorsStore(state => state.preview);
   const [seconds, setSeconds] = useState(0);
   const deadline = Date.now();
   const getTime = () => {
@@ -18,7 +23,14 @@ const Timer = () => {
   }, []);
 
   return (
-    <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+    <div
+      style={
+        preview
+          ? { backgroundColor: themeBgColor }
+          : { backgroundColor: globalUser.bgcolor }
+      }
+      className="my-10 flex h-screen flex-col items-center justify-center"
+    >
       <svg
         className="h-90 w-90 flex"
         fill="none"
