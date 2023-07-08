@@ -6,7 +6,6 @@ const Timer = () => {
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const globalUser = useUserStore(state => state.user);
   const preview = useColorsStore(state => state.preview);
-  const [test, setTest] = useState(false);
   const [seconds, setSeconds] = useState(0);
   const deadline = Date.now();
   const getTime = () => {
@@ -14,8 +13,6 @@ const Timer = () => {
     const timeInSeconds = time / 1000;
     if (timeInSeconds < 16) {
       setSeconds(Math.floor(time / 1000));
-    } else {
-      setTest(!test);
     }
   };
 
@@ -24,10 +21,6 @@ const Timer = () => {
 
     return () => clearInterval(interval);
   }, []);
-
-  if (test) {
-    return <h1>Test</h1>;
-  }
 
   return (
     <div

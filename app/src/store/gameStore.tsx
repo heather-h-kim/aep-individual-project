@@ -1,18 +1,18 @@
 import { create } from 'zustand';
 
 interface roundObject {
-  round_number: number;
-  number_shown: number;
-  number_entered: number;
+  roundNumber: number;
+  numberShown: number;
+  numberEntered: number;
 }
 
 interface levelObject {
-  level_number: number;
+  levelNumber: number;
   rounds: roundObject[];
 }
 
 interface level {
-  level_number: number;
+  levelNumber: number;
   rounds: roundObject[];
   updateLevelNumber: (levelNumber: number) => void;
   updateRounds: (roundObject) => void;
@@ -20,23 +20,23 @@ interface level {
 }
 
 interface game {
-  levels_rounds: levelObject[];
+  levelsRounds: levelObject[];
   updateLevelsRounds: (LevelObject) => void;
   removeLevelsRounds: () => void;
 }
 
 export const useLevelStore = create<level>(set => ({
-  level_number: 0,
+  levelNumber: 0,
   rounds: [],
-  updateLevelNumber: levelNumber => set({ level_number: levelNumber }),
+  updateLevelNumber: levelNumber => set({ levelNumber: levelNumber }),
   updateRounds: newRound =>
     set(state => ({
       rounds: [
         ...state.rounds,
         {
-          round_number: newRound.round_number,
-          number_shown: newRound.number_shown,
-          number_entered: newRound.number_entered,
+          roundNumber: newRound.roundNumber,
+          numberShown: newRound.numberShown,
+          numberEntered: newRound.numberEntered,
         } as roundObject,
       ],
     })),
@@ -44,10 +44,10 @@ export const useLevelStore = create<level>(set => ({
 }));
 
 export const useGameStore = create<game>(set => ({
-  levels_rounds: [],
+  levelsRounds: [],
   updateLevelsRounds: newLevelObject =>
     set(state => ({
-      levels_rounds: [...state.levels_rounds, newLevelObject],
+      levelsRounds: [...state.levelsRounds, newLevelObject],
     })),
-  removeLevelsRounds: () => set({ levels_rounds: [] }),
+  removeLevelsRounds: () => set({ levelsRounds: [] }),
 }));

@@ -10,16 +10,24 @@ import RoundFive from './RoundFive';
 import RoundSix from './RoundSix';
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
-import { useIndexStore } from '../store/stateStore';
+import { useGameStore, useLevelStore } from '../store/gameStore';
 
 const Game = () => {
-  const themeBgColor = useColorsStore(state => state.bgcolor);
-  const preview = useColorsStore(state => state.preview);
+  const { themeBgColor, preview } = useColorsStore(state => ({
+    themeBgColor: state.bgcolor,
+    preview: state.preview,
+  }));
   const globalUser = useUserStore(state => state.user);
-  // const { index, updateIndex } = useIndexStore(state => ({
-  //   index: state.index,
-  //   updateIndex: state.updateIndex,
-  // }));
+  const { levelNumber, rounds, updateLevelNumber, updateRounds } =
+    useLevelStore(state => ({
+      levelNumber: state.levelNumber,
+      rounds: state.rounds,
+      updateLevelNumber: state.updateLevelNumber,
+      updateRounds: state.updateRounds,
+    }));
+
+  const levelsRounds = useGameStore(state => state.levelsRounds);
+
   const param = useParams();
   const [level, setLevel] = useState(Number(param.level));
   const [numberArray, setNumberArray] = useState([]);
@@ -69,10 +77,6 @@ const Game = () => {
     setNumberArray(array);
   }, []);
 
-  console.log('numbers are', numberArray);
-  console.log('level is', level);
-  console.log('index is', index);
-
   //function to set index state from children
   const handleIndexState = () => {
     setIndex(index + 1);
@@ -80,12 +84,22 @@ const Game = () => {
 
   const handleClick = () => {
     console.log('handleClick');
-    // updateIndex(0);
     setIndex(0);
+    updateLevelNumber(level);
   };
 
+  console.log('numbers are', numberArray);
+  console.log('level is', level);
+  console.log('levelNumber is', levelNumber);
+  console.log('index is', index);
+
   if (index == 0) {
-    return <RoundOne handleIndexState={handleIndexState} />;
+    return (
+      <RoundOne
+        handleIndexState={handleIndexState}
+        number={numberArray[index]}
+      />
+    );
   }
 
   if (index == 1) {
