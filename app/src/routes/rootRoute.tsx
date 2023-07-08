@@ -13,8 +13,6 @@ import loginHomeRoute from './loginHomeRoute';
 import levelTwoRoute from './levelTwoRoute';
 import levelThreeRoute from './levelThreeRoute';
 import levelFourRoute from './levelFourRoute';
-import gameRoute from './gameRoute';
-import gameIndexRoute from './gameIndexRoute';
 
 export const rootRoute = new RootRoute({
   component: () => (
