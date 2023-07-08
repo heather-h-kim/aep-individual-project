@@ -1,13 +1,11 @@
 import { create } from 'zustand';
 
-interface ShowNumber {
-  showNumber: boolean;
-  updateShowNumber: () => void;
+interface Index {
+  index: number;
+  updateIndex: (newNumber: number) => void;
 }
 
-export const useShowNumberStore = create<ShowNumber>(set => ({
-  showNumber: false,
-  updateShowNumber: () => {
-    set(state => ({ showNumber: !state.showNumber }));
-  },
+export const useIndexStore = create<Index>(set => ({
+  index: 10,
+  updateIndex: newNumber => set({ index: newNumber }),
 }));
