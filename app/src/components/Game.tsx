@@ -16,13 +16,14 @@ const Game = () => {
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const preview = useColorsStore(state => state.preview);
   const globalUser = useUserStore(state => state.user);
-  const { index, updateIndex } = useIndexStore(state => ({
-    index: state.index,
-    updateIndex: state.updateIndex,
-  }));
+  // const { index, updateIndex } = useIndexStore(state => ({
+  //   index: state.index,
+  //   updateIndex: state.updateIndex,
+  // }));
   const param = useParams();
   const [level, setLevel] = useState(Number(param.level));
   const [numberArray, setNumberArray] = useState([]);
+  const [index, setIndex] = useState(10);
 
   //Fetch distractions from third party APIs
   // useGetGifs();
@@ -72,18 +73,19 @@ const Game = () => {
   console.log('level is', level);
   console.log('index is', index);
 
-  // //function to set index state from children
-  // const handleIndexState = () => {
-  //   setIndex(index + 1);
-  // };
+  //function to set index state from children
+  const handleIndexState = () => {
+    setIndex(index + 1);
+  };
 
   const handleClick = () => {
     console.log('handleClick');
-    updateIndex(0);
+    // updateIndex(0);
+    setIndex(0);
   };
 
   if (index == 0) {
-    return <RoundOne />;
+    return <RoundOne handleIndexState={handleIndexState} />;
   }
 
   if (index == 1) {
