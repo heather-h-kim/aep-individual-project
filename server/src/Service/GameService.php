@@ -34,6 +34,7 @@ class GameService
 
     /**
      * @throws NonUniqueResultException
+     * @throws \Exception
      */
     public function createGameLevelsRounds(CreateGameLevelRoundDto $createGameRoundDto): int
     {
@@ -44,7 +45,8 @@ class GameService
         $user = $this->userRepository->find($user_id);
 
         //get info for the played_at and season fields
-        $currentDate = new DateTime('now');
+//        $currentDate = new DateTime('now');
+        $currentDate = new DateTime($createGameRoundDto->getPlayedAt());
         $season = $this->seasonRepository->findOneByCurrentDate($currentDate);
 
         //update newGame

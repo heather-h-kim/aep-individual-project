@@ -6,6 +6,7 @@ import Avatar from './Avatar';
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 import Dropdown from './Dropdown';
+import { useGameStore, useLevelStore } from '../store/gameStore';
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth0();
@@ -13,6 +14,15 @@ const Navbar = () => {
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const themeFgColor = useColorsStore(state => state.fgcolor);
   const preview = useColorsStore(state => state.preview);
+  const removeRounds = useLevelStore(state => state.removeRounds);
+  const removeLevelsRounds = useGameStore(state => state.removeLevelsRounds);
+
+  //function to clear the game when one of the navbar menus other than game menu is clicked during the game
+  const clearGame = () => {
+    removeRounds();
+    removeLevelsRounds();
+  };
+
   if (!isAuthenticated) {
     return (
       <nav className="mx-auto flex max-w-full flex-wrap items-center justify-between bg-cyan-50 p-4">
@@ -83,6 +93,7 @@ const Navbar = () => {
                   }
                   className="inline-block rounded px-3 py-1 "
                   to="/loginHome"
+                  onClick={clearGame}
                 >
                   Home
                 </Link>
@@ -102,6 +113,7 @@ const Navbar = () => {
                   }
                   className="inline-block rounded px-3 py-1 "
                   to="/demo"
+                  onClick={clearGame}
                 >
                   Demo
                 </Link>
@@ -124,6 +136,7 @@ const Navbar = () => {
                   }
                   className="inline-block rounded px-3 py-1 "
                   to="/rankings"
+                  onClick={clearGame}
                 >
                   Rankings
                 </Link>
@@ -143,6 +156,7 @@ const Navbar = () => {
                   }
                   className="inline-block rounded px-3 py-1 "
                   to="/profile"
+                  onClick={clearGame}
                 >
                   Profile
                 </Link>

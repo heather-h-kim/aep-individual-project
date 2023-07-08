@@ -35,7 +35,7 @@ class GameController extends ApiController
         /**
          * @var CreateGameLevelRoundDto $dto
          */
-        $dto = $this->getValidatedDto($request, CreateGameLevelRoundDto::class);
+
         $dto = $this->getValidatedDto($request, CreateGameLevelRoundDto::class);
         return $this->JSON($this->gameService->createGameLevelsRounds($dto));
     }

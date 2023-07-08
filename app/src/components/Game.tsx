@@ -1,5 +1,5 @@
 import { Link, Navigate, useParams } from '@tanstack/react-router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import useGetGifs from '../hooks/useGetGifs';
 import useRandomFacts from '../hooks/useRandomFacts';
 import Timer from './Timer';
@@ -7,6 +7,9 @@ import Giphy from './Giphy';
 import RandomFacts from './RandomFacts';
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
+import { useGameStore, useLevelStore } from '../store/gameStore';
+import { useShowNumberStore } from '../store/stateStore';
+import ShowNumber from './ShowNumber';
 
 const Game = () => {
   const param = useParams();
@@ -30,9 +33,24 @@ const Game = () => {
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const preview = useColorsStore(state => state.preview);
   const globalUser = useUserStore(state => state.user);
+  const updateLevelNumber = useLevelStore(state => state.updateLevelNumber);
+  const levelNumber = useLevelStore(state => state.level_number);
+  const updateRounds = useLevelStore(state => state.updateRounds);
+  const removeRounds = useLevelStore(state => state.removeRounds);
+  const updateLevelsRounds = useGameStore(state => state.updateLevelsRounds);
+  const removeLevelsRounds = useGameStore(state => state.removeLevelsRounds);
+  const levels_rounds = useGameStore(state => state.levels_rounds);
+  const rounds = useLevelStore(state => state.rounds);
+  const [roundNumberArray, setRoundNumberArray] = useState([1, 2, 3, 4, 5, 6]);
+  const [roundIndex, setRoundIndex] = useState(0);
+  const [scoreButton, setScoreButton] = useState(false);
 
-  useGetGifs();
-  useRandomFacts();
+  //
+  // const showNumber = useShowNumberStore(state => state.showNumber);
+  // const updateShowNumber = useShowNumberStore(state => state.updateShowNumber);
+
+  // useGetGifs();
+  // useRandomFacts();
 
   useEffect(() => {
     console.log('in useEffect');
@@ -72,18 +90,33 @@ const Game = () => {
     } while (array.length < n);
 
     setNumberArray(array);
-  }, [level]);
 
-  console.log(level);
+    console.log(level);
+  }, []);
+
   console.log(numberArray);
 
   const handleClick = () => {
+    console.log('handleClick');
+    updateLevelNumber(level);
     setStart(!start);
     setShowNumber(!showNumber);
   };
 
+  const handleInput = e => {
+    console.log('handleInput');
+    setAnswer(e.target.value);
+  };
+
   const handleSubmit = e => {
     e.preventDefault();
+    console.log('handleSubmit', index);
+    updateRounds({
+      round_number: roundNumberArray[index],
+      number_shown: numberArray[index],
+      number_entered: Number(answer),
+    });
+
     setShowQuestion(!showQuestion);
 
     if (answer == numberArray[index]) {
@@ -95,8 +128,25 @@ const Game = () => {
     setAnswer('');
   };
 
-  const seeScore = () => {
-    console.log('in seeScore');
+  console.log('rounds', rounds);
+
+  const updateGame = () => {
+    console.log('updateLevelsRounds');
+    console.log('updateLevelsRounds');
+    updateLevelsRounds({ level_number: levelNumber, rounds: rounds });
+    removeRounds();
+  };
+
+  console.log('levelsRounds is', levels_rounds);
+
+  const seeScoreFromKeepPlaying = () => {
+    console.log('updateLevelsRounds');
+    updateLevelsRounds({ level_number: levelNumber, rounds: rounds });
+    removeRounds();
+    removeLevelsRounds();
+
+    setKeepPlaying(!keepPlaying);
+    setShowScore(!showScore);
   };
 
   if (start) {
@@ -120,8 +170,13 @@ const Game = () => {
   }
 
   if (showNumber) {
+    // return <ShowNumber />;
+
+    console.log('in shownumber');
     setTimeout(() => {
+      console.log('setShowNumber');
       setShowNumber(!showNumber);
+      // updateShowNumber();
 
       switch (index) {
         case 0:
@@ -165,7 +220,7 @@ const Game = () => {
     setTimeout(() => {
       setShowTimer(!showTimer);
       setShowQuestion(!showQuestion);
-    }, 15000);
+    }, 1500);
 
     return <Timer />;
   }
@@ -174,7 +229,7 @@ const Game = () => {
     setTimeout(() => {
       setShowGif(!showGif);
       setShowQuestion(!showQuestion);
-    }, 15000);
+    }, 1500);
 
     return <Giphy />;
   }
@@ -183,7 +238,7 @@ const Game = () => {
     setTimeout(() => {
       setShowRandomFact(!showRandomFact);
       setShowQuestion(!showQuestion);
-    }, 15000);
+    }, 1500);
 
     return <RandomFacts />;
   }
@@ -209,11 +264,9 @@ const Game = () => {
             id="answer"
             name="answer"
             className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900  placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-            // required
+            required
             value={answer}
-            onChange={e => {
-              setAnswer(e.target.value);
-            }}
+            onChange={handleInput}
           />
           <button
             className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
@@ -228,21 +281,35 @@ const Game = () => {
 
   if (correct) {
     setTimeout(() => {
+      console.log('setIsCorrect');
       setIsCorrect(isCorrect + 1);
+      console.log('setCorrect');
       setCorrect(!correct);
+      console.log('setIndex');
       setIndex(index + 1);
+      console.log('index', index);
       if (index < 5) {
+        console.log('setShowNumber');
         setShowNumber(!showNumber);
       } else {
         if (isCorrect < 5) {
-          setShowScore(!showScore);
+          console.log('setScoreButton');
+          setScoreButton(!scoreButton);
         }
 
         if (isCorrect == 5) {
+          console.log('setKeepPlaying');
           setKeepPlaying(!keepPlaying);
+
+          if (level === 4) {
+            console.log('setScoreButton');
+            setScoreButton(!scoreButton);
+          }
         }
       }
     }, 1000);
+
+    console.log('rounds is', rounds);
 
     return (
       <div
@@ -262,13 +329,15 @@ const Game = () => {
     setTimeout(() => {
       setIncorrect(!incorrect);
       setIndex(index + 1);
+      setRoundIndex(roundIndex + 1);
       if (index < 5) {
         setShowNumber(!showNumber);
       } else {
-        setShowScore(!showScore);
+        setScoreButton(!scoreButton);
       }
     }, 1000);
 
+    console.log('round is', rounds);
     return (
       <div
         style={
@@ -285,6 +354,28 @@ const Game = () => {
     );
   }
 
+  if (scoreButton) {
+    console.log('in scoreButton');
+
+    return (
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-row items-center justify-center"
+      >
+        <button
+          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          onClick={updateGame}
+        >
+          See my score
+        </button>
+      </div>
+    );
+  }
+
   if (keepPlaying) {
     return (
       <div
@@ -297,14 +388,15 @@ const Game = () => {
       >
         <Link
           className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
-          to="/game-level2/2"
+          to={`/game-level${level + 1}/${level + 1}`}
+          onClick={updateGame}
         >
           {' '}
           Play next level
         </Link>
         <button
           className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
-          onClick={seeScore}
+          onClick={seeScoreFromKeepPlaying}
         >
           Stop and see my score
         </button>
@@ -318,6 +410,7 @@ const Game = () => {
       setShowScore(!showScore);
       setLastStep(!lastStep);
     }, 2000);
+
     return (
       <div
         style={
