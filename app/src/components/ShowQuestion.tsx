@@ -2,6 +2,7 @@ import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 import { useState } from 'react';
 import { useLevelStore } from '../store/gameStore';
+import { useIsCorrectStore } from '../store/stateStore';
 
 const ShowQuestion = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -16,18 +17,22 @@ const ShowQuestion = props => {
       updateLevelNumber: state.updateLevelNumber,
       updateRounds: state.updateRounds,
     }));
+  const { updateIsCorrect } = useIsCorrectStore(state => ({
+    updateIsCorrect: state.updateIsCorrect,
+  }));
   const [answer, setAnswer] = useState('');
 
   const handleSubmit = e => {
     e.preventDefault();
     console.log('handleSubmit');
     updateRounds({
-      round_number: props.roundNumber,
-      number_shown: props.numberShown,
-      number_entered: Number(answer),
+      roundNumber: props.roundNumber,
+      numberShown: props.numberShown,
+      numberEntered: Number(answer),
     });
 
     if (answer == props.numberShown) {
+      updateIsCorrect();
       props.handleStateStep('correct');
     } else {
       props.handleStateStep('incorrect');

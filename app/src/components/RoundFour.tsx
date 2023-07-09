@@ -4,6 +4,8 @@ import { useUserStore } from '../store/userStore';
 import Giphy from './Giphy';
 import ShowQuestion from './ShowQuestion';
 import useSetTimeout from '../hooks/useSetTimeout';
+import ShowCorrect from './ShowCorrect';
+import ShowInCorrect from './ShowIncorrect';
 
 const RoundFour = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -57,35 +59,11 @@ const RoundFour = props => {
   }
 
   if (state.step == 'correct') {
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col items-center justify-center"
-      >
-        <h1 className="text-8xl font-extrabold tracking-widest">Correct!</h1>
-      </div>
-    );
+    return <ShowCorrect />;
   }
 
   if (state.step == 'incorrect') {
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col items-center justify-center"
-      >
-        <h1 className="text-8xl font-extrabold tracking-widest">
-          Wrong... The number was {state.numberShown}.
-        </h1>
-      </div>
-    );
+    return <ShowInCorrect numberShown={state.numberShown} />;
   }
 };
 

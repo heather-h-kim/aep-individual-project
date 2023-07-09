@@ -4,6 +4,10 @@ import { useUserStore } from '../store/userStore';
 import { useLevelStore, useGameStore } from '../store/gameStore';
 import RandomFacts from './RandomFacts';
 import ShowQuestion from './ShowQuestion';
+import ShowCorrect from './ShowCorrect';
+import ShowInCorrect from './ShowIncorrect';
+import { useIsCorrectStore } from '../store/stateStore';
+import { Link } from '@tanstack/react-router';
 
 const RoundSix = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -22,7 +26,11 @@ const RoundSix = props => {
     rounds: state.rounds,
     removeRounds: state.removeRounds,
   }));
+  const { isCorrect } = useIsCorrectStore(state => ({
+    isCorrect: state.isCorrect,
+  }));
 
+  console.log('is Correct is', isCorrect);
   console.log('in round 6, state is', state);
 
   useEffect(() => {
@@ -33,7 +41,7 @@ const RoundSix = props => {
         delay = 2000;
         break;
       case 'showDistraction':
-        delay = 3000;
+        delay = 1000;
         break;
       case 'correct':
         delay = 1500;
@@ -55,7 +63,40 @@ const RoundSix = props => {
           setState({ ...state, step: 'showQuestion' });
           break;
         case 'correct':
-          setState({ ...state, step: 'showKeepPlaying' });
+          switch (props.level) {
+            case 1:
+              if (isCorrect < props.level * 6) {
+                setState({ ...state, step: 'showScoreButton' });
+              }
+              if (isCorrect == props.level * 6) {
+                setState({ ...state, step: 'showKeepPlaying' });
+              }
+              break;
+            case 2:
+              if (isCorrect < props.level * 6) {
+                setState({ ...state, step: 'showScoreButton' });
+              }
+              if (isCorrect == props.level * 6) {
+                setState({ ...state, step: 'showKeepPlaying' });
+              }
+              break;
+            case 3:
+              if (isCorrect < props.level * 6) {
+                setState({ ...state, step: 'showScoreButton' });
+              }
+              if (isCorrect == props.level * 6) {
+                setState({ ...state, step: 'showKeepPlaying' });
+              }
+              break;
+            case 4:
+              if (isCorrect < props.level * 6) {
+                setState({ ...state, step: 'showScoreButton' });
+              }
+              if (isCorrect == props.level * 6) {
+                setState({ ...state, step: 'showKeepPlaying' });
+              }
+              break;
+          }
           break;
         case 'incorrect':
           setState({ ...state, step: 'showScoreButton' });
@@ -75,7 +116,6 @@ const RoundSix = props => {
 
   //function to update game when the score button is clicked
   const updateGame = () => {
-    console.log('updateLevelsRounds');
     console.log('updateLevelsRounds');
     updateLevelsRounds({ level_number: levelNumber, rounds: rounds });
     removeRounds();
@@ -113,35 +153,11 @@ const RoundSix = props => {
   }
 
   if (state.step == 'correct') {
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col items-center justify-center"
-      >
-        <h1 className="text-8xl font-extrabold tracking-widest">Correct!</h1>
-      </div>
-    );
+    return <ShowCorrect />;
   }
 
   if (state.step == 'incorrect') {
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col items-center justify-center"
-      >
-        <h1 className="text-8xl font-extrabold tracking-widest">
-          Wrong... The number was {state.numberShown}.
-        </h1>
-      </div>
-    );
+    return <ShowInCorrect numberShown={state.numberShown} />;
   }
 
   if (state.step == 'showScoreButton') {
@@ -159,6 +175,34 @@ const RoundSix = props => {
           onClick={updateGame}
         >
           See my score
+        </button>
+      </div>
+    );
+  }
+
+  if (state.step == 'showKeepPlaying') {
+    return (
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-row items-center justify-center"
+      >
+        <Link
+          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          to={`/game-level${props.level + 1}/${props.level + 1}`}
+          onClick={updateGame}
+        >
+          {' '}
+          Play next level
+        </Link>
+        <button
+          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          // onClick={seeScoreFromKeepPlaying}
+        >
+          Stop and see my score
         </button>
       </div>
     );

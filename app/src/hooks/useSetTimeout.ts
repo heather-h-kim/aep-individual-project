@@ -15,7 +15,7 @@ const useSetTimeout = props => {
         delay = 2000;
         break;
       case 'showDistraction':
-        delay = 3000;
+        delay = 1000;
         break;
       case 'correct':
         delay = 1500;

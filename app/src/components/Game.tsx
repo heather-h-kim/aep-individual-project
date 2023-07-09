@@ -11,6 +11,7 @@ import RoundSix from './RoundSix';
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 import { useGameStore, useLevelStore } from '../store/gameStore';
+import { useIsCorrectStore } from '../store/stateStore';
 
 const Game = () => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -32,6 +33,10 @@ const Game = () => {
   const [level, setLevel] = useState(Number(param.level));
   const [numberArray, setNumberArray] = useState([]);
   const [index, setIndex] = useState(10);
+
+  const { isCorrect } = useIsCorrectStore(state => ({
+    isCorrect: state.isCorrect,
+  }));
 
   //Fetch distractions from third party APIs
   // useGetGifs();
@@ -93,6 +98,8 @@ const Game = () => {
   console.log('levelNumber is', levelNumber);
   console.log('index is', index);
   console.log('rounds is', rounds);
+  console.log('isCorrect is', isCorrect);
+  console.log('levelsRounds is', levelsRounds);
 
   if (index == 0) {
     return (
@@ -145,7 +152,9 @@ const Game = () => {
   }
 
   if (index == 5) {
-    return <RoundSix number={numberArray[index]} round={index + 1} />;
+    return (
+      <RoundSix number={numberArray[index]} round={index + 1} level={level} />
+    );
   }
 
   return (

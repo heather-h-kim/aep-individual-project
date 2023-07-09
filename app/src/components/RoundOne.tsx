@@ -4,6 +4,9 @@ import { useUserStore } from '../store/userStore';
 import Timer from './Timer';
 import ShowQuestion from './ShowQuestion';
 import useSetTimeout from '../hooks/useSetTimeout';
+import { useIsCorrectStore } from '../store/stateStore';
+import ShowCorrect from './ShowCorrect';
+import ShowInCorrect from './ShowIncorrect';
 
 const RoundOne = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -14,6 +17,7 @@ const RoundOne = props => {
   const { state, setState, timeOut } = useSetTimeout(props);
 
   console.log('in round 1');
+  console.log('state', state);
 
   useEffect(() => {
     console.log('in round 1 useEffect');
@@ -57,35 +61,11 @@ const RoundOne = props => {
   }
 
   if (state.step == 'correct') {
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col items-center justify-center"
-      >
-        <h1 className="text-8xl font-extrabold tracking-widest">Correct!</h1>
-      </div>
-    );
+    return <ShowCorrect />;
   }
 
   if (state.step == 'incorrect') {
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col items-center justify-center"
-      >
-        <h1 className="text-8xl font-extrabold tracking-widest">
-          Wrong... The number was {state.numberShown}.
-        </h1>
-      </div>
-    );
+    return <ShowInCorrect numberShown={state.numberShown} />;
   }
 };
 
