@@ -3,6 +3,7 @@ import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 import Timer from './Timer';
 import ShowQuestion from './ShowQuestion';
+import useSetTimeout from '../hooks/useSetTimeout';
 
 const RoundOne = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -10,49 +11,13 @@ const RoundOne = props => {
     preview: state.preview,
   }));
   const globalUser = useUserStore(state => state.user);
-  const [state, setState] = useState({
-    roundNumber: 1,
-    numberShown: props.number,
-    step: 'showNumber',
-  });
+  const { state, setState, timeOut } = useSetTimeout(props);
 
   console.log('in round 1');
 
   useEffect(() => {
     console.log('in round 1 useEffect');
-    let delay;
-
-    switch (state.step) {
-      case 'showNumber':
-        delay = 2000;
-        break;
-      case 'showTimer':
-        delay = 3000;
-        break;
-      case 'correct' || 'incorrect':
-        delay = 1500;
-        break;
-      default:
-        delay = 0;
-    }
-
-    const timer = setTimeout(() => {
-      switch (state.step) {
-        case 'showNumber':
-          setState({ ...state, step: 'showTimer' });
-          break;
-        case 'showTimer':
-          setState({ ...state, step: 'showQuestion' });
-          break;
-        case 'correct' || 'incorrect':
-          props.handleIndexState();
-          break;
-        default:
-          console.log('setTimeout Round 1');
-      }
-    }, delay);
-
-    return () => clearTimeout(timer);
+    timeOut();
   }, [state.step]);
 
   //function to set next step from the ShowQuestion component

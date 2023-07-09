@@ -98,28 +98,53 @@ const Game = () => {
       <RoundOne
         handleIndexState={handleIndexState}
         number={numberArray[index]}
+        round={index + 1}
       />
     );
   }
 
   if (index == 1) {
-    return <RoundTwo />;
+    return (
+      <RoundTwo
+        handleIndexState={handleIndexState}
+        number={numberArray[index]}
+        round={index + 1}
+      />
+    );
   }
 
   if (index == 2) {
-    return <RoundThree />;
+    return (
+      <RoundThree
+        handleIndexState={handleIndexState}
+        number={numberArray[index]}
+        round={index + 1}
+      />
+    );
   }
 
   if (index == 3) {
-    return <RoundFour />;
+    return (
+      <RoundFour
+        handleIndexState={handleIndexState}
+        number={numberArray[index]}
+        round={index + 1}
+      />
+    );
   }
 
   if (index == 4) {
-    return <RoundFive />;
+    return (
+      <RoundFive
+        handleIndexState={handleIndexState}
+        number={numberArray[index]}
+        round={index + 1}
+      />
+    );
   }
 
   if (index == 5) {
-    return <RoundSix />;
+    return <RoundSix number={numberArray[index]} round={index + 1} />;
   }
 
   return (
