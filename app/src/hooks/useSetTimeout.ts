@@ -14,7 +14,7 @@ const useSetTimeout = props => {
       case 'showNumber':
         delay = 2000;
         break;
-      case 'showTimer':
+      case 'showDistraction':
         delay = 3000;
         break;
       case 'correct':
@@ -31,9 +31,9 @@ const useSetTimeout = props => {
     const timer = setTimeout(() => {
       switch (state.step) {
         case 'showNumber':
-          setState({ ...state, step: 'showTimer' });
+          setState({ ...state, step: 'showDistraction' });
           break;
-        case 'showTimer':
+        case 'showDistraction':
           setState({ ...state, step: 'showQuestion' });
           break;
         case 'correct':
@@ -43,7 +43,7 @@ const useSetTimeout = props => {
           props.handleIndexState();
           break;
         default:
-          console.log('setTimeout Round 1');
+          console.log('timeout hook');
       }
     }, delay);
 

@@ -16,7 +16,7 @@ const RoundTwo = props => {
   console.log('in round 2');
 
   useEffect(() => {
-    console.log('in round 1 useEffect');
+    console.log('in round 2 useEffect');
     timeOut();
   }, [state.step]);
 
@@ -42,14 +42,14 @@ const RoundTwo = props => {
     );
   }
 
-  if (state.step == 'showTimer') {
+  if (state.step == 'showDistraction') {
     return <Timer />;
   }
 
   if (state.step == 'showQuestion') {
     return (
       <ShowQuestion
-        roundNumber={1}
+        roundNumber={state.roundNumber}
         numberShown={state.numberShown}
         handleStateStep={handleStateStep}
       />

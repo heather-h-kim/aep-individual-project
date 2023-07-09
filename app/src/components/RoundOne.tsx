@@ -42,14 +42,14 @@ const RoundOne = props => {
     );
   }
 
-  if (state.step == 'showTimer') {
+  if (state.step == 'showDistraction') {
     return <Timer />;
   }
 
   if (state.step == 'showQuestion') {
     return (
       <ShowQuestion
-        roundNumber={1}
+        roundNumber={state.roundNumber}
         numberShown={state.numberShown}
         handleStateStep={handleStateStep}
       />
