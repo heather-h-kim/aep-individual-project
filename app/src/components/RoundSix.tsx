@@ -8,6 +8,7 @@ import ShowCorrect from './ShowCorrect';
 import ShowInCorrect from './ShowIncorrect';
 import { useIsCorrectStore } from '../store/stateStore';
 import { Link } from '@tanstack/react-router';
+import ShowNumber from './ShowNumber';
 
 const RoundSix = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -20,7 +21,11 @@ const RoundSix = props => {
     numberShown: props.number,
     step: 'showNumber',
   });
-  const updateLevelsRounds = useGameStore(state => state.updateLevelsRounds);
+  const { updateLevelsRounds, removeLevelsRounds } = useGameStore(state => ({
+    updateLevelsRounds: state.updateLevelsRounds,
+    removeLevelsRounds: state.removeLevelsRounds,
+  }));
+
   const { levelNumber, rounds, removeRounds } = useLevelStore(state => ({
     levelNumber: state.levelNumber,
     rounds: state.rounds,
@@ -114,28 +119,26 @@ const RoundSix = props => {
     setState({ ...state, step: nextStep });
   };
 
-  //function to update game when the score button is clicked
+  //function to update game before moving on to the next level
   const updateGame = () => {
-    console.log('updateLevelsRounds');
+    console.log('update the Game');
     updateLevelsRounds({ level_number: levelNumber, rounds: rounds });
     removeRounds();
   };
 
+  //function to send the game to the backend and reset the game
+  const getScore = () => {
+    console.log('end the game');
+    updateLevelsRounds({ level_number: levelNumber, rounds: rounds });
+    //mutation
+    //reset the game
+    removeRounds();
+    removeLevelsRounds();
+    setState({ ...state, step: 'showScore' });
+  };
+
   if (state.step == 'showNumber') {
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col items-center justify-center"
-      >
-        <h1 className="text-8xl font-extrabold tracking-widest">
-          {props.number}
-        </h1>
-      </div>
-    );
+    return <ShowNumber numberShown={state.numberShown} />;
   }
 
   if (state.step == 'showDistraction') {
@@ -172,7 +175,7 @@ const RoundSix = props => {
       >
         <button
           className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
-          onClick={updateGame}
+          onClick={getScore}
         >
           See my score
         </button>
@@ -200,10 +203,28 @@ const RoundSix = props => {
         </Link>
         <button
           className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
-          // onClick={seeScoreFromKeepPlaying}
+          onClick={getScore}
         >
           Stop and see my score
         </button>
+      </div>
+    );
+  }
+
+  if (state.step == 'showScore') {
+    return (
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-row items-center justify-center"
+      >
+        <h1 className="text-8xl font-extrabold tracking-widest">
+          {' '}
+          Your score is:{' '}
+        </h1>
       </div>
     );
   }

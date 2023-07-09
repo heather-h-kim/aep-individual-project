@@ -6,6 +6,7 @@ import ShowQuestion from './ShowQuestion';
 import useSetTimeout from '../hooks/useSetTimeout';
 import ShowCorrect from './ShowCorrect';
 import ShowInCorrect from './ShowIncorrect';
+import ShowNumber from './ShowNumber';
 
 const RoundFive = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -28,20 +29,7 @@ const RoundFive = props => {
   };
 
   if (state.step == 'showNumber') {
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col items-center justify-center"
-      >
-        <h1 className="text-8xl font-extrabold tracking-widest">
-          {props.number}
-        </h1>
-      </div>
-    );
+    return <ShowNumber numberShown={state.numberShown} />;
   }
 
   if (state.step == 'showDistraction') {
