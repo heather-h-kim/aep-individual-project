@@ -20,22 +20,39 @@ const RoundOne = props => {
 
   useEffect(() => {
     console.log('in round 1 useEffect');
+    let delay;
 
-    if (state.step == 'showNumber') {
-      const timer = setTimeout(() => {
-        setState({ ...state, step: 'showTimer' });
-      }, 2000);
-
-      return () => clearTimeout(timer);
+    switch (state.step) {
+      case 'showNumber':
+        delay = 2000;
+        break;
+      case 'showTimer':
+        delay = 3000;
+        break;
+      case 'correct' || 'incorrect':
+        delay = 1500;
+        break;
+      default:
+        delay = 0;
     }
 
-    if (state.step == 'showTimer') {
-      const timer = setTimeout(() => {
-        setState({ ...state, step: 'showQuestion' });
-      }, 2000);
+    const timer = setTimeout(() => {
+      switch (state.step) {
+        case 'showNumber':
+          setState({ ...state, step: 'showTimer' });
+          break;
+        case 'showTimer':
+          setState({ ...state, step: 'showQuestion' });
+          break;
+        case 'correct' || 'incorrect':
+          props.handleIndexState();
+          break;
+        default:
+          console.log('setTimeout Round 1');
+      }
+    }, delay);
 
-      return () => clearTimeout(timer);
-    }
+    return () => clearTimeout(timer);
   }, [state.step]);
 
   //function to set next step from the ShowQuestion component
@@ -75,7 +92,35 @@ const RoundOne = props => {
   }
 
   if (state.step == 'correct') {
-    return <h1>Correct</h1>;
+    return (
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
+        <h1 className="text-8xl font-extrabold tracking-widest">Correct!</h1>
+      </div>
+    );
+  }
+
+  if (state.step == 'incorrect') {
+    return (
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
+        <h1 className="text-8xl font-extrabold tracking-widest">
+          Wrong... The number was {state.numberShown}.
+        </h1>
+      </div>
+    );
   }
 };
 
