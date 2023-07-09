@@ -17,7 +17,10 @@ const useSetTimeout = props => {
       case 'showTimer':
         delay = 3000;
         break;
-      case 'correct' || 'incorrect':
+      case 'correct':
+        delay = 1500;
+        break;
+      case 'incorrect':
         delay = 1500;
         break;
       default:
@@ -33,7 +36,10 @@ const useSetTimeout = props => {
         case 'showTimer':
           setState({ ...state, step: 'showQuestion' });
           break;
-        case 'correct' || 'incorrect':
+        case 'correct':
+          props.handleIndexState();
+          break;
+        case 'incorrect':
           props.handleIndexState();
           break;
         default:

@@ -92,6 +92,7 @@ const Game = () => {
   console.log('level is', level);
   console.log('levelNumber is', levelNumber);
   console.log('index is', index);
+  console.log('rounds is', rounds);
 
   if (index == 0) {
     return (
