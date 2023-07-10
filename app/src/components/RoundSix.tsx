@@ -36,6 +36,7 @@ const RoundSix = props => {
     isCorrect: state.isCorrect,
     resetIsCorrect: state.resetIsCorrect,
   }));
+  const [score, setScore] = useState(0);
 
   const { data, mutate } = useMutation({
     mutationFn: (body: game) => postGame(body),
@@ -48,6 +49,7 @@ const RoundSix = props => {
 
     onSuccess: data => {
       console.log('Success', data);
+      setScore(data);
     },
     onSettled: (data, error, variables, context) => {
       console.log('Complete', data);
@@ -123,13 +125,15 @@ const RoundSix = props => {
   //function to send the payload to the backend and reset the game
   const getScore = () => {
     console.log('end the game');
+    const timestamp = Date.now();
     const payload = {
-      played_at: Date.now(),
+      played_at: timestamp,
       user_id: globalUser.userId,
       levels_rounds: levelsRounds,
     };
     console.log('payload is', payload);
-    // mutate(payload);
+
+    mutate(payload);
 
     //reset the game
     resetRounds();
@@ -140,6 +144,10 @@ const RoundSix = props => {
     setState({ ...state, step: 'showScore' });
   };
 
+  // button to click to play the same level once again
+  const playAgain = () => {
+    props.resetIndexState();
+  };
   if (state.step == 'showNumber') {
     return <ShowNumber numberShown={state.numberShown} />;
   }
@@ -220,21 +228,45 @@ const RoundSix = props => {
   }
 
   if (state.step == 'showScore') {
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-row items-center justify-center"
-      >
-        <h1 className="text-8xl font-extrabold tracking-widest">
-          {' '}
-          Your score is:{' '}
-        </h1>
-      </div>
-    );
+    if (score != 0) {
+      return (
+        <div
+          style={
+            preview
+              ? { backgroundColor: themeBgColor }
+              : { backgroundColor: globalUser.bgcolor }
+          }
+          className="my-10 flex h-screen flex-col items-center justify-center"
+        >
+          <h1 className="text-7xl font-extrabold tracking-widest">
+            {' '}
+            Your score is:{score}
+          </h1>
+          <button
+            className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+            onClick={playAgain}
+          >
+            {' '}
+            Play this level again
+          </button>
+        </div>
+      );
+    }
+
+    if (score == 0) {
+      return (
+        <div
+          style={
+            preview
+              ? { backgroundColor: themeBgColor }
+              : { backgroundColor: globalUser.bgcolor }
+          }
+          className="my-10 flex h-screen flex-row items-center justify-center"
+        >
+          <h1 className="text-8xl font-extrabold tracking-widest"> Wait...</h1>
+        </div>
+      );
+    }
   }
 };
 

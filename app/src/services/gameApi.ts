@@ -1,34 +1,9 @@
-import { roundObject, levelObject } from '../store/gameStore';
-
-// export interface round {
-//   round_number: number;
-//   number_shown: number;
-//   number_entered: number;
-// }
-
-// export interface levelObject {
-//   $level_number: number;
-//   $rounds: roundObject[];
-// }
-
-// export interface game {
-//   played_at: number;
-//   user_id: number | undefined;
-//   $levels_rounds: {
-//     $level_number: number;
-//     $rounds: {
-//       $round_number: number;
-//       $number_shown: number;
-//       $number_entered: number;
-//     }[];
-//   }[];
-// }
+import { round } from '../store/gameStore';
 
 export interface game {
   played_at: number;
   user_id: number | undefined;
-  level_number: number;
-  rounds: roundObject[];
+  levels_rounds: { level_number: number; rounds: round[] }[];
 }
 
 export async function postGame(body: game) {

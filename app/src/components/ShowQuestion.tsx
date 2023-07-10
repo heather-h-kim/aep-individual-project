@@ -19,9 +19,9 @@ const ShowQuestion = props => {
     e.preventDefault();
     //add the new round to the round array
     updateRounds({
-      roundNumber: props.roundNumber,
-      numberShown: props.numberShown,
-      numberEntered: Number(answer),
+      round_number: props.roundNumber,
+      number_shown: props.numberShown,
+      number_entered: Number(answer),
     });
 
     //add the new object that has level number and the array of rounds to the levelsRounds array

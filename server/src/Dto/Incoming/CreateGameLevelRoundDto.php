@@ -7,9 +7,9 @@ use Symfony\Component\Validator\Constraints\Type;
 
 class CreateGameLevelRoundDto
 {
-    #[NotNull]
-    #[Type('int')]
-    private int $played_at;
+//    #[NotNull]
+//    #[Type('int')]
+//    private int $played_at;
     #[NotNull]
     #[Type('int')]
     private int $user_id;
@@ -19,21 +19,21 @@ class CreateGameLevelRoundDto
     private array $levels_rounds;
 
 
-    /**
-     * @return int
-     */
-    public function getPlayedAt(): int
-    {
-        return $this->played_at;
-    }
-
-    /**
-     * @param int $played_at
-     */
-    public function setPlayedAt(int $played_at): void
-    {
-        $this->played_at = $played_at;
-    }
+//    /**
+//     * @return int
+//     */
+//    public function getPlayedAt(): int
+//    {
+//        return $this->played_at;
+//    }
+//
+//    /**
+//     * @param int $played_at
+//     */
+//    public function setPlayedAt(int $played_at): void
+//    {
+//        $this->played_at = $played_at;
+//    }
 
     /**
      * @return int

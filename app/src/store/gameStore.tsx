@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-interface round {
+export interface round {
   round_number: number;
   number_shown: number;
   number_entered: number;
@@ -22,7 +22,7 @@ export const useRoundStore = create<rounds>(set => ({
 }));
 
 interface game {
-  levelsRounds: { levelNumber: number; rounds: round[] }[];
+  levelsRounds: { level_number: number; rounds: round[] }[];
   updateGame: (levelNumber: number) => void;
   resetGame: () => void;
 }
@@ -36,7 +36,7 @@ export const useGameStore = create<game>((set, get) => ({
     set(state => ({
       levelsRounds: [
         ...state.levelsRounds,
-        { levelNumber: number, rounds: roundsToUse },
+        { level_number: number, rounds: roundsToUse },
       ],
     }));
   },

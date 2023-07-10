@@ -31,8 +31,8 @@ const Game = () => {
   }));
 
   //Fetch distractions from third party APIs
-  // useGetGifs();
-  // useRandomFacts();
+  useGetGifs();
+  useRandomFacts();
 
   //create 6 random numbers when the component loads
   useEffect(() => {
@@ -44,20 +44,20 @@ const Game = () => {
 
     switch (level) {
       case 1:
-        a = 1000000;
-        b = 8999999;
-        break;
-      case 2:
         a = 10000000;
         b = 89999999;
         break;
-      case 3:
-        a = 100000000;
-        b = 899999999;
-        break;
-      case 4:
+      case 2:
         a = 1000000000;
         b = 8999999999;
+        break;
+      case 3:
+        a = 10000000000;
+        b = 89999999999;
+        break;
+      case 4:
+        a = 100000000000;
+        b = 899999999999;
         break;
       default:
         console.log('default');
@@ -79,18 +79,17 @@ const Game = () => {
     setIndex(index + 1);
   };
 
+  //function to set index back to 10 from children
+  const resetIndexState = () => {
+    setIndex(10);
+  };
+
   const handleClick = () => {
     console.log('handleClick');
     setIndex(0);
   };
 
   console.log('numbers are', numberArray);
-  // console.log('level is', level);
-  // console.log('levelNumber is', levelNumber);
-  // console.log('index is', index);
-  // console.log('rounds is', rounds);
-  // console.log('isCorrect is', isCorrect);
-  // console.log('levelsRounds is', levelsRounds);
 
   if (index == 0) {
     return (
@@ -144,7 +143,12 @@ const Game = () => {
 
   if (index == 5) {
     return (
-      <RoundSix number={numberArray[index]} round={index + 1} level={level} />
+      <RoundSix
+        resetIndexState={resetIndexState}
+        number={numberArray[index]}
+        round={index + 1}
+        level={level}
+      />
     );
   }
 
