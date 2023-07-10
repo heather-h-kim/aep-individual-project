@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 const useSetTimeout = props => {
   const [state, setState] = useState({
+    levelNumber: props.level,
     roundNumber: props.round,
     numberShown: props.number,
     step: 'showNumber',

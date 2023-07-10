@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 

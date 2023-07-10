@@ -6,8 +6,7 @@ import Avatar from './Avatar';
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 import Dropdown from './Dropdown';
-import { useGameStore, useLevelStore } from '../store/gameStore';
-import { useIndexStore } from '../store/stateStore';
+import { useGameStore, useRoundStore } from '../store/gameStore';
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth0();
@@ -15,13 +14,13 @@ const Navbar = () => {
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const themeFgColor = useColorsStore(state => state.fgcolor);
   const preview = useColorsStore(state => state.preview);
-  const removeRounds = useLevelStore(state => state.removeRounds);
-  const removeLevelsRounds = useGameStore(state => state.removeLevelsRounds);
+  const resetRounds = useRoundStore(state => state.resetRounds);
+  const resetGame = useGameStore(state => state.resetGame);
 
   //function to clear the game when one of the navbar menus other than game menu is clicked during the game
   const clearGame = () => {
-    removeRounds();
-    removeLevelsRounds();
+    resetRounds();
+    resetGame();
   };
 
   if (!isAuthenticated) {

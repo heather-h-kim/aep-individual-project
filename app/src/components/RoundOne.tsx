@@ -1,27 +1,18 @@
-import { useEffect, useState } from 'react';
-import { useColorsStore } from '../store/colorStore';
-import { useUserStore } from '../store/userStore';
+import { useEffect } from 'react';
 import Timer from './Timer';
 import ShowQuestion from './ShowQuestion';
 import useSetTimeout from '../hooks/useSetTimeout';
-import { useIsCorrectStore } from '../store/stateStore';
 import ShowCorrect from './ShowCorrect';
 import ShowInCorrect from './ShowIncorrect';
 import ShowNumber from './ShowNumber';
+import { useGameStore, useRoundStore } from '../store/gameStore';
 
 const RoundOne = props => {
-  const { themeBgColor, preview } = useColorsStore(state => ({
-    themeBgColor: state.bgcolor,
-    preview: state.preview,
-  }));
-  const globalUser = useUserStore(state => state.user);
   const { state, setState, timeOut } = useSetTimeout(props);
-
-  console.log('in round 1');
-  console.log('state', state);
+  const rounds = useRoundStore(state => state.rounds);
+  const levelsRounds = useGameStore(state => state.levelsRounds);
 
   useEffect(() => {
-    console.log('in round 1 useEffect');
     timeOut();
   }, [state.step]);
 
@@ -41,6 +32,7 @@ const RoundOne = props => {
   if (state.step == 'showQuestion') {
     return (
       <ShowQuestion
+        levelNumber={state.levelNumber}
         roundNumber={state.roundNumber}
         numberShown={state.numberShown}
         handleStateStep={handleStateStep}
@@ -49,10 +41,14 @@ const RoundOne = props => {
   }
 
   if (state.step == 'correct') {
+    console.log('rounds', rounds);
+    console.log('levelsRounds', levelsRounds);
     return <ShowCorrect />;
   }
 
   if (state.step == 'incorrect') {
+    console.log('rounds', rounds);
+    console.log('levelsRounds', levelsRounds);
     return <ShowInCorrect numberShown={state.numberShown} />;
   }
 };

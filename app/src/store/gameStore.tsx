@@ -1,53 +1,44 @@
 import { create } from 'zustand';
 
-interface roundObject {
-  roundNumber: number;
-  numberShown: number;
-  numberEntered: number;
+interface round {
+  round_number: number;
+  number_shown: number;
+  number_entered: number;
 }
 
-interface levelObject {
-  levelNumber: number;
-  rounds: roundObject[];
+interface rounds {
+  rounds: round[];
+  updateRounds: (round) => void;
+  resetRounds: () => void;
 }
 
-interface level {
-  levelNumber: number;
-  rounds: roundObject[];
-  updateLevelNumber: (levelNumber: number) => void;
-  updateRounds: (roundObject) => void;
-  removeRounds: () => void;
-}
-
-interface game {
-  levelsRounds: levelObject[];
-  updateLevelsRounds: (LevelObject) => void;
-  removeLevelsRounds: () => void;
-}
-
-export const useLevelStore = create<level>(set => ({
-  levelNumber: 0,
+export const useRoundStore = create<rounds>(set => ({
   rounds: [],
-  updateLevelNumber: levelNumber => set({ levelNumber: levelNumber }),
-  updateRounds: newRound =>
+  updateRounds: round =>
     set(state => ({
-      rounds: [
-        ...state.rounds,
-        {
-          roundNumber: newRound.roundNumber,
-          numberShown: newRound.numberShown,
-          numberEntered: newRound.numberEntered,
-        } as roundObject,
-      ],
+      rounds: [...state.rounds, round],
     })),
-  removeRounds: () => set({ rounds: [] }),
+  resetRounds: () => set({ rounds: [] }),
 }));
 
-export const useGameStore = create<game>(set => ({
+interface game {
+  levelsRounds: { levelNumber: number; rounds: round[] }[];
+  updateGame: (levelNumber: number) => void;
+  resetGame: () => void;
+}
+
+export const useGameStore = create<game>((set, get) => ({
   levelsRounds: [],
-  updateLevelsRounds: newLevelObject =>
+  updateGame: (number: number) => {
+    //get the updated round array
+    const roundsToUse = useRoundStore.getState().rounds;
+    //update the levelsRounds array
     set(state => ({
-      levelsRounds: [...state.levelsRounds, newLevelObject],
-    })),
-  removeLevelsRounds: () => set({ levelsRounds: [] }),
+      levelsRounds: [
+        ...state.levelsRounds,
+        { levelNumber: number, rounds: roundsToUse },
+      ],
+    }));
+  },
+  resetGame: () => set({ levelsRounds: [] }),
 }));

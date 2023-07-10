@@ -10,7 +10,7 @@ import RoundFive from './RoundFive';
 import RoundSix from './RoundSix';
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
-import { useGameStore, useLevelStore } from '../store/gameStore';
+import { useGameStore } from '../store/gameStore';
 import { useIsCorrectStore } from '../store/stateStore';
 
 const Game = () => {
@@ -19,14 +19,6 @@ const Game = () => {
     preview: state.preview,
   }));
   const globalUser = useUserStore(state => state.user);
-  const { levelNumber, rounds, updateLevelNumber, updateRounds } =
-    useLevelStore(state => ({
-      levelNumber: state.levelNumber,
-      rounds: state.rounds,
-      updateLevelNumber: state.updateLevelNumber,
-      updateRounds: state.updateRounds,
-    }));
-
   const levelsRounds = useGameStore(state => state.levelsRounds);
 
   const param = useParams();
@@ -90,16 +82,15 @@ const Game = () => {
   const handleClick = () => {
     console.log('handleClick');
     setIndex(0);
-    updateLevelNumber(level);
   };
 
   console.log('numbers are', numberArray);
-  console.log('level is', level);
-  console.log('levelNumber is', levelNumber);
-  console.log('index is', index);
-  console.log('rounds is', rounds);
-  console.log('isCorrect is', isCorrect);
-  console.log('levelsRounds is', levelsRounds);
+  // console.log('level is', level);
+  // console.log('levelNumber is', levelNumber);
+  // console.log('index is', index);
+  // console.log('rounds is', rounds);
+  // console.log('isCorrect is', isCorrect);
+  // console.log('levelsRounds is', levelsRounds);
 
   if (index == 0) {
     return (

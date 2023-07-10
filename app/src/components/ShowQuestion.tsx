@@ -1,7 +1,7 @@
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 import { useState } from 'react';
-import { useLevelStore } from '../store/gameStore';
+import { useGameStore, useRoundStore } from '../store/gameStore';
 import { useIsCorrectStore } from '../store/stateStore';
 
 const ShowQuestion = props => {
@@ -10,26 +10,24 @@ const ShowQuestion = props => {
     preview: state.preview,
   }));
   const globalUser = useUserStore(state => state.user);
-  const { levelNumber, rounds, updateLevelNumber, updateRounds } =
-    useLevelStore(state => ({
-      levelNumber: state.levelNumber,
-      rounds: state.rounds,
-      updateLevelNumber: state.updateLevelNumber,
-      updateRounds: state.updateRounds,
-    }));
-  const { updateIsCorrect } = useIsCorrectStore(state => ({
-    updateIsCorrect: state.updateIsCorrect,
-  }));
+  const updateRounds = useRoundStore(state => state.updateRounds);
+  const updateGame = useGameStore(state => state.updateGame);
+  const updateIsCorrect = useIsCorrectStore(state => state.updateIsCorrect);
   const [answer, setAnswer] = useState('');
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('handleSubmit');
+    //add the new round to the round array
     updateRounds({
       roundNumber: props.roundNumber,
       numberShown: props.numberShown,
       numberEntered: Number(answer),
     });
+
+    //add the new object that has level number and the array of rounds to the levelsRounds array
+    if (props.roundNumber == 6) {
+      updateGame(props.levelNumber);
+    }
 
     if (answer == props.numberShown) {
       updateIsCorrect();
