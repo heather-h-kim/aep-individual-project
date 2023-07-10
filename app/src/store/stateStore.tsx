@@ -13,9 +13,11 @@ export const useIndexStore = create<Index>(set => ({
 interface IsCorrect {
   isCorrect: number;
   updateIsCorrect: () => void;
+  resetIsCorrect: () => void;
 }
 
 export const useIsCorrectStore = create<IsCorrect>(set => ({
   isCorrect: 0,
   updateIsCorrect: () => set(state => ({ isCorrect: state.isCorrect + 1 })),
+  resetIsCorrect: () => set(state => ({ isCorrect: 0 })),
 }));

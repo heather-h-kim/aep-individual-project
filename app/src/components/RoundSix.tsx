@@ -24,9 +24,18 @@ const RoundSix = props => {
     numberShown: props.number,
     step: 'showNumber',
   });
-  const rounds = useRoundStore(state => state.rounds);
-  const levelsRounds = useGameStore(state => state.levelsRounds);
-  const isCorrect = useIsCorrectStore(state => state.isCorrect);
+  const { rounds, resetRounds } = useRoundStore(state => ({
+    rounds: state.rounds,
+    resetRounds: state.resetRounds,
+  }));
+  const { levelsRounds, resetGame } = useGameStore(state => ({
+    levelsRounds: state.levelsRounds,
+    resetGame: state.resetGame,
+  }));
+  const { isCorrect, resetIsCorrect } = useIsCorrectStore(state => ({
+    isCorrect: state.isCorrect,
+    resetIsCorrect: state.resetIsCorrect,
+  }));
 
   const { data, mutate } = useMutation({
     mutationFn: (body: game) => postGame(body),
@@ -46,6 +55,12 @@ const RoundSix = props => {
   });
 
   useEffect(() => {
+    console.log(
+      'in round 6 useEffect, isCorrect, levelsRounds, levelsRounds.length',
+      isCorrect,
+      levelsRounds,
+      levelsRounds.length,
+    );
     //set delay time conditionally
     let delay;
     switch (state.step) {
@@ -76,13 +91,12 @@ const RoundSix = props => {
           break;
         case 'correct':
           //move to showKeepPlaying screen if the user got all questions correct in all levels played, otherwise, move on to the showScoreButton screen
-          if (isCorrect < 6 * (levelsRounds.length + 1)) {
+          if (isCorrect < 6 * levelsRounds.length) {
             setState({ ...state, step: 'showScoreButton' });
           }
-          if (isCorrect == 6 * (levelsRounds.length + 1)) {
+          if (isCorrect == 6 * levelsRounds.length) {
             setState({ ...state, step: 'showKeepPlaying' });
           }
-
           break;
         case 'incorrect':
           setState({ ...state, step: 'showScoreButton' });
@@ -100,34 +114,29 @@ const RoundSix = props => {
     setState({ ...state, step: nextStep });
   };
 
-  //function to update game before moving on to the next level
+  //reset the rounds array before moving up to the next level
   const updateGame = () => {
-    console.log('update the Game');
-    // updateLevelsRounds({ level_number: levelNumber, rounds: rounds });
-    // removeRounds();
+    console.log('update');
+    resetRounds();
   };
 
-  //function to send the game to the backend and reset the game
+  //function to send the payload to the backend and reset the game
   const getScore = () => {
     console.log('end the game');
-    // updateLevelsRounds({ level_number: levelNumber, rounds: rounds });
-    // const payload = {
-    //   played_at: Date.now(),
-    //   user_id: globalUser.userId,
-    //   level_number: state.levelNumber,
-    //   rounds: rounds,
-    // };
-
+    const payload = {
+      played_at: Date.now(),
+      user_id: globalUser.userId,
+      levels_rounds: levelsRounds,
+    };
+    console.log('payload is', payload);
     // mutate(payload);
 
-    // setPayload({ ...payload, levels_rounds: [levelsRounds] });
-    // console.log('levelsRounds is', levelsRounds);
-    console.log('levelsRounds', levelsRounds);
-
-    //mutation
     //reset the game
-    // removeRounds();
-    // removeLevelsRounds();
+    resetRounds();
+    resetGame();
+    resetIsCorrect();
+
+    //update the state to move on to the next screen
     setState({ ...state, step: 'showScore' });
   };
 
@@ -151,10 +160,14 @@ const RoundSix = props => {
   }
 
   if (state.step == 'correct') {
+    console.log('rounds', rounds);
+    console.log('levelsRounds', levelsRounds);
     return <ShowCorrect />;
   }
 
   if (state.step == 'incorrect') {
+    console.log('rounds', rounds);
+    console.log('levelsRounds', levelsRounds);
     return <ShowInCorrect numberShown={state.numberShown} />;
   }
 
@@ -207,9 +220,6 @@ const RoundSix = props => {
   }
 
   if (state.step == 'showScore') {
-    // console.log('levelsRounds is', levelsRounds);
-    // console.log('payload at showScore is', payload);
-
     return (
       <div
         style={

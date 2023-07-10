@@ -2,6 +2,8 @@ import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 import { useState } from 'react';
 import { Link } from '@tanstack/react-router';
+import { useGameStore, useRoundStore } from '../store/gameStore';
+import { useIsCorrectStore } from '../store/stateStore';
 
 const Dropdown = () => {
   const globalUser = useUserStore(state => state.user);
@@ -9,10 +11,17 @@ const Dropdown = () => {
   const themeFgColor = useColorsStore(state => state.fgcolor);
   const preview = useColorsStore(state => state.preview);
   const [showMenu, setShowMenu] = useState(false);
+  const resetRounds = useRoundStore(state => state.resetRounds);
+  const resetGame = useGameStore(state => state.resetGame);
+  const resetIsCorrect = useIsCorrectStore(state => state.resetIsCorrect);
 
   const handleClick = () => {
+    resetRounds();
+    resetGame();
+    resetIsCorrect();
     setShowMenu(!showMenu);
   };
+
   return (
     <div className="relative inline-block text-left">
       <div>
