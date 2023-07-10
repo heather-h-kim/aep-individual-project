@@ -64,6 +64,7 @@ const ShowQuestion = props => {
           value={answer}
           onChange={e => setAnswer(e.target.value)}
           autoFocus
+          inputMode="numeric"
         />
         <button
           className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
