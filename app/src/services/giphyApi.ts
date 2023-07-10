@@ -8,8 +8,15 @@ export async function getGifs() {
       method: 'GET',
     });
     const jsonResponse = await response.json();
-    // console.log(jsonResponse.data[0].images.original.url);
-    return jsonResponse.data[0].images.original.url;
+    // console.log(
+    //   'gifs are',
+    //   jsonResponse.data[0].images.original.url,
+    //   jsonResponse.data[1].images.original.url,
+    // );
+    return [
+      jsonResponse.data[0].images.original.url,
+      jsonResponse.data[1].images.original.url,
+    ];
   } catch (error) {
     console.log('Something went wrong', error);
   }

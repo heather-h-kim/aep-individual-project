@@ -1,4 +1,4 @@
-import { useDemoStore } from '../store/demoStore';
+import { useDistractionStore } from '../store/distractionStore';
 import React from 'react';
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
@@ -7,7 +7,7 @@ export const RandomFacts = () => {
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const globalUser = useUserStore(state => state.user);
   const preview = useColorsStore(state => state.preview);
-  const randomFact = useDemoStore(state => state.randomFact);
+  const randomFact = useDistractionStore(state => state.randomFact);
   return (
     <div
       style={

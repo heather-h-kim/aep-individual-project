@@ -26,7 +26,7 @@ const RoundThree = props => {
   }
 
   if (state.step == 'showDistraction') {
-    return <Giphy />;
+    return <Giphy roundNumber={state.roundNumber} />;
   }
 
   if (state.step == 'showQuestion') {

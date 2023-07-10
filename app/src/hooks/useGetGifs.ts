@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { getGifs } from '../services/giphyApi';
-import { useDemoStore } from '../store/demoStore';
+import { useDistractionStore } from '../store/distractionStore';
 
 const useGetGifs = () => {
-  const updateGif = useDemoStore(state => state.updateGif);
+  const updateGif = useDistractionStore(state => state.updateGif);
 
   return useQuery({
     queryKey: ['Gif'],

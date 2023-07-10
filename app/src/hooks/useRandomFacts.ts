@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { getRandomFacts } from '../services/randomFactApi';
-import { useDemoStore } from '../store/demoStore';
+import { useDistractionStore } from '../store/distractionStore';
 
 const useRandomFacts = () => {
-  const updateRandomFact = useDemoStore(state => state.updateRandomFact);
+  const updateRandomFact = useDistractionStore(state => state.updateRandomFact);
 
   return useQuery({
     queryKey: ['Random'],

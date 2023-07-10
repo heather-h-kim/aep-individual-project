@@ -39,7 +39,7 @@ class GiphyService
                 'query'=> [
                     'api_key'=> $apiKey,
                     'q'=> 'cat',
-                    'limit'=> 1,
+                    'limit'=> 2,
                     'offset'=> $offset,
                     'rating'=> 'g',
                     'lang' => 'en',

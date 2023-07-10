@@ -56,7 +56,7 @@ const ShowQuestion = props => {
           className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
         ></label>
         <input
-          type="text"
+          type="number"
           id="answer"
           name="answer"
           className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900  placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
@@ -64,7 +64,6 @@ const ShowQuestion = props => {
           value={answer}
           onChange={e => setAnswer(e.target.value)}
           autoFocus
-          inputMode="numeric"
         />
         <button
           className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
