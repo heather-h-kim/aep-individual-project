@@ -1,10 +1,13 @@
 import React from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useUserStore } from '../store/userStore';
+import { useColorsStore } from '../store/colorStore';
 
 const LoginHome = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
   const globalUser = useUserStore(state => state.user);
+  const themeBgColor = useColorsStore(state => state.bgcolor);
+  const preview = useColorsStore(state => state.preview);
 
   if (isAuthenticated && !globalUser.userId) {
     return (
@@ -33,7 +36,14 @@ const LoginHome = () => {
   }
 
   return (
-    <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+    <div
+      style={
+        preview
+          ? { backgroundColor: themeBgColor }
+          : { backgroundColor: globalUser.bgcolor }
+      }
+      className="my-10 flex h-screen flex-col items-center justify-center"
+    >
       <h1 className=" pb-8 text-6xl font-bold">
         Welcome to Number Memory Game!
       </h1>

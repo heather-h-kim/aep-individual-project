@@ -6,10 +6,13 @@ import logoutRoute from './logoutRoute';
 import profileRoute from './profileRoute';
 import demoRoute from './demoRoute';
 import adminRoute from './adminRoute';
-import gameRoute from './gameRoute';
+import levelOneRoute from './levelOneRoute';
 import rankingsRoute from './rankingsRoute';
 import timerRoute from './timerRoute';
 import loginHomeRoute from './loginHomeRoute';
+import levelTwoRoute from './levelTwoRoute';
+import levelThreeRoute from './levelThreeRoute';
+import levelFourRoute from './levelFourRoute';
 
 export const rootRoute = new RootRoute({
   component: () => (
@@ -27,10 +30,13 @@ export const routeTree = rootRoute.addChildren([
   profileRoute,
   demoRoute,
   adminRoute,
-  gameRoute,
   rankingsRoute,
   timerRoute,
   loginHomeRoute,
+  levelOneRoute,
+  levelTwoRoute,
+  levelThreeRoute,
+  levelFourRoute,
 ]);
 
 export const router = new Router({ routeTree });

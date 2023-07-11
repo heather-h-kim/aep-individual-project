@@ -11,10 +11,10 @@ class CreateRoundDto
     #[Type('int')]
     private int $round_number;
     #[NotNull]
-    #[Type('int')]
+    #[Type('float')]
     private int $number_shown;
     #[NotNull]
-    #[Type('int')]
+    #[Type('float')]
     private int $number_entered;
 
     /**

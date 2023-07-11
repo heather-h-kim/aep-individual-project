@@ -8,9 +8,13 @@ export async function getRandomFacts() {
       method: 'GET',
     });
     const jsonResponse = await response.json();
-    const { fact } = jsonResponse[0];
-    // console.log(fact);
-    return fact;
+    const facts = [];
+    for (let i = 0; i < jsonResponse.length; i++) {
+      facts.push(jsonResponse[i].fact);
+    }
+    // console.log('jsonResponse is', jsonResponse);
+    // console.log('facts is', facts);
+    return facts;
   } catch (error) {
     console.log('Something went wrong', error);
   }

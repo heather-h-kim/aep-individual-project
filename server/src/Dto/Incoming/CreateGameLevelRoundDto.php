@@ -9,31 +9,12 @@ class CreateGameLevelRoundDto
 {
     #[NotNull]
     #[Type('int')]
-    private int $played_at;
-    #[NotNull]
-    #[Type('int')]
     private int $user_id;
     /**
      * @var CreateLevelDto[] $levels_rounds
      */
     private array $levels_rounds;
 
-
-    /**
-     * @return int
-     */
-    public function getPlayedAt(): int
-    {
-        return $this->played_at;
-    }
-
-    /**
-     * @param int $played_at
-     */
-    public function setPlayedAt(int $played_at): void
-    {
-        $this->played_at = $played_at;
-    }
 
     /**
      * @return int

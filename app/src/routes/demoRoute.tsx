@@ -5,9 +5,7 @@ import Demo from '../components/Demo';
 const demoRoute = new Route({
   getParentRoute: () => rootRoute,
   path: '/demo',
-  component: () => {
-    return <Demo />;
-  },
+  component: Demo,
 });
 
 export default demoRoute;
