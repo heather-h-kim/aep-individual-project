@@ -27,9 +27,6 @@ class GiphyService
      */
     public function getGif(): array
     {
-//        $dotenv = new Dotenv();
-//        $dotenv->load(dirname(__DIR__, 2).'/.env');
-//        $apiKey = getenv('GIPHY_API_KEY');
             $apiKey = $_ENV['GIPHY_API_KEY'];
             $offset = rand(0, 4999);
 

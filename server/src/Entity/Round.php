@@ -15,10 +15,10 @@ class Round
     private ?int $round_id = null;
 
     #[ORM\Column]
-    private ?int $number_shown = null;
+    private ?float $number_shown = null;
 
     #[ORM\Column]
-    private ?int $number_entered = null;
+    private ?float $number_entered = null;
 
     #[ORM\ManyToOne(inversedBy: 'Rounds')]
     #[ORM\JoinColumn(name: 'level_id', referencedColumnName: 'level_id', nullable: true)]

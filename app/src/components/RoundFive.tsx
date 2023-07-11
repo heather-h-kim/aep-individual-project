@@ -26,7 +26,7 @@ const RoundFive = props => {
   }
 
   if (state.step == 'showDistraction') {
-    return <RandomFacts />;
+    return <RandomFacts roundNumber={state.roundNumber} />;
   }
 
   if (state.step == 'showQuestion') {

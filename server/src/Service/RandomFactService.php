@@ -32,7 +32,7 @@ class RandomFactService
             'GET',
             'https://api.api-ninjas.com/v1/facts', [
                 'query'=> [
-                    'limit'=> 1,
+                    'limit'=> 2,
                 ],
                 'headers' => [
                     'X-Api-Key' => $apiKey

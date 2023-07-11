@@ -10,7 +10,6 @@ export const Giphy = props => {
   const preview = useColorsStore(state => state.preview);
 
   console.log('gifs are', gif);
-  console.log('second gif', gif[1]);
 
   if (props.roundNumber == 3) {
     return (

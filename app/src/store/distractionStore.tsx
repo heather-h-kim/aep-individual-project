@@ -2,9 +2,9 @@ import { create } from 'zustand';
 
 interface Distraction {
   gif: string[];
-  randomFact: string[] | undefined;
+  randomFact: string[];
   updateGif: (newGifs: string[]) => void;
-  updateRandomFact: (newRandomFact: string) => void;
+  updateRandomFact: (newRandomFact: string[]) => void;
 }
 
 export const useDistractionStore = create<Distraction>(set => ({

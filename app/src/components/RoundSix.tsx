@@ -67,10 +67,10 @@ const RoundSix = props => {
     let delay;
     switch (state.step) {
       case 'showNumber':
-        delay = 2000;
+        delay = 3000;
         break;
       case 'showDistraction':
-        delay = 1000;
+        delay = 15000;
         break;
       case 'correct':
         delay = 1500;
@@ -93,11 +93,17 @@ const RoundSix = props => {
           break;
         case 'correct':
           //move to showKeepPlaying screen if the user got all questions correct in all levels played, otherwise, move on to the showScoreButton screen
-          if (isCorrect < 6 * levelsRounds.length) {
-            setState({ ...state, step: 'showScoreButton' });
+          if (state.levelNumber != 4) {
+            if (isCorrect < 6 * levelsRounds.length) {
+              setState({ ...state, step: 'showScoreButton' });
+            }
+            if (isCorrect == 6 * levelsRounds.length) {
+              setState({ ...state, step: 'showKeepPlaying' });
+            }
           }
-          if (isCorrect == 6 * levelsRounds.length) {
-            setState({ ...state, step: 'showKeepPlaying' });
+          //Don't need to show the button to play next level at the last level
+          if (state.levelNumber == 4) {
+            setState({ ...state, step: 'showScoreButton' });
           }
           break;
         case 'incorrect':
@@ -125,9 +131,9 @@ const RoundSix = props => {
   //function to send the payload to the backend and reset the game
   const getScore = () => {
     console.log('end the game');
-    const timestamp = Date.now();
+    // const timestamp = Date.now();
     const payload = {
-      played_at: timestamp,
+      // played_at: timestamp,
       user_id: globalUser.userId,
       levels_rounds: levelsRounds,
     };
@@ -144,16 +150,17 @@ const RoundSix = props => {
     setState({ ...state, step: 'showScore' });
   };
 
-  // button to click to play the same level once again
-  const playAgain = () => {
-    props.resetIndexState();
-  };
+  // // button to click to play the same level once again
+  // const playAgain = () => {
+  //   // props.resetIndexState();
+  // };
+
   if (state.step == 'showNumber') {
     return <ShowNumber numberShown={state.numberShown} />;
   }
 
   if (state.step == 'showDistraction') {
-    return <RandomFacts />;
+    return <RandomFacts roundNumber={state.roundNumber} />;
   }
 
   if (state.step == 'showQuestion') {
@@ -242,13 +249,13 @@ const RoundSix = props => {
             {' '}
             Your score is:{score}
           </h1>
-          <button
-            className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
-            onClick={playAgain}
-          >
-            {' '}
-            Play this level again
-          </button>
+          {/*<button*/}
+          {/*  className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"*/}
+          {/*  onClick={playAgain}*/}
+          {/*>*/}
+          {/*  {' '}*/}
+          {/*  Play this level again*/}
+          {/*</button>*/}
         </div>
       );
     }

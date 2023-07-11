@@ -1,7 +1,7 @@
 import { round } from '../store/gameStore';
 
 export interface game {
-  played_at: number;
+  // played_at: number;
   user_id: number | undefined;
   levels_rounds: { level_number: number; rounds: round[] }[];
 }

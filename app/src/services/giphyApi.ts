@@ -8,15 +8,12 @@ export async function getGifs() {
       method: 'GET',
     });
     const jsonResponse = await response.json();
-    // console.log(
-    //   'gifs are',
-    //   jsonResponse.data[0].images.original.url,
-    //   jsonResponse.data[1].images.original.url,
-    // );
-    return [
-      jsonResponse.data[0].images.original.url,
-      jsonResponse.data[1].images.original.url,
-    ];
+    const gifs = [];
+    for (let i = 0; i < jsonResponse.data.length; i++) {
+      gifs.push(jsonResponse.data[i].images.original.url);
+    }
+    console.log(gifs);
+    return gifs;
   } catch (error) {
     console.log('Something went wrong', error);
   }
