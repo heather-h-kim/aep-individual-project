@@ -29,11 +29,11 @@ const Navbar = () => {
   if (!isAuthenticated) {
     return (
       <nav className="mx-auto flex max-w-full flex-wrap items-center justify-between bg-cyan-50 p-4">
-        <span className="self-center whitespace-nowrap text-2xl font-semibold dark:text-white">
+        <span className="self-center whitespace-nowrap text-2xl font-semibold text-blue-900">
           Number Memory Game
         </span>
         <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="mt-4 flex flex-col p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
+          <ul className="mt-4 flex flex-col items-center p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
             <li className="mr-3">
               <Link
                 className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-white hover:bg-blue-700"
@@ -78,9 +78,24 @@ const Navbar = () => {
           }
           className="mx-auto flex max-w-full flex-wrap items-center justify-between p-4"
         >
-          <Avatar />
+          <span
+            style={
+              preview
+                ? {
+                    color: themeFgColor,
+                    backgroundColor: themeBgColor,
+                  }
+                : {
+                    color: globalUser.fgcolor,
+                    backgroundColor: globalUser.bgcolor,
+                  }
+            }
+            className="self-center whitespace-nowrap text-2xl font-semibold"
+          >
+            Number Memory Game
+          </span>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-            <ul className="mt-4 flex flex-col p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
+            <ul className="mt-4 flex flex-col items-center p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
               <li className="mr-3">
                 <Link
                   style={
@@ -167,6 +182,7 @@ const Navbar = () => {
               <li className="mr-3">
                 <Logout />
               </li>
+              <Avatar />
             </ul>
           </div>
         </nav>
