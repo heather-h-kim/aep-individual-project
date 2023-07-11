@@ -20,11 +20,11 @@ class Round
     #[ORM\Column]
     private ?float $number_entered = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Rounds')]
-    #[ORM\JoinColumn(name: 'level_id', referencedColumnName: 'level_id', nullable: true)]
-    private ?Level $level_id = null;
+    #[ORM\ManyToOne(inversedBy: 'rounds')]
+    #[ORM\JoinColumn(name: 'level_id', referencedColumnName: 'level_id', nullable: false)]
+    private ?Level $level = null;
 
-    #[ORM\OneToOne(inversedBy: 'Round', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'round', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name:'round_lookup_id', referencedColumnName: 'round_lookup_id', nullable: false)]
     private ?RoundLookup $round_lookup_id = null;
 
@@ -57,14 +57,14 @@ class Round
         return $this;
     }
 
-    public function getLevelId(): ?Level
+    public function getLevel(): ?Level
     {
-        return $this->level_id;
+        return $this->level;
     }
 
-    public function setLevelId(?Level $level_id): self
+    public function setLevel(?Level $level): self
     {
-        $this->level_id = $level_id;
+        $this->level = $level;
 
         return $this;
     }

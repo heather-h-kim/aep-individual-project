@@ -17,7 +17,7 @@ class RoundLookup
     private ?int $round_number = null;
 
     #[ORM\OneToOne(mappedBy: 'round_lookup_id', cascade: ['persist', 'remove'])]
-    private ?Round $Round = null;
+    private ?Round $round = null;
 
     public function getId(): ?int
     {
@@ -38,17 +38,17 @@ class RoundLookup
 
     public function getRound(): ?Round
     {
-        return $this->Round;
+        return $this->round;
     }
 
-    public function setRound(Round $Round): self
+    public function setRound(Round $round): self
     {
         // set the owning side of the relation if necessary
-        if ($Round->getRoundLookupId() !== $this) {
-            $Round->setRoundLookupId($this);
+        if ($round->getRoundLookupId() !== $this) {
+            $round->setRoundLookupId($this);
         }
 
-        $this->Round = $Round;
+        $this->round = $round;
 
         return $this;
     }

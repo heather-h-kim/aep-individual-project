@@ -16,24 +16,26 @@ class Game
     #[ORM\Column]
     private ?int $game_id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Games')]
-    #[ORM\JoinColumn(name: 'season_id', referencedColumnName: 'season_id', nullable: false)]
-    private ?Season $season_id = null;
+    #[ORM\ManyToOne(inversedBy: 'games')]
+    #[ORM\JoinColumn(name: 'season_id', referencedColumnName: 'season_id')]
+    private ?Season $season = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Games')]
+    #[ORM\ManyToOne(inversedBy: 'games')]
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'user_id', nullable: false)]
-    private ?User $user_id = null;
+    private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'game_id', targetEntity: Level::class)]
+    #[ORM\OneToMany(mappedBy: 'game', targetEntity: Level::class)]
     #[ORM\JoinColumn(name:'level_id', referencedColumnName: 'level_id')]
-    private Collection $Levels;
+    private Collection $levels;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $played_at = null;
 
+
+
     public function __construct()
     {
-        $this->Levels = new ArrayCollection();
+        $this->levels = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -41,26 +43,15 @@ class Game
         return $this->game_id;
     }
 
-    public function getSeasonId(): ?Season
+
+    public function getUser(): ?User
     {
-        return $this->season_id;
+        return $this->user;
     }
 
-    public function setSeasonId(?Season $season_id): self
+    public function setUser(?User $user): self
     {
-        $this->season_id = $season_id;
-
-        return $this;
-    }
-
-    public function getUserId(): ?User
-    {
-        return $this->user_id;
-    }
-
-    public function setUserId(?User $user_id): self
-    {
-        $this->user_id = $user_id;
+        $this->user = $user;
 
         return $this;
     }
@@ -70,14 +61,14 @@ class Game
      */
     public function getLevels(): Collection
     {
-        return $this->Levels;
+        return $this->levels;
     }
 
     public function addLevel(Level $level): self
     {
-        if (!$this->Levels->contains($level)) {
-            $this->Levels->add($level);
-            $level->setGameId($this);
+        if (!$this->levels->contains($level)) {
+            $this->levels->add($level);
+            $level->setGame($this);
         }
 
         return $this;
@@ -85,10 +76,10 @@ class Game
 
     public function removeLevel(Level $level): self
     {
-        if ($this->Levels->removeElement($level)) {
+        if ($this->levels->removeElement($level)) {
             // set the owning side to null (unless already changed)
-            if ($level->getGameId() === $this) {
-                $level->setGameId(null);
+            if ($level->getGame() === $this) {
+                $level->setGame(null);
             }
         }
 
@@ -106,4 +97,18 @@ class Game
 
         return $this;
     }
+
+    public function getSeason(): ?Season
+    {
+        return $this->season;
+    }
+
+    public function setSeason(?Season $season): self
+    {
+        $this->season = $season;
+
+        return $this;
+    }
+
+
 }

@@ -34,7 +34,7 @@ private RoundLookupRepository $roundLookupRepository;
         $round->setRoundLookupId($round_lookup_id);
         $round->setNumberShown($number_shown);
         $round->setNumberEntered($number_entered);
-        $round->setLevelId($level);
+        $round->setLevel($level);
 
         $this->roundRepository->save($round, true);
 

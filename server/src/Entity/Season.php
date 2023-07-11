@@ -22,13 +22,14 @@ class Season
     #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTime $end_date = null;
 
-    #[ORM\OneToMany(mappedBy: 'season_id', targetEntity: Game::class)]
-    #[ORM\JoinColumn(name: 'game_id', referencedColumnName: 'game_id')]
-    private Collection $Games;
+    #[ORM\OneToMany(mappedBy: 'season', targetEntity: Game::class)]
+    #[ORM\JoinColumn(name:'game_id', referencedColumnName: 'game_id')]
+    private Collection $games;
+
 
     public function __construct()
     {
-        $this->Games = new ArrayCollection();
+        $this->games = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -65,14 +66,14 @@ class Season
      */
     public function getGames(): Collection
     {
-        return $this->Games;
+        return $this->games;
     }
 
     public function addGame(Game $game): self
     {
-        if (!$this->Games->contains($game)) {
-            $this->Games->add($game);
-            $game->setSeasonId($this);
+        if (!$this->games->contains($game)) {
+            $this->games->add($game);
+            $game->setSeason($this);
         }
 
         return $this;
@@ -80,13 +81,15 @@ class Season
 
     public function removeGame(Game $game): self
     {
-        if ($this->Games->removeElement($game)) {
+        if ($this->games->removeElement($game)) {
             // set the owning side to null (unless already changed)
-            if ($game->getSeasonId() === $this) {
-                $game->setSeasonId(null);
+            if ($game->getSeason() === $this) {
+                $game->setSeason(null);
             }
         }
 
         return $this;
     }
+
+
 }

@@ -46,12 +46,11 @@ class GameService
 
         //get info for the played_at and season fields
         $currentDate = new DateTime('now');
-//        $currentDate = new DateTime($createGameRoundDto->getPlayedAt());
         $season = $this->seasonRepository->findOneByCurrentDate($currentDate);
 
         //update newGame
-        $newGame->setUserId($user);
-        $newGame->setSeasonId($season);
+        $newGame->setUser($user);
+        $newGame->setSeason($season);
         $newGame->setPlayedAt($currentDate);
 
         $this->gameRepository->save($newGame, true);
@@ -81,7 +80,7 @@ class GameService
                $newRound=$this->roundService->createRound($roundDto, $newLevel);
 
                //calculate score
-               $unit_score = $newRound->getLevelId()->getLevelLookupId()->getUnitScore();
+               $unit_score = $newRound->getLevel()->getLevelLookupId()->getUnitScore();
                if($newRound->getNumberShown() === $newRound->getNumberEntered()){
                    $score = $score+$unit_score;
                }
@@ -89,5 +88,11 @@ class GameService
         }
 
         return $score;
+    }
+
+    public function getGames():iterable
+    {
+        $allGames = $this->gameRepository->findAll();
+        return $allGames;
     }
 }

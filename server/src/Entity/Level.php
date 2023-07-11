@@ -16,14 +16,14 @@ class Level
     private ?int $level_id = null;
 
 
-    #[ORM\ManyToOne(inversedBy: 'Levels')]
-    #[ORM\JoinColumn(name: 'game_id', referencedColumnName: 'game_id', nullable: true)]
-    private ?Game $game_id = null;
+    #[ORM\ManyToOne(inversedBy: 'levels')]
+    #[ORM\JoinColumn(name: 'game_id', referencedColumnName: 'game_id')]
+    private ?Game $game = null;
 
 
-    #[ORM\OneToMany(mappedBy: 'level_id', targetEntity: Round::class)]
+    #[ORM\OneToMany(mappedBy: 'level', targetEntity: Round::class)]
     #[ORM\JoinColumn(name:'round_id', referencedColumnName: 'round_id')]
-    private Collection $Rounds;
+    private Collection $rounds;
 
     #[ORM\OneToOne(inversedBy: 'level', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(name: 'level_lookup_id', referencedColumnName: 'level_lookup_id', nullable: false)]
@@ -31,7 +31,7 @@ class Level
 
     public function __construct()
     {
-        $this->Rounds = new ArrayCollection();
+        $this->rounds = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -39,14 +39,14 @@ class Level
         return $this->level_id;
     }
 
-    public function getGameId(): ?Game
+    public function getGame(): ?Game
     {
-        return $this->game_id;
+        return $this->game;
     }
 
-    public function setGameId(?Game $game_id): self
+    public function setGame(?Game $game): self
     {
-        $this->game_id = $game_id;
+        $this->game = $game;
 
         return $this;
     }
@@ -58,14 +58,14 @@ class Level
      */
     public function getRounds(): Collection
     {
-        return $this->Rounds;
+        return $this->rounds;
     }
 
     public function addRound(Round $round): self
     {
-        if (!$this->Rounds->contains($round)) {
-            $this->Rounds->add($round);
-            $round->setLevelId($this);
+        if (!$this->rounds->contains($round)) {
+            $this->rounds->add($round);
+            $round->setLevel($this);
         }
 
         return $this;
@@ -73,10 +73,10 @@ class Level
 
     public function removeRound(Round $round): self
     {
-        if ($this->Rounds->removeElement($round)) {
+        if ($this->rounds->removeElement($round)) {
             // set the owning side to null (unless already changed)
-            if ($round->getLevelId() === $this) {
-                $round->setLevelId(null);
+            if ($round->getLevel() === $this) {
+                $round->setLevel(null);
             }
         }
 

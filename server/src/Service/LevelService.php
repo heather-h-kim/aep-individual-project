@@ -29,7 +29,7 @@ class LevelService
         $level_lookup_id = $this->levelLookupRepository->findOneBy(['level_number'=> $level_number]);
 
         $level->setLevelLookupId($level_lookup_id);
-        $level->setGameId($game);
+        $level->setGame($game);
 
         $this->levelRepository->save($level, true);
 
