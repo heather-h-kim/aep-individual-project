@@ -11,6 +11,7 @@ export default {
       },
       animation: {
         '15s-circle-timer': 'circle 15s linear forwards',
+        '10s-circle-timer': 'circle 10s linear forwards',
       },
     },
   },

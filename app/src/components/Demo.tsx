@@ -5,6 +5,7 @@ import useRandomFacts from '../hooks/useRandomFacts';
 import Giphy from './Giphy';
 import RandomFacts from './RandomFacts';
 import { useDistractionStore } from '../store/distractionStore';
+import DemoTimer from './DemoTimer';
 
 const Demo = () => {
   const [numberArray, setNumberArray] = useState([]);
@@ -22,7 +23,7 @@ const Demo = () => {
     const n = 3;
     const array = [];
     do {
-      const randomNumber = Math.floor(10000 + Math.random() * 89999);
+      const randomNumber = Math.floor(100000 + Math.random() * 899999);
 
       if (!array.includes(randomNumber)) {
         array.push(randomNumber);
@@ -37,10 +38,10 @@ const Demo = () => {
     let delay;
     switch (step) {
       case 'showNumber':
-        delay = 3000;
+        delay = 1500;
         break;
       case 'showDistraction':
-        delay = 15000;
+        delay = 10000;
         break;
       case 'correct':
         delay = 1500;
@@ -122,7 +123,7 @@ const Demo = () => {
 
   if (step == 'showDistraction') {
     if (index == 0) {
-      return <Timer />;
+      return <DemoTimer />;
     }
 
     if (index == 1) {
