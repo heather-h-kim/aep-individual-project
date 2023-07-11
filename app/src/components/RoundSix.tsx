@@ -235,45 +235,36 @@ const RoundSix = props => {
   }
 
   if (state.step == 'showScore') {
-    if (score != 0) {
-      return (
-        <div
-          style={
-            preview
-              ? { backgroundColor: themeBgColor }
-              : { backgroundColor: globalUser.bgcolor }
-          }
-          className="my-10 flex h-screen flex-col items-center justify-center"
-        >
-          <h1 className="text-7xl font-extrabold tracking-widest">
-            {' '}
-            Your score is:{score}
-          </h1>
-          {/*<button*/}
-          {/*  className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"*/}
-          {/*  onClick={playAgain}*/}
-          {/*>*/}
-          {/*  {' '}*/}
-          {/*  Play this level again*/}
-          {/*</button>*/}
-        </div>
-      );
-    }
+    return (
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
+        <h1 className="text-7xl font-extrabold tracking-widest">
+          {' '}
+          Your score is:{score}
+        </h1>
+      </div>
+    );
+  }
 
-    if (score == 0) {
-      return (
-        <div
-          style={
-            preview
-              ? { backgroundColor: themeBgColor }
-              : { backgroundColor: globalUser.bgcolor }
-          }
-          className="my-10 flex h-screen flex-row items-center justify-center"
-        >
-          <h1 className="text-8xl font-extrabold tracking-widest"> Wait...</h1>
-        </div>
-      );
-    }
+  if (score == 0) {
+    return (
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-row items-center justify-center"
+      >
+        <h1 className="text-8xl font-extrabold tracking-widest"> Wait...</h1>
+      </div>
+    );
   }
 };
 

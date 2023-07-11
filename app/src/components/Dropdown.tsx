@@ -1,7 +1,7 @@
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 import { useState } from 'react';
-import { Link } from '@tanstack/react-router';
+import { Link, useNavigate } from '@tanstack/react-router';
 import { useGameStore, useRoundStore } from '../store/gameStore';
 import { useIsCorrectStore } from '../store/stateStore';
 
@@ -14,11 +14,17 @@ const Dropdown = () => {
   const resetRounds = useRoundStore(state => state.resetRounds);
   const resetGame = useGameStore(state => state.resetGame);
   const resetIsCorrect = useIsCorrectStore(state => state.resetIsCorrect);
+  const navigate = useNavigate();
 
   const handleClick = () => {
     resetRounds();
     resetGame();
     resetIsCorrect();
+    setShowMenu(!showMenu);
+    navigate({ to: '/loginHome' });
+  };
+
+  const handleClickDropDown = () => {
     setShowMenu(!showMenu);
   };
 
@@ -78,7 +84,7 @@ const Dropdown = () => {
           aria-orientation="vertical"
           aria-labelledby="menu-button"
           tabIndex="-1"
-          onClick={handleClick}
+          onClick={handleClickDropDown}
         >
           <div className="py-1" role="none">
             <Link
