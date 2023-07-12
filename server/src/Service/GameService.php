@@ -42,8 +42,8 @@ class GameService extends AbstractDtoTransformers
         $newGame = new Game();
 
         //get info for the user field
-        $user_id = $createGameRoundDto->getUserId();
-        $user = $this->userRepository->find($user_id);
+        $userId = $createGameRoundDto->getUserId();
+        $user = $this->userRepository->find($userId);
 
         //get info for the played_at and season fields
         $currentDate = new DateTime('now');
@@ -81,15 +81,16 @@ class GameService extends AbstractDtoTransformers
                $newRound=$this->roundService->createRound($roundDto, $newLevel);
 
                //calculate score
-               $unit_score = $newRound->getLevel()->getLevelLookupId()->getUnitScore();
+               $unitScore = $newRound->getLevel()->getLevelLookupId()->getUnitScore();
                if($newRound->getNumberShown() === $newRound->getNumberEntered()){
-                   $score = $score+$unit_score;
+                   $score = $score+$unitScore;
                }
             }
         }
 
         return $score;
     }
+
 
     public function getGames():iterable
     {
@@ -102,8 +103,28 @@ class GameService extends AbstractDtoTransformers
         return $this->gameRepository->findBy(['season' => $seasonId, 'user' => $userId]);
     }
 
+        public function calculateScorePerGame(Game $game): int
+        {
+            $levels = $game->getLevels();
+            $score = 0;
+
+            foreach($levels as $level) {
+                $unitScore = $level->getLevelLookupId()->getUnitScore();
+                $rounds = $level->getRounds();
+
+                foreach($rounds as $round) {
+                    if($round->getNumberShown() === $round->getNumberEntered()){
+                        $score = $score+$unitScore;
+                    }
+                }
+            }
+            return $score;
+        }
+
     public function transformToDto($object): GameDto
     {
         return new GameDto($object->getId(), $object->getSeason(), $object->getUser());
     }
+
+
 }
