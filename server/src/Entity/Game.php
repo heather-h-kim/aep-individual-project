@@ -24,7 +24,7 @@ class Game
     #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'user_id', nullable: false)]
     private ?User $user = null;
 
-    #[ORM\OneToMany(mappedBy: 'game', targetEntity: Level::class)]
+    #[ORM\OneToMany(mappedBy: 'Game', targetEntity: Level::class)]
     #[ORM\JoinColumn(name:'level_id', referencedColumnName: 'level_id')]
     private Collection $levels;
 

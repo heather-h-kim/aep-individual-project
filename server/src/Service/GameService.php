@@ -11,8 +11,9 @@ use App\Repository\SeasonRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
+use App\Dto\Outgoing\GameDto;
 
-class GameService
+class GameService extends AbstractDtoTransformers
 {
     private GameRepository $gameRepository;
     private SeasonRepository $seasonRepository;
@@ -93,6 +94,16 @@ class GameService
     public function getGames():iterable
     {
         $allGames = $this->gameRepository->findAll();
-        return $allGames;
+        return $this->transformToDtos($allGames);
+    }
+
+    public function getGamesBySeasonAndUser(int $seasonId, int $userId): iterable
+    {
+        return $this->gameRepository->findBy(['season' => $seasonId, 'user' => $userId]);
+    }
+
+    public function transformToDto($object): GameDto
+    {
+        return new GameDto($object->getId(), $object->getSeason(), $object->getUser());
     }
 }
