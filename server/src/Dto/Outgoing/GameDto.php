@@ -8,13 +8,13 @@ use App\Entity\User;
 class GameDto
 {
     private int $game_id;
-    private Season $season_id;
-    private User $user_id;
+    private ?SeasonDto $season_id;
+    private ?UserDto $user_id;
 
     /**
      * @param int $game_id
      */
-    public function __construct(int $game_id, Season $season_id, User $user_id)
+    public function __construct(int $game_id, ?SeasonDto $season_id, ?UserDto $user_id)
     {
         $this->game_id = $game_id;
         $this->season_id = $season_id;
@@ -38,36 +38,37 @@ class GameDto
     }
 
     /**
-     * @return Season
+     * @return SeasonDto|null
      */
-    public function getSeasonId(): Season
+    public function getSeasonId(): ?SeasonDto
     {
         return $this->season_id;
     }
 
     /**
-     * @param Season $season_id
+     * @param SeasonDto|null $season_id
      */
-    public function setSeasonId(Season $season_id): void
+    public function setSeasonId(?SeasonDto $season_id): void
     {
         $this->season_id = $season_id;
     }
 
     /**
-     * @return User
+     * @return UserDto|null
      */
-    public function getUserId(): User
+    public function getUserId(): ?UserDto
     {
         return $this->user_id;
     }
 
     /**
-     * @param User $user_id
+     * @param UserDto|null $user_id
      */
-    public function setUserId(User $user_id): void
+    public function setUserId(?UserDto $user_id): void
     {
         $this->user_id = $user_id;
     }
+
 
 
 }

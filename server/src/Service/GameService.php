@@ -20,17 +20,22 @@ class GameService extends AbstractDtoTransformers
     private UserRepository $userRepository;
     private LevelService $levelService;
     private RoundService $roundService;
+    private SeasonService $seasonService;
+    private UserService $userService;
+
 
     /**
      * @param GameRepository $gameRepository
      */
-    public function __construct(GameRepository $gameRepository, SeasonRepository $seasonRepository, UserRepository $userRepository, LevelService $levelService, RoundService $roundService)
+    public function __construct(GameRepository $gameRepository, SeasonRepository $seasonRepository, UserRepository $userRepository, LevelService $levelService, RoundService $roundService, SeasonService $seasonService, UserService $userService)
     {
         $this->gameRepository = $gameRepository;
         $this->seasonRepository = $seasonRepository;
         $this->userRepository = $userRepository;
         $this->levelService = $levelService;
         $this->roundService = $roundService;
+        $this->seasonService = $seasonService;
+        $this->userService = $userService;
     }
 
     /**
@@ -123,7 +128,10 @@ class GameService extends AbstractDtoTransformers
 
     public function transformToDto($object): GameDto
     {
-        return new GameDto($object->getId(), $object->getSeason(), $object->getUser());
+        return new GameDto(
+            $object->getId(),
+            $this->seasonService->transformToDto($object->getSeason()),
+            $this->userService->transformToDto($object->getUser()));
     }
 
 

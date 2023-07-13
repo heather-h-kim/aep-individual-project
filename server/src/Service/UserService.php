@@ -68,6 +68,7 @@ class UserService extends AbstractDtoTransformers
     {
         $allUsers = $this->userRepository->findAll();
         return $this->transformToDtos($allUsers);
+//        return $this->userRepository->findAll();
 
     }
 
