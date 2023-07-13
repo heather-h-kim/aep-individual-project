@@ -2,23 +2,22 @@
 
 namespace App\Dto\Outgoing;
 
-use App\Entity\Season;
-use App\Entity\User;
-
 class GameDto
 {
     private int $game_id;
-    private ?SeasonDto $season_id;
-    private ?UserDto $user_id;
+    private ?SeasonDto $season;
+    private ?UserDto $user;
 
     /**
      * @param int $game_id
+     * @param SeasonDto|null $season
+     * @param UserDto|null $user
      */
-    public function __construct(int $game_id, ?SeasonDto $season_id, ?UserDto $user_id)
+    public function __construct(int $game_id, ?SeasonDto $season, ?UserDto $user)
     {
         $this->game_id = $game_id;
-        $this->season_id = $season_id;
-        $this->user_id = $user_id;
+        $this->season = $season;
+        $this->user = $user;
     }
 
     /**
@@ -40,33 +39,33 @@ class GameDto
     /**
      * @return SeasonDto|null
      */
-    public function getSeasonId(): ?SeasonDto
+    public function getSeason(): ?SeasonDto
     {
-        return $this->season_id;
+        return $this->season;
     }
 
     /**
-     * @param SeasonDto|null $season_id
+     * @param SeasonDto|null $season
      */
-    public function setSeasonId(?SeasonDto $season_id): void
+    public function setSeason(?SeasonDto $season): void
     {
-        $this->season_id = $season_id;
+        $this->season = $season;
     }
 
     /**
      * @return UserDto|null
      */
-    public function getUserId(): ?UserDto
+    public function getUser(): ?UserDto
     {
-        return $this->user_id;
+        return $this->user;
     }
 
     /**
-     * @param UserDto|null $user_id
+     * @param UserDto|null $user
      */
-    public function setUserId(?UserDto $user_id): void
+    public function setUser(?UserDto $user): void
     {
-        $this->user_id = $user_id;
+        $this->user = $user;
     }
 
 

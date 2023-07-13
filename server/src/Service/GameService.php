@@ -103,29 +103,34 @@ class GameService extends AbstractDtoTransformers
         return $this->transformToDtos($allGames);
     }
 
-    public function getGamesBySeasonAndUser(int $seasonId, int $userId): iterable
+    public function getGamesBySeason(int $seasonId): iterable
     {
-        return $this->gameRepository->findBy(['season' => $seasonId, 'user' => $userId]);
+        $games =  $this->gameRepository->findBy(['season' => $seasonId], ['user'=> 'ASC']);
+        return $this->transformToDtos($games);
     }
 
-        public function calculateScorePerGame(Game $game): int
-        {
-            $levels = $game->getLevels();
-            $score = 0;
+    public function calculateScorePerGame(Game $game): int
+    {
+        $levels = $game->getLevels();
+        $score = 0;
 
-            foreach($levels as $level) {
-                $unitScore = $level->getLevelLookupId()->getUnitScore();
-                $rounds = $level->getRounds();
+        foreach($levels as $level) {
+            $unitScore = $level->getLevelLookupId()->getUnitScore();
+            $rounds = $level->getRounds();
 
-                foreach($rounds as $round) {
-                    if($round->getNumberShown() === $round->getNumberEntered()){
-                        $score = $score+$unitScore;
-                    }
+            foreach($rounds as $round) {
+                if($round->getNumberShown() === $round->getNumberEntered()){
+                    $score = $score+$unitScore;
                 }
             }
-            return $score;
         }
+        return $score;
+    }
 
+    /**
+     * @param Game $object
+     * @return GameDto
+     */
     public function transformToDto($object): GameDto
     {
         return new GameDto(

@@ -17,6 +17,7 @@ const Dropdown = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    console.log('game menu clicked');
     resetRounds();
     resetGame();
     resetIsCorrect();

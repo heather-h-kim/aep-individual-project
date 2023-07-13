@@ -46,10 +46,10 @@ class GameController extends ApiController
         return $this->JSON($this->gameService->getGames());
     }
 
-    #[Route('api/games/{seasonId}/{userId}', methods:['GET'])]
-public function getGamesBySeasonAndUser(int $seasonId, int $userId): Response
+    #[Route('api/games/{seasonId}', methods:['GET'])]
+    public function getGamesBySeason(int $seasonId): Response
     {
-        return $this->JSON($this->gameService->getGamesBySeasonAndUser($seasonId, $userId));
+        return $this->JSON($this->gameService->getGamesBySeason($seasonId));
     }
 
 }

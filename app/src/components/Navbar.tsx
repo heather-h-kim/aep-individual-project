@@ -194,10 +194,32 @@ const Navbar = () => {
     return (
       <div>
         <Navigate to="/loginHome" />
-        <nav className="mx-auto flex max-w-screen-2xl flex-wrap items-center justify-between p-4">
-          <Avatar />
+        <nav
+          style={
+            preview
+              ? { backgroundColor: themeBgColor }
+              : { backgroundColor: globalUser.bgcolor }
+          }
+          className="mx-auto flex max-w-full flex-wrap items-center justify-between p-4"
+        >
+          <span
+            style={
+              preview
+                ? {
+                    color: themeFgColor,
+                    backgroundColor: themeBgColor,
+                  }
+                : {
+                    color: globalUser.fgcolor,
+                    backgroundColor: globalUser.bgcolor,
+                  }
+            }
+            className="self-center whitespace-nowrap text-2xl font-semibold"
+          >
+            Number Memory Game
+          </span>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-            <ul className="mt-4 flex flex-col p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
+            <ul className="mt-4 flex flex-col items-center p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
               <li className="mr-3">
                 <Link
                   style={
@@ -218,23 +240,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li className="mr-3">
-                <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
-                  className="inline-block rounded px-3 py-1 "
-                  to="/game"
-                >
-                  Game
-                </Link>
+                <Dropdown />
               </li>
               <li className="mr-3">
                 <Link
@@ -298,6 +304,7 @@ const Navbar = () => {
               <li className="mr-3">
                 <Logout />
               </li>
+              <Avatar />
             </ul>
           </div>
         </nav>
