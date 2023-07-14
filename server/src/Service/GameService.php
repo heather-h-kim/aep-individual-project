@@ -106,18 +106,22 @@ class GameService extends AbstractDtoTransformers
 
     public function getGamesBySeason(int $seasonId): array
     {
+        //get games for the season
         $games =  $this->gameRepository->findBy(['season' => $seasonId], ['user'=> 'ASC']);
 
+        //create an associative array of user=>topScore pairs
         $array = [];
 
         foreach($games as $game){
             $calculatedScore = $this->calculateScorePerGame($game);
+
+            //push a new user=>topScore pair into $array if there's no key=>value pair for the user or the existing value is smaller than the current score
             if(!isset($array[$game->getUser()->getId()]) || $array[$game->getUser()->getId()] < $calculatedScore){
                 $array[$game->getUser()->getId()] = $this->calculateScorePerGame($game);
             }
         }
 
-
+        //convert the associative array ($array) into an array of objects (UserTopScoreDto)
         $finalArray = [];
         arsort($array);
         foreach($array as $key=>$value){
