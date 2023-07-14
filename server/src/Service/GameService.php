@@ -5,31 +5,38 @@ namespace App\Service;
 use App\Dto\Incoming\CreateGameLevelRoundDto;
 use App\Dto\Incoming\CreateLevelDto;
 use App\Dto\Incoming\CreateRoundDto;
+use App\Dto\Outgoing\UserTopScoreDto;
 use App\Entity\Game;
 use App\Repository\GameRepository;
 use App\Repository\SeasonRepository;
 use App\Repository\UserRepository;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
+use App\Dto\Outgoing\GameDto;
 
-class GameService
+class GameService extends AbstractDtoTransformers
 {
     private GameRepository $gameRepository;
     private SeasonRepository $seasonRepository;
     private UserRepository $userRepository;
     private LevelService $levelService;
     private RoundService $roundService;
+    private SeasonService $seasonService;
+    private UserService $userService;
+
 
     /**
      * @param GameRepository $gameRepository
      */
-    public function __construct(GameRepository $gameRepository, SeasonRepository $seasonRepository, UserRepository $userRepository, LevelService $levelService, RoundService $roundService)
+    public function __construct(GameRepository $gameRepository, SeasonRepository $seasonRepository, UserRepository $userRepository, LevelService $levelService, RoundService $roundService, SeasonService $seasonService, UserService $userService)
     {
         $this->gameRepository = $gameRepository;
         $this->seasonRepository = $seasonRepository;
         $this->userRepository = $userRepository;
         $this->levelService = $levelService;
         $this->roundService = $roundService;
+        $this->seasonService = $seasonService;
+        $this->userService = $userService;
     }
 
     /**
@@ -41,17 +48,16 @@ class GameService
         $newGame = new Game();
 
         //get info for the user field
-        $user_id = $createGameRoundDto->getUserId();
-        $user = $this->userRepository->find($user_id);
+        $userId = $createGameRoundDto->getUserId();
+        $user = $this->userRepository->find($userId);
 
         //get info for the played_at and season fields
         $currentDate = new DateTime('now');
-//        $currentDate = new DateTime($createGameRoundDto->getPlayedAt());
         $season = $this->seasonRepository->findOneByCurrentDate($currentDate);
 
         //update newGame
-        $newGame->setUserId($user);
-        $newGame->setSeasonId($season);
+        $newGame->setUser($user);
+        $newGame->setSeason($season);
         $newGame->setPlayedAt($currentDate);
 
         $this->gameRepository->save($newGame, true);
@@ -81,13 +87,83 @@ class GameService
                $newRound=$this->roundService->createRound($roundDto, $newLevel);
 
                //calculate score
-               $unit_score = $newRound->getLevelId()->getLevelLookupId()->getUnitScore();
+               $unitScore = $newRound->getLevel()->getLevelLookupId()->getUnitScore();
                if($newRound->getNumberShown() === $newRound->getNumberEntered()){
-                   $score = $score+$unit_score;
+                   $score = $score+$unitScore;
                }
             }
         }
 
         return $score;
     }
+
+
+    public function getGames():iterable
+    {
+        $allGames = $this->gameRepository->findAll();
+        return $this->transformToDtos($allGames);
+    }
+
+    public function getGamesBySeason(int $seasonId): array
+    {
+        //get games for the season
+        $games =  $this->gameRepository->findBy(['season' => $seasonId], ['user'=> 'ASC']);
+
+        //create an associative array of user=>topScore pairs
+        $array = [];
+
+        foreach($games as $game){
+            $calculatedScore = $this->calculateScorePerGame($game);
+
+            //push a new user=>topScore pair into $array if there's no key=>value pair for the user or the existing value is smaller than the current score
+            if(!isset($array[$game->getUser()->getId()]) || $array[$game->getUser()->getId()] < $calculatedScore){
+                $array[$game->getUser()->getId()] = $this->calculateScorePerGame($game);
+            }
+        }
+
+        //convert the associative array ($array) into an array of objects (UserTopScoreDto)
+        $finalArray = [];
+        arsort($array);
+        foreach($array as $key=>$value){
+            $finalArray[] = $this->transformToUserTopScoreDto($key, $value);
+        }
+
+//        $finalArray = array_map("$this->transformToUserTopScoreDto", $array);
+
+       return $finalArray;
+
+    }
+
+    public function calculateScorePerGame(Game $game): int
+    {
+        $levels = $game->getLevels();
+        $score = 0;
+
+        foreach($levels as $level) {
+            $unitScore = $level->getLevelLookupId()->getUnitScore();
+            $rounds = $level->getRounds();
+
+            foreach($rounds as $round) {
+                if($round->getNumberShown() === $round->getNumberEntered()){
+                    $score = $score+$unitScore;
+                }
+            }
+        }
+        return $score;
+    }
+
+    public function transformToUserTopScoreDto(int $user_id, int $top_score): UserTopScoreDto
+    {
+        return new UserTopScoreDto($user_id, $top_score);
+    }
+
+    public function transformToDto($object): GameDto
+    {
+        return new GameDto(
+            $object->getId(),
+            $this->seasonService->transformToDto($object->getSeason()),
+            $this->userService->transformToDto($object->getUser()),
+        );
+    }
+
 }

@@ -8,6 +8,8 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactory;
 use Symfony\Component\Serializer\Mapping\Loader\AnnotationLoader;
+//use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\Normalizer\AbstractObjectNormalizer;
 use Symfony\Component\Serializer\Normalizer\ArrayDenormalizer;
 use Symfony\Component\Serializer\Normalizer\DateTimeNormalizer;
@@ -44,7 +46,10 @@ class JsonSerializer
         return $this->serializer->serialize(
             $object,
             self::FORMAT_JSON,
-            [AbstractObjectNormalizer::SKIP_NULL_VALUES => true]
+            [AbstractObjectNormalizer::SKIP_NULL_VALUES => true,
+                AbstractNormalizer::CIRCULAR_REFERENCE_HANDLER => function (object $object, string $format, array $context): string {
+                    return $object->getName();
+                },]
         );
     }
 

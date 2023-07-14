@@ -68,6 +68,8 @@ class UserService extends AbstractDtoTransformers
     {
         $allUsers = $this->userRepository->findAll();
         return $this->transformToDtos($allUsers);
+//        return $this->userRepository->findAll();
+
     }
 
     public function getUserById(int $id): ?UserDto
@@ -81,7 +83,8 @@ class UserService extends AbstractDtoTransformers
         $user = $this->userRepository->findOneBy(['auth0token' => $token]);
 
         if(!$user) {
-            return $this->transformToDto($user);
+//            return $this->transformToDto($user);
+            return null;
         }
 
         return $this->transformToDto($user);

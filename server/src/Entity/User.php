@@ -41,13 +41,13 @@ class User
     #[ORM\Column(length: 100, nullable: true)]
     private ?string $auth0token = null;
 
-    #[ORM\OneToMany(mappedBy: 'user_id', targetEntity: Game::class)]
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Game::class)]
     #[ORM\JoinColumn(name:'game_id', referencedColumnName: 'game_id' )]
-    private Collection $Games;
+    private Collection $games;
 
     public function __construct()
     {
-        $this->Games = new ArrayCollection();
+        $this->games = new ArrayCollection();
     }
 
 
@@ -157,14 +157,14 @@ class User
      */
     public function getGames(): Collection
     {
-        return $this->Games;
+        return $this->games;
     }
 
     public function addGame(Game $game): self
     {
-        if (!$this->Games->contains($game)) {
-            $this->Games->add($game);
-            $game->setUserId($this);
+        if (!$this->games->contains($game)) {
+            $this->games->add($game);
+            $game->setUser($this);
         }
 
         return $this;
@@ -172,10 +172,10 @@ class User
 
     public function removeGame(Game $game): self
     {
-        if ($this->Games->removeElement($game)) {
+        if ($this->games->removeElement($game)) {
             // set the owning side to null (unless already changed)
-            if ($game->getUserId() === $this) {
-                $game->setUserId(null);
+            if ($game->getUser() === $this) {
+                $game->setUser(null);
             }
         }
 
