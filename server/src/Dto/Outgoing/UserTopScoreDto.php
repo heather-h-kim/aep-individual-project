@@ -4,51 +4,50 @@ namespace App\Dto\Outgoing;
 
 class UserTopScoreDto
 {
-    private ?int $user_id;
-    private ?int $top_score;
+    private ?string $userName;
+    private ?int $topScore;
 
     /**
-     * @param int|null $user_id
-     * @param int|null $score
+     * @param string|null $userName
+     * @param int|null $topScore
      */
-    public function __construct(?int $user_id, ?int $top_score)
+    public function __construct(?string $userName, ?int $topScore)
     {
-        $this->user_id = $user_id;
-        $this->top_score = $top_score;
+        $this->userName = $userName;
+        $this->topScore = $topScore;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getUserName(): ?string
+    {
+        return $this->userName;
+    }
+
+    /**
+     * @param string|null $userName
+     */
+    public function setUserName(?string $userName): void
+    {
+        $this->userName = $userName;
     }
 
     /**
      * @return int|null
      */
-    public function getUserId(): ?int
+    public function getTopScore(): ?int
     {
-        return $this->user_id;
+        return $this->topScore;
     }
 
     /**
-     * @param int|null $user_id
+     * @param int|null $topScore
      */
-    public function setUserId(?int $user_id): void
+    public function setTopScore(?int $topScore): void
     {
-        $this->user_id = $user_id;
+        $this->topScore = $topScore;
     }
-
-    /**
-     * @return int|null
-     */
-    public function getScore(): ?int
-    {
-        return $this->top_score;
-    }
-
-    /**
-     * @param int|null $top_score
-     */
-    public function setScore(?int $top_score): void
-    {
-        $this->top_score = $top_score;
-    }
-
 
 
 

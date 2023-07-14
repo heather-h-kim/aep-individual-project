@@ -10,7 +10,7 @@ const useRandomFacts = () => {
     queryFn: getRandomFacts,
     onSuccess: data => updateRandomFact(data),
     onError: error =>
-      console.log('something went wrong while getting gifs', error),
+      console.log('something went wrong while getting randomFacts', error),
     refetchOnWindowFocus: false,
   });
 };

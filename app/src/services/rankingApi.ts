@@ -1,6 +1,6 @@
-export async function getRankings(season) {
+export async function getRankings(seasonId) {
   try {
-    const url = `http://localhost:8000/api/games/${season}`;
+    const url = `http://localhost:8000/api/games/${seasonId}`;
     const response = await fetch(url, {
       headers: {
         'content-type': 'application/json',
@@ -8,7 +8,7 @@ export async function getRankings(season) {
       method: 'GET',
     });
     const jsonResponse = await response.json();
-    console.log(jsonResponse);
+    // console.log(jsonResponse);
     return jsonResponse;
   } catch (error) {
     console.log('Something went wrong while getting rankings', error);
@@ -25,7 +25,7 @@ export async function getSeasons() {
       method: 'GET',
     });
     const jsonResponse = response.json();
-    console.log(jsonResponse);
+    // console.log(jsonResponse);
     return jsonResponse;
   } catch (error) {
     console.log('Something went wrong while getting all seasons', error);

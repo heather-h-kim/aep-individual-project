@@ -104,7 +104,7 @@ class GameService extends AbstractDtoTransformers
         return $this->transformToDtos($allGames);
     }
 
-    public function getGamesBySeason(int $seasonId): array
+    public function getRankingBySeason(int $seasonId): array
     {
         //get games for the season
         $games =  $this->gameRepository->findBy(['season' => $seasonId], ['user'=> 'ASC']);
@@ -116,8 +116,8 @@ class GameService extends AbstractDtoTransformers
             $calculatedScore = $this->calculateScorePerGame($game);
 
             //push a new user=>topScore pair into $array if there's no key=>value pair for the user or the existing value is smaller than the current score
-            if(!isset($array[$game->getUser()->getId()]) || $array[$game->getUser()->getId()] < $calculatedScore){
-                $array[$game->getUser()->getId()] = $this->calculateScorePerGame($game);
+            if(!isset($array[$game->getUser()->getUsername()]) || $array[$game->getUser()->getUsername()] < $calculatedScore){
+                $array[$game->getUser()->getUsername()] = $this->calculateScorePerGame($game);
             }
         }
 
@@ -152,9 +152,9 @@ class GameService extends AbstractDtoTransformers
         return $score;
     }
 
-    public function transformToUserTopScoreDto(int $user_id, int $top_score): UserTopScoreDto
+    public function transformToUserTopScoreDto(string $username, int $topScore): UserTopScoreDto
     {
-        return new UserTopScoreDto($user_id, $top_score);
+        return new UserTopScoreDto($username, $topScore);
     }
 
     public function transformToDto($object): GameDto

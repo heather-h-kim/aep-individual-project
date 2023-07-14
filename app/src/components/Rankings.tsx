@@ -4,20 +4,26 @@ import { useEffect, useState } from 'react';
 import useGetSeasons from '../hooks/useGetSeasons';
 
 const Rankings = () => {
-  const [season, setSeason] = useState(3);
-  useGetSeasons();
+  const { seasons, currentSeasonId } = useGetSeasons();
+  const [rankingArray, setRankingArray] = useState([]);
+
   useQuery({
-    queryKey: ['Rankings', season],
-    queryFn: () => getRankings(season),
-    onSuccess: data => console.log(data),
+    queryKey: ['Rankings', currentSeasonId],
+    queryFn: () => getRankings(currentSeasonId),
+    onSuccess: data => {
+      console.log(data);
+      setRankingArray(data);
+    },
     onError: error =>
       console.log('something went wrong while getting seasons', error),
     refetchOnWindowFocus: false,
   });
 
   const handleClick = () => {
-    setSeason(4);
+    console.log('clicked');
   };
+
+  console.log(rankingArray);
 
   return (
     <div>
