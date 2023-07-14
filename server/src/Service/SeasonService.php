@@ -21,7 +21,7 @@ class SeasonService extends AbstractDtoTransformers
         $this->seasonRepository = $seasonRepository;
     }
 
-    public function getSeasons(): iterable{
+    public function getAllSeasons(): iterable{
         $allSeasons = $this->seasonRepository->findAll();
         return $this->transformToDtos($allSeasons);
     }
