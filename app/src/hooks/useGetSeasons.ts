@@ -3,7 +3,13 @@ import { getSeasons } from '../services/rankingApi';
 import { useState } from 'react';
 
 const useGetSeasons = () => {
-  const [seasons, setSeasons] = useState([]);
+  interface season {
+    seasonId: number;
+    startDate: string;
+    endDate: string;
+  }
+
+  const [seasons, setSeasons] = useState<season[]>([]);
   const [currentSeason, setCurrentSeason] = useState({});
   const [currentSeasonId, setCurrentSeasonId] = useState<any>(0);
 
@@ -28,7 +34,9 @@ const useGetSeasons = () => {
 
   return {
     seasons,
+    currentSeason,
     currentSeasonId,
+    setCurrentSeasonId,
   };
 };
 

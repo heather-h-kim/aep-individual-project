@@ -128,7 +128,7 @@ class GameService extends AbstractDtoTransformers
             $finalArray[] = $this->transformToUserTopScoreDto($key, $value);
         }
 
-//        $finalArray = array_map("$this->transformToUserTopScoreDto", $array);
+//        $finalArray = array_map(static function ($key, $value){ $this->transformToUserTopScoreDto($key, $value);}, $array);
 
        return $finalArray;
 
