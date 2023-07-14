@@ -121,10 +121,10 @@ class GameService extends AbstractDtoTransformers
         $finalArray = [];
         arsort($array);
         foreach($array as $key=>$value){
-            $finalArray[] = $this->transformToDto($key, $value);
+            $finalArray[] = $this->transformToUserTopScoreDto($key, $value);
         }
 
-//        $finalArray = array_map("$this->transformToDto", $array);
+//        $finalArray = array_map("$this->transformToUserTopScoreDto", $array);
 
        return $finalArray;
 
