@@ -5,6 +5,7 @@ namespace App\Service;
 use App\Dto\Incoming\CreateGameLevelRoundDto;
 use App\Dto\Incoming\CreateLevelDto;
 use App\Dto\Incoming\CreateRoundDto;
+use App\Dto\Outgoing\UserTopScoreDto;
 use App\Entity\Game;
 use App\Repository\GameRepository;
 use App\Repository\SeasonRepository;
@@ -103,10 +104,30 @@ class GameService extends AbstractDtoTransformers
         return $this->transformToDtos($allGames);
     }
 
-    public function getGamesBySeason(int $seasonId): iterable
+    public function getGamesBySeason(int $seasonId): array
     {
         $games =  $this->gameRepository->findBy(['season' => $seasonId], ['user'=> 'ASC']);
-        return $this->transformToDtos($games);
+
+        $array = [];
+
+        foreach($games as $game){
+            $calculatedScore = $this->calculateScorePerGame($game);
+            if(!isset($array[$game->getUser()->getId()]) || $array[$game->getUser()->getId()] < $calculatedScore){
+                $array[$game->getUser()->getId()] = $this->calculateScorePerGame($game);
+            }
+        }
+
+
+        $finalArray = [];
+        arsort($array);
+        foreach($array as $key=>$value){
+            $finalArray[] = $this->transformToDto($key, $value);
+        }
+
+//        $finalArray = array_map("$this->transformToDto", $array);
+
+       return $finalArray;
+
     }
 
     public function calculateScorePerGame(Game $game): int
@@ -127,17 +148,18 @@ class GameService extends AbstractDtoTransformers
         return $score;
     }
 
-    /**
-     * @param Game $object
-     * @return GameDto
-     */
+    public function transformToUserTopScoreDto(int $user_id, int $top_score): UserTopScoreDto
+    {
+        return new UserTopScoreDto($user_id, $top_score);
+    }
+
     public function transformToDto($object): GameDto
     {
         return new GameDto(
             $object->getId(),
             $this->seasonService->transformToDto($object->getSeason()),
-            $this->userService->transformToDto($object->getUser()));
+            $this->userService->transformToDto($object->getUser()),
+        );
     }
-
 
 }
