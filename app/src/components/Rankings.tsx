@@ -4,8 +4,12 @@ import { useEffect, useState } from 'react';
 import useGetSeasons from '../hooks/useGetSeasons';
 import { useSeasonStore } from '../store/seasonStore';
 import { useRankingStore } from '../store/rankingStore';
+import Pagination from './Pagination';
 
 const Rankings = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rankingsPerPage, setRankingsPerPage] = useState(5);
+
   // global states for the dropdown menu and getting rankings
   const { seasons, currentSeasonId, updateCurrentSeasonId } = useSeasonStore(
     state => ({
@@ -20,8 +24,6 @@ const Rankings = () => {
     rankings: state.rankings,
     updateRankings: state.updateRankings,
   }));
-
-  const [rank, setRank] = useState(1);
 
   //query to get rankings for the current season
   useQuery({
@@ -40,8 +42,19 @@ const Rankings = () => {
     updateCurrentSeasonId(e.target.value);
   };
 
-  console.log('rankings', rankings);
-  console.log('currentSeasonId is', currentSeasonId);
+  // console.log('rankings', rankings);
+  // console.log('currentSeasonId is', currentSeasonId);
+
+  // Get rankings to display per page
+  const indexOfLastRanking = currentPage * rankingsPerPage;
+  const indexOfFirstRanking = indexOfLastRanking - rankingsPerPage;
+  const rankingsToDisplayPerPage = rankings.slice(
+    indexOfFirstRanking,
+    indexOfLastRanking,
+  );
+
+  //Change rankings page
+  const paginate = pageNumber => setCurrentPage(pageNumber);
 
   return (
     <div>
@@ -75,7 +88,7 @@ const Rankings = () => {
             </tr>
           </thead>
           <tbody>
-            {rankings.map(ranking => {
+            {rankingsToDisplayPerPage.map(ranking => {
               return (
                 <tr key={ranking.userName}>
                   <td>{ranking.rank}</td>
@@ -86,6 +99,11 @@ const Rankings = () => {
             })}
           </tbody>
         </table>
+        <Pagination
+          rankingsPerPage={rankingsPerPage}
+          totalRankings={rankings.length}
+          paginate={paginate}
+        />
       </div>
     </div>
   );
