@@ -6,21 +6,24 @@ import { useSeasonStore } from '../store/seasonStore';
 import { useRankingStore } from '../store/rankingStore';
 
 const Rankings = () => {
-  // const { seasons, currentSeason, currentSeasonId, setCurrentSeasonId } =
-  //   useGetSeasons();
-  const { seasons, currentSeasonId, updateSeasons, updateCurrentSeasonId } =
-    useSeasonStore(state => ({
+  // global states for the dropdown menu and getting rankings
+  const { seasons, currentSeasonId, updateCurrentSeasonId } = useSeasonStore(
+    state => ({
       seasons: state.seasons,
       currentSeasonId: state.currentSeasonId,
-      updateSeasons: state.updateSeasons,
       updateCurrentSeasonId: state.updateCurrentSeasonId,
-    }));
+    }),
+  );
 
+  //global states for rankings
   const { rankings, updateRankings } = useRankingStore(state => ({
     rankings: state.rankings,
     updateRankings: state.updateRankings,
   }));
 
+  const [rank, setRank] = useState(1);
+
+  //query to get rankings for the current season
   useQuery({
     queryKey: ['Rankings', currentSeasonId],
     queryFn: () => getRankings(currentSeasonId),
@@ -32,29 +35,6 @@ const Rankings = () => {
       console.log('something went wrong while getting seasons', error),
     refetchOnWindowFocus: false,
   });
-
-  // interface ranking {
-  //   userName: string;
-  //   topScore: number;
-  // }
-  //
-  // const [rankingArray, setRankingArray] = useState<ranking[]>([]);
-  //
-  // useQuery({
-  //   queryKey: ['Rankings', currentSeasonId],
-  //   queryFn: () => getRankings(currentSeasonId),
-  //   onSuccess: data => {
-  //     console.log(data);
-  //     setRankingArray(data);
-  //   },
-  //   onError: error =>
-  //     console.log('something went wrong while getting seasons', error),
-  //   refetchOnWindowFocus: false,
-  // });
-
-  const handleClick = () => {
-    console.log('clicked');
-  };
 
   const handleSelect = e => {
     updateCurrentSeasonId(e.target.value);
@@ -85,16 +65,27 @@ const Rankings = () => {
           );
         })}
       </select>
-      <button onClick={handleClick}>Rankings</button>
       <div>
-        {rankings.map(ranking => {
-          return (
-            <div key={ranking.userName}>
-              <h2>{ranking.userName}</h2>
-              <p>{ranking.topScore}</p>
-            </div>
-          );
-        })}
+        <table className="table-auto">
+          <thead>
+            <tr>
+              <th>Rank</th>
+              <th>Username</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rankings.map(ranking => {
+              return (
+                <tr key={ranking.userName}>
+                  <td>{ranking.rank}</td>
+                  <td>{ranking.userName}</td>
+                  <td>{ranking.topScore}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
     </div>
   );

@@ -125,7 +125,19 @@ class GameService extends AbstractDtoTransformers
         $finalArray = [];
         arsort($array);
         foreach($array as $key=>$value){
-            $finalArray[] = $this->transformToUserTopScoreDto($key, $value);
+            $finalArray[] = $this->transformToUserTopScoreDto(1, $key, $value);
+        }
+
+        //update rank for each user, taking account of multiple identical top scores
+        foreach($finalArray as $obj){
+            if(array_search($obj, $finalArray)>0){
+                if($finalArray[array_search($obj, $finalArray) -1]->getTopScore() > $obj->getTopScore()){
+                $obj->setRank(($finalArray[array_search($obj, $finalArray) -1]->getRank() )+ 1);
+                }
+                if($finalArray[array_search($obj, $finalArray) -1]->getTopScore() == $obj->getTopScore()){
+                    $obj->setRank($finalArray[array_search($obj, $finalArray) -1]->getRank());
+                }
+            }
         }
 
 //        $finalArray = array_map(static function ($key, $value){ $this->transformToUserTopScoreDto($key, $value);}, $array);
@@ -152,9 +164,9 @@ class GameService extends AbstractDtoTransformers
         return $score;
     }
 
-    public function transformToUserTopScoreDto(string $username, int $topScore): UserTopScoreDto
+    public function transformToUserTopScoreDto(int $rank, string $username, int $topScore): UserTopScoreDto
     {
-        return new UserTopScoreDto($username, $topScore);
+        return new UserTopScoreDto($rank, $username, $topScore);
     }
 
     public function transformToDto($object): GameDto

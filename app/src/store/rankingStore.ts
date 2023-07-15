@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import { useSeasonStore } from './seasonStore';
 
 interface RankObject {
+  rank: number;
   userName: string;
   topScore: number;
 }
