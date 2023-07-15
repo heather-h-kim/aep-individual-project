@@ -1,7 +1,8 @@
-import Login from './components/Login.tsx';
-import Logout from './components/Logout.tsx';
-import Profile from './components/Profile';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation } from '@tanstack/react-query';
 import { addUser, createUser } from './services/userApi';
@@ -10,18 +11,16 @@ import { useUserStore } from './store/userStore';
 import { useColorsStore } from './store/colorStore';
 import { router } from './routes/rootRoute';
 import { RouterProvider } from '@tanstack/react-router';
+import useGetSeasons from './hooks/useGetSeasons';
+import { getRankings } from './services/rankingApi';
+import { useRankingStore } from './store/rankingStore';
 
 const queryClient = new QueryClient();
 
 export default function App() {
   const { user, isAuthenticated, isLoading, error } = useAuth0();
-  const globalUser = useUserStore(state => state.user);
-  const themeBgColor = useColorsStore(state => state.bgcolor);
-  const themeFgColor = useColorsStore(state => state.fgcolor);
-  const preview = useColorsStore(state => state.preview);
   const updateThemeBgColor = useColorsStore(state => state.updateBgcolor);
   const updateThemeFgColor = useColorsStore(state => state.updateFgcolor);
-
   const updateGlobalUser = useUserStore(state => state.updateUser);
   const { data, mutate } = useMutation({
     mutationFn: (body: createUser) => addUser(body),
@@ -38,6 +37,25 @@ export default function App() {
     onSettled: (data, error, variables, context) => {
       console.log('complete', data);
     },
+  });
+
+  //Get seasons and ranking here so that the ranking component can load quickly with the ranking of the current season
+  const { seasons, currentSeasonId } = useGetSeasons();
+  const { rankings, updateRankings } = useRankingStore(state => ({
+    rankings: state.rankings,
+    updateRankings: state.updateRankings,
+  }));
+
+  useQuery({
+    queryKey: ['Rankings', currentSeasonId],
+    queryFn: () => getRankings(currentSeasonId),
+    onSuccess: data => {
+      console.log(data);
+      updateRankings(data);
+    },
+    onError: error =>
+      console.log('something went wrong while getting seasons', error),
+    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
@@ -83,19 +101,13 @@ export default function App() {
     );
   }
 
-  // console.log('global user is', globalUser);
-  // console.log('global user roll name is', globalUser.roll.roleName);
+  console.log('seasons are', seasons);
+  console.log('current seasonId is', currentSeasonId);
+  console.log('ranking', rankings);
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div
-        // style={
-        //   preview
-        //     ? { backgroundColor: themeBgColor }
-        //     : { backgroundColor: globalUser.bgcolor }
-        // }
-        className="m-10 p-5"
-      >
+      <div className="m-10 p-5">
         <RouterProvider router={router} />
       </div>
     </QueryClientProvider>

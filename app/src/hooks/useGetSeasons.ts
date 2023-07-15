@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getSeasons } from '../services/rankingApi';
-import { useState } from 'react';
+import { useSeasonStore } from '../store/seasonStore';
 
 const useGetSeasons = () => {
   interface season {
@@ -9,18 +9,21 @@ const useGetSeasons = () => {
     endDate: string;
   }
 
-  const [seasons, setSeasons] = useState<season[]>([]);
-  const [currentSeason, setCurrentSeason] = useState({});
-  const [currentSeasonId, setCurrentSeasonId] = useState<any>(0);
+  const { seasons, currentSeasonId, updateSeasons, updateCurrentSeasonId } =
+    useSeasonStore(state => ({
+      seasons: state.seasons,
+      currentSeasonId: state.currentSeasonId,
+      updateSeasons: state.updateSeasons,
+      updateCurrentSeasonId: state.updateCurrentSeasonId,
+    }));
 
   useQuery({
     queryKey: ['Seasons'],
     queryFn: getSeasons,
     onSuccess: data => {
       console.log(data);
-      setSeasons(data);
-      setCurrentSeason(data[data.length - 1]);
-      setCurrentSeasonId(Object.values(data[data.length - 1])[0]);
+      updateSeasons(data);
+      updateCurrentSeasonId(Object.values(data[data.length - 1])[0]);
     },
     onError: error =>
       console.log('something went wrong while getting seasons', error),
@@ -28,15 +31,11 @@ const useGetSeasons = () => {
   });
 
   console.log(seasons);
-  console.log(currentSeason);
-  console.log(Object.values(currentSeason)[0]);
   console.log(currentSeasonId);
 
   return {
     seasons,
-    currentSeason,
     currentSeasonId,
-    setCurrentSeasonId,
   };
 };
 
