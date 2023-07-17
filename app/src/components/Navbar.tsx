@@ -300,7 +300,6 @@ const Navbar = () => {
                   Profile
                 </Link>
               </li>
-
               <li className="mr-3">
                 <Logout />
               </li>

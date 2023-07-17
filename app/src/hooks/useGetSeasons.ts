@@ -9,13 +9,21 @@ const useGetSeasons = () => {
     endDate: string;
   }
 
-  const { seasons, currentSeasonId, updateSeasons, updateCurrentSeasonId } =
-    useSeasonStore(state => ({
-      seasons: state.seasons,
-      currentSeasonId: state.currentSeasonId,
-      updateSeasons: state.updateSeasons,
-      updateCurrentSeasonId: state.updateCurrentSeasonId,
-    }));
+  const {
+    seasons,
+    currentSeason,
+    currentSeasonId,
+    updateSeasons,
+    updateCurrentSeason,
+    updateCurrentSeasonId,
+  } = useSeasonStore(state => ({
+    seasons: state.seasons,
+    currentSeason: state.currentSeason,
+    currentSeasonId: state.currentSeasonId,
+    updateSeasons: state.updateSeasons,
+    updateCurrentSeason: state.updateCurrentSeason,
+    updateCurrentSeasonId: state.updateCurrentSeasonId,
+  }));
 
   useQuery({
     queryKey: ['Seasons'],
@@ -23,6 +31,7 @@ const useGetSeasons = () => {
     onSuccess: data => {
       console.log(data);
       updateSeasons(data);
+      updateCurrentSeason(data[data.length - 1]);
       updateCurrentSeasonId(Object.values(data[data.length - 1])[0]);
     },
     onError: error =>
@@ -32,6 +41,7 @@ const useGetSeasons = () => {
 
   console.log(seasons);
   console.log(currentSeasonId);
+  console.log('currentSeason', currentSeason);
 
   return {
     seasons,

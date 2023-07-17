@@ -54,6 +54,20 @@ class SeasonRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+        /**
+     * @return Season[] Returns an array of Season objects
+     */
+    public function findByStartDate(DateTime $currentDate): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.start_date <= :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->orderBy('s.season_id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
 //    /**
 //     * @return Season[] Returns an array of Season objects
 //     */
