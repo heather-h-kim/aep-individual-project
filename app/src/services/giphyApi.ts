@@ -15,6 +15,6 @@ export async function getGifs() {
     console.log(gifs);
     return gifs;
   } catch (error) {
-    console.log('Something went wrong', error);
+    console.log('Something went wrong while getting gifs', error);
   }
 }

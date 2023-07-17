@@ -9,6 +9,8 @@ const useRandomFacts = () => {
     queryKey: ['Random'],
     queryFn: getRandomFacts,
     onSuccess: data => updateRandomFact(data),
+    onError: error =>
+      console.log('something went wrong while getting randomFacts', error),
     refetchOnWindowFocus: false,
   });
 };
