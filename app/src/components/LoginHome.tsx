@@ -3,16 +3,13 @@ import { useAuth0 } from '@auth0/auth0-react';
 import { useUserStore } from '../store/userStore';
 import { useColorsStore } from '../store/colorStore';
 import useGetSeasons from '../hooks/useGetSeasons';
+import { useSeasonStore } from '../store/seasonStore';
 
 const LoginHome = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
   const globalUser = useUserStore(state => state.user);
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const preview = useColorsStore(state => state.preview);
-
-  // const { seasons, currentSeasonId } = useGetSeasons();
-  //
-  // console.log('currentSeasonId reset', currentSeasonId);
 
   if (isAuthenticated && !globalUser.userId) {
     return (

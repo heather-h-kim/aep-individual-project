@@ -5,11 +5,13 @@ import { useState } from 'react';
 import useSelectDateError from '../hooks/useSelectDateError';
 
 const Admin = () => {
-  const { seasons, currentSeason, currentSeasonId } = useSeasonStore(state => ({
-    seasons: state.seasons,
-    currentSeason: state.currentSeason,
-    currentSeasonId: state.currentSeasonId,
-  }));
+  const { allSeasons, currentSeason, currentSeasonId } = useSeasonStore(
+    state => ({
+      seasons: state.allSeasons,
+      currentSeason: state.currentSeason,
+      currentSeasonId: state.currentSeasonId,
+    }),
+  );
 
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -73,7 +75,7 @@ const Admin = () => {
             </tr>
           </thead>
           <tbody>
-            {seasons.map(season => {
+            {allSeasons.map(season => {
               return (
                 <tr key={season.seasonId}>
                   <td>Season {season.seasonId}</td>

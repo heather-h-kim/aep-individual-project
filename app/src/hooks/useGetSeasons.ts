@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSeasons } from '../services/rankingApi';
+import { getAllSeasons } from '../services/rankingApi';
 import { useSeasonStore } from '../store/seasonStore';
 
 const useGetSeasons = () => {
@@ -10,43 +10,45 @@ const useGetSeasons = () => {
   }
 
   const {
-    seasons,
+    allSeasons,
+    seasonsToDate,
     currentSeason,
     currentSeasonId,
-    updateSeasons,
+    updateAllSeasons,
+    updateSeasonsToDate,
     updateCurrentSeason,
     updateCurrentSeasonId,
   } = useSeasonStore(state => ({
-    seasons: state.seasons,
+    allSeasons: state.allSeasons,
+    seasonsToDate: state.seasonsToDate,
     currentSeason: state.currentSeason,
     currentSeasonId: state.currentSeasonId,
-    updateSeasons: state.updateSeasons,
+    updateAllSeasons: state.updateAllSeasons,
+    updateSeasonsToDate: state.updateSeasonsToDate,
     updateCurrentSeason: state.updateCurrentSeason,
     updateCurrentSeasonId: state.updateCurrentSeasonId,
   }));
 
   useQuery({
     queryKey: ['Seasons'],
-    queryFn: getSeasons,
+    queryFn: getAllSeasons,
     onSuccess: data => {
       console.log(data);
-      updateSeasons(data);
-      updateCurrentSeason(data[data.length - 1]);
-      updateCurrentSeasonId(Object.values(data[data.length - 1])[0]);
+      updateAllSeasons(data);
+      const array = [];
+      for (const season of data) {
+        if (new Date(season.startDate).getTime() < Date.now()) {
+          array.push(season);
+        }
+      }
+      updateSeasonsToDate(array);
+      updateCurrentSeason(array[array.length - 1]);
+      updateCurrentSeasonId(Object.values(array[array.length - 1])[0]);
     },
     onError: error =>
       console.log('something went wrong while getting seasons', error),
     refetchOnWindowFocus: false,
   });
-
-  console.log(seasons);
-  console.log(currentSeasonId);
-  console.log('currentSeason', currentSeason);
-
-  return {
-    seasons,
-    currentSeasonId,
-  };
 };
 
 export default useGetSeasons;

@@ -1,7 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
-import { getRankings, getSeasons } from '../services/rankingApi';
-import { useEffect, useState } from 'react';
-import useGetSeasons from '../hooks/useGetSeasons';
+import { useState } from 'react';
 import { useSeasonStore } from '../store/seasonStore';
 import { useRankingStore } from '../store/rankingStore';
 import Pagination from './Pagination';
@@ -12,39 +9,21 @@ const Rankings = () => {
   const [search, setSearch] = useState('');
 
   // global states for the dropdown menu and getting rankings
-  const { seasons, currentSeasonId, updateCurrentSeasonId } = useSeasonStore(
-    state => ({
-      seasons: state.seasons,
+  const { seasonsToDate, currentSeasonId, updateCurrentSeasonId } =
+    useSeasonStore(state => ({
+      seasonsToDate: state.seasonsToDate,
       currentSeasonId: state.currentSeasonId,
       updateCurrentSeasonId: state.updateCurrentSeasonId,
-    }),
-  );
+    }));
 
   //global states for rankings
-  const { rankings, updateRankings } = useRankingStore(state => ({
-    rankings: state.rankings,
-    updateRankings: state.updateRankings,
-  }));
-
-  //query to get rankings for the current season
-  useQuery({
-    queryKey: ['Rankings', currentSeasonId],
-    queryFn: () => getRankings(currentSeasonId),
-    onSuccess: data => {
-      console.log(data);
-      updateRankings(data);
-    },
-    onError: error =>
-      console.log('something went wrong while getting seasons', error),
-    refetchOnWindowFocus: false,
-  });
+  const rankings = useRankingStore(state => state.rankings);
 
   const handleSelect = e => {
     updateCurrentSeasonId(e.target.value);
   };
 
-  // console.log('rankings', rankings);
-  // console.log('currentSeasonId is', currentSeasonId);
+  console.log('rankings', rankings);
 
   // Get rankings to display per page
   const indexOfLastRanking = currentPage * rankingsPerPage;
@@ -78,7 +57,7 @@ const Rankings = () => {
               <option defaultValue={currentSeasonId}>
                 Season {currentSeasonId}
               </option>
-              {seasons.map(season => {
+              {seasonsToDate.map(season => {
                 return (
                   <option key={season.seasonId} value={season.seasonId}>
                     Season {season.seasonId}
@@ -145,7 +124,7 @@ const Rankings = () => {
               <option defaultValue={currentSeasonId}>
                 Season {currentSeasonId}
               </option>
-              {seasons.map(season => {
+              {seasonsToDate.map(season => {
                 return (
                   <option key={season.seasonId} value={season.seasonId}>
                     Season {season.seasonId}

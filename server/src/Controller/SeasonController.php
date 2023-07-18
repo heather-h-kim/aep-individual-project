@@ -56,6 +56,11 @@ class SeasonController extends ApiController
         return $this->json($this->seasonService->getAllSeasons());
     }
 
+//    #[Route('api/seasons/toDate', methods:['GET'])]
+//    public function getSeasonsToDate(): Response
+//    {
+//        return $this->json($this->seasonService->getAllSeasons());
+//    }
 
 
 

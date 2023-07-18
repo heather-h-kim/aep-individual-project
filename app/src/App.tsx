@@ -14,10 +14,24 @@ import { RouterProvider } from '@tanstack/react-router';
 import useGetSeasons from './hooks/useGetSeasons';
 import { getRankings } from './services/rankingApi';
 import { useRankingStore } from './store/rankingStore';
+import { useSeasonStore } from './store/seasonStore';
 
 const queryClient = new QueryClient();
 
 export default function App() {
+  // interface user {
+  //   given_name: string;
+  //   family_name: string;
+  //   nickname: string;
+  //   name: string;
+  //   picture: string;
+  //   email: string;
+  //   email_verified: boolean;
+  //   locale: string;
+  //   sub: string;
+  //   updated_at: string
+  // }
+
   const { user, isAuthenticated, isLoading, error } = useAuth0();
   const updateThemeBgColor = useColorsStore(state => state.updateBgcolor);
   const updateThemeFgColor = useColorsStore(state => state.updateFgcolor);
@@ -39,8 +53,16 @@ export default function App() {
     },
   });
 
-  //Get seasons and ranking here so that the ranking component can load quickly with the ranking of the current season
-  const { seasons, currentSeasonId } = useGetSeasons();
+  //Get seasons and ranking data here so that the ranking & admin components can load quickly
+  useGetSeasons();
+  const { allSeasons, seasonsToDate, currentSeason, currentSeasonId } =
+    useSeasonStore(state => ({
+      allSeasons: state.allSeasons,
+      seasonsToDate: state.seasonsToDate,
+      currentSeason: state.currentSeason,
+      currentSeasonId: state.currentSeasonId,
+    }));
+
   const { rankings, updateRankings } = useRankingStore(state => ({
     rankings: state.rankings,
     updateRankings: state.updateRankings,
@@ -89,6 +111,12 @@ export default function App() {
     }
   }, [isAuthenticated, user]);
 
+  console.log('allSeasons', allSeasons);
+  console.log('seasonsToDate', seasonsToDate);
+  console.log('currentSeason', currentSeason);
+  console.log('current seasonId is', currentSeasonId);
+  console.log('rankings', rankings);
+
   if (isLoading) {
     return <div className="m-8 p-5 text-lg">Loading...</div>;
   }
@@ -100,10 +128,6 @@ export default function App() {
       </div>
     );
   }
-
-  console.log('seasons are', seasons);
-  console.log('current seasonId is', currentSeasonId);
-  console.log('ranking', rankings);
 
   return (
     <QueryClientProvider client={queryClient}>
