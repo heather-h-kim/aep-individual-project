@@ -5,6 +5,7 @@ use App\Dto\Incoming\UpdateSeasonDto;
 use App\Dto\Outgoing\SeasonDto;
 use App\Dto\Incoming\CreateSeasonDto;
 use App\Entity\Season;
+use App\Repository\GameRepository;
 use App\Repository\SeasonRepository;
 use DateTime;
 use Doctrine\ORM\NonUniqueResultException;
@@ -12,13 +13,15 @@ use Doctrine\ORM\NonUniqueResultException;
 class SeasonService extends AbstractDtoTransformers
 {
     private SeasonRepository $seasonRepository;
+    private GameRepository $gameRepository;
 
     /**
      * @param SeasonRepository $seasonRepository
      */
-    public function __construct(SeasonRepository $seasonRepository)
+    public function __construct(SeasonRepository $seasonRepository, GameRepository $gameRepository)
     {
         $this->seasonRepository = $seasonRepository;
+        $this->gameRepository = $gameRepository;
     }
 
     public function getAllSeasons(): iterable{
@@ -68,6 +71,14 @@ class SeasonService extends AbstractDtoTransformers
         $newSeason->setEndDate($end_date);
 
         $this->seasonRepository->save($newSeason, true);
+
+        $seasonlessGames = $this->gameRepository->findALLByNullSeason($start_date, $end_date);
+
+        foreach($seasonlessGames as $game){
+            $game->setSeason($newSeason);
+            $this->gameRepository->save($game, true);
+        }
+
 
         return $this->transformToDto($newSeason);
     }
