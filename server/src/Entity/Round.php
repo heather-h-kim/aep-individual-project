@@ -25,7 +25,7 @@ class Round
     private ?Level $level = null;
 
     #[ORM\OneToOne(inversedBy: 'round', cascade: ['persist', 'remove'])]
-    #[ORM\JoinColumn(name:'round_lookup_id', referencedColumnName: 'round_lookup_id', nullable: false)]
+    #[ORM\JoinColumn(name:'round_lookup_id', referencedColumnName: 'round_lookup_id', nullable: false, unique: false)]
     private ?RoundLookup $round_lookup_id = null;
 
     public function getId(): ?int

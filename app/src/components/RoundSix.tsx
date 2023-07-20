@@ -235,6 +235,7 @@ const RoundSix = props => {
   }
 
   if (state.step == 'showScore') {
+    console.log('score is', score);
     if (score == 0) {
       return (
         <div

@@ -11,6 +11,7 @@ use App\Repository\GameRepository;
 use App\Repository\SeasonRepository;
 use App\Repository\UserRepository;
 use DateTime;
+use DateTimeZone;
 use Doctrine\ORM\NonUniqueResultException;
 use App\Dto\Outgoing\GameDto;
 
@@ -52,7 +53,8 @@ class GameService extends AbstractDtoTransformers
         $user = $this->userRepository->find($userId);
 
         //get info for the played_at and season fields
-        $currentDate = new DateTime('now');
+        $currentDate = new DateTime('now', new DateTimeZone('UTC'));
+//        $currentDate = new DateTime('now');
         $season = $this->seasonRepository->findOneByCurrentDate($currentDate);
 
         //update newGame

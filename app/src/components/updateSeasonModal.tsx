@@ -11,38 +11,41 @@ export const UpdateSeasonModal = ({
   DatePicker,
   errors,
   setErrors,
+  dates,
+  setDates,
 }) => {
   if (visible === false) return null;
 
   const handleOnChangeUpdateStartDate = date => {
-    setStartDate(date);
+    console.log('type of date', typeof date, date);
+    // setStartDate(date);
+    setDates({
+      ...dates,
+      startDate: date,
+    });
     setErrors({
       ...errors,
       startDate: '',
     });
-    const timestampSelectedDate = date.getTime();
 
     console.log('errors', errors);
   };
 
   const handleOnChangeUpdateEndDate = date => {
-    setEndDate(date);
+    // setEndDate(date);
+    setDates({
+      ...dates,
+      endDate: date,
+    });
     setErrors({
       ...errors,
       endDate: '',
     });
-    const timestampSelectedDate = date.getTime();
-    const timestampStartDate = startDate.getTime();
 
     console.log('errors', errors);
-
-    if (timestampSelectedDate < timestampStartDate) {
-      setErrors({
-        ...errors,
-        endDate: 'The end date should be later than the start date',
-      });
-    }
   };
+
+  // console.log(dates);
 
   return (
     <div
@@ -62,8 +65,8 @@ export const UpdateSeasonModal = ({
                     Start date:
                     <DatePicker
                       name="startDate"
-                      selected={startDate}
-                      placeholderText={'select a date'}
+                      selected={dates.startDate}
+                      // placeholderText={'select a date'}
                       onChange={handleOnChangeUpdateStartDate}
                     />
                   </label>
@@ -71,11 +74,10 @@ export const UpdateSeasonModal = ({
                     End date:
                     <DatePicker
                       name="endDate"
-                      selected={endDate}
-                      placeholderText={'select a date'}
-                      onChange={handleOnChangeEndDate}
+                      selected={dates.endDate}
+                      // placeholderText={'select a date'}
+                      onChange={handleOnChangeUpdateEndDate}
                     />
-                    {errors.endDate && <h3>{errors.endDate}</h3>}
                   </label>
                 </div>
                 <div className="flex flex-row">

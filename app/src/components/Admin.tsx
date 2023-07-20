@@ -14,6 +14,14 @@ import { UpdateUserModal } from './UpdateUserModal';
 import { UpdateSeasonModal } from './updateSeasonModal';
 
 const Admin = () => {
+  interface dates {
+    startDate: Date | null;
+    endDate: Date | null;
+    seasonId: number | null;
+    prevSeasonId: number | null;
+    nextSeasonId: number | null;
+  }
+
   const { allSeasons, currentSeason, currentSeasonId, addNewSeason } =
     useSeasonStore(state => ({
       allSeasons: state.allSeasons,
@@ -31,6 +39,13 @@ const Admin = () => {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [dates, setDates] = useState<dates>({
+    startDate: null,
+    endDate: null,
+    seasonId: null,
+    prevSeasonId: null,
+    nextSeasonId: null,
+  });
 
   const createSeasonMutation = useMutation({
     mutationFn: (body: createSeason) => createNewSeason(body),
@@ -48,7 +63,7 @@ const Admin = () => {
       console.log('Success', data);
       addNewSeason(data);
     },
-    onSettled: (data, error, variables, context) => {
+    onSettled: data => {
       console.log('Complete', data);
       setIsUpdating(false);
     },
@@ -129,6 +144,14 @@ const Admin = () => {
   const handleOnClose = () => {
     setStartDate(null);
     setEndDate(null);
+    setDates({
+      ...dates,
+      startDate: null,
+      endDate: null,
+      seasonId: null,
+      prevSeasonId: null,
+      nextSeasonId: null,
+    });
     setShowModal(!showModal);
   };
 
@@ -137,6 +160,8 @@ const Admin = () => {
     setEndDate(null);
     setShowModal(!showModal);
   };
+
+  console.log(dates);
 
   return (
     <div>
@@ -168,6 +193,43 @@ const Admin = () => {
                           'update the season, seasonId is',
                           season.seasonId,
                         );
+                        const currentIndex = allSeasons.indexOf(season);
+                        const startDate = new Date(season.startDate);
+                        const endDate = new Date(season.endDate);
+
+                        if (currentIndex == 0) {
+                          setDates({
+                            ...dates,
+                            startDate: startDate,
+                            endDate: endDate,
+                            seasonId: season.seasonId,
+                            nextSeasonId: allSeasons[currentIndex + 1].seasonId,
+                          });
+
+                          setShowModal(!showModal);
+                        }
+
+                        if (currentIndex == allSeasons.length - 1) {
+                          setDates({
+                            ...dates,
+                            startDate: startDate,
+                            endDate: endDate,
+                            seasonId: season.seasonId,
+                            prevSeasonId: allSeasons[currentIndex - 1].seasonId,
+                          });
+
+                          setShowModal(!showModal);
+                        }
+
+                        setDates({
+                          ...dates,
+                          startDate: startDate,
+                          endDate: endDate,
+                          seasonId: season.seasonId,
+                          prevSeasonId: allSeasons[currentIndex - 1].seasonId,
+                          nextSeasonId: allSeasons[currentIndex + 1].seasonId,
+                        });
+
                         setShowModal(!showModal);
                       }}
                     >
@@ -261,6 +323,8 @@ const Admin = () => {
           DatePicker={DatePicker}
           errors={errors}
           setErrors={setErrors}
+          dates={dates}
+          setDates={setDates}
         />
       </div>
     </div>
