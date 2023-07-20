@@ -59,7 +59,7 @@ class GameRepository extends ServiceEntityRepository
     /**
      * @return Game[] Returns an array of Game objects
      */
-    public function findALLByNullSeason(\DateTime $start_date, \DateTime $end_date): array
+    public function findALLByNullSeason(DateTime $start_date, DateTime $end_date): array
     {
         return $this->createQueryBuilder('g')
             ->andWhere('g.season is NULL')

@@ -56,6 +56,12 @@ class SeasonController extends ApiController
         return $this->json($this->seasonService->getAllSeasons());
     }
 
+    #[Route('api/season/{seasonId}', methods:['DELETE'])]
+    public function deleteSeason(int $seasonId): Response
+    {
+        return $this->json($this->seasonService->deleteSeason($seasonId));
+    }
+
 //    #[Route('api/seasons/toDate', methods:['GET'])]
 //    public function getSeasonsToDate(): Response
 //    {

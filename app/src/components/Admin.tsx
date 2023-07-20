@@ -3,15 +3,24 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useState } from 'react';
 import useSelectDateError from '../hooks/useSelectDateError';
+import { useMutation } from '@tanstack/react-query';
+import { updateUser, updateUserProfile } from '../services/userApi';
+import {
+  createNewSeason,
+  createSeason,
+  deleteSeason,
+} from '../services/seasonApi';
+import { UpdateUserModal } from './UpdateUserModal';
+import { UpdateSeasonModal } from './updateSeasonModal';
 
 const Admin = () => {
-  const { allSeasons, currentSeason, currentSeasonId } = useSeasonStore(
-    state => ({
+  const { allSeasons, currentSeason, currentSeasonId, addNewSeason } =
+    useSeasonStore(state => ({
       allSeasons: state.allSeasons,
       currentSeason: state.currentSeason,
       currentSeasonId: state.currentSeasonId,
-    }),
-  );
+      addNewSeason: state.addNewSeason,
+    }));
 
   const [startDate, setStartDate] = useState(null);
   const [endDate, setEndDate] = useState(null);
@@ -21,6 +30,51 @@ const Admin = () => {
   });
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+
+  const createSeasonMutation = useMutation({
+    mutationFn: (body: createSeason) => createNewSeason(body),
+    onMutate: body => {
+      console.log('mutate', body);
+      setIsUpdating(true);
+      console.log(isUpdating);
+    },
+    onError: (error, variables, context) => {
+      console.log('Something went wrong...', error, variables, context);
+      setIsUpdating(false);
+    },
+
+    onSuccess: data => {
+      console.log('Success', data);
+      addNewSeason(data);
+    },
+    onSettled: (data, error, variables, context) => {
+      console.log('Complete', data);
+      setIsUpdating(false);
+    },
+  });
+
+  const deleteSeasonMutation = useMutation({
+    mutationFn: seasonId => deleteSeason(seasonId),
+    onMutate: seasonId => {
+      console.log('mutate', seasonId);
+      setIsUpdating(true);
+      console.log(isUpdating);
+    },
+
+    onError: (error, variables, context) => {
+      console.log('Something went wrong...', error, variables, context);
+      setIsUpdating(false);
+    },
+
+    onSuccess: data => {
+      console.log('Success', data);
+    },
+    onSettled: (data, error, variables, context) => {
+      console.log('Complete', data);
+      setIsUpdating(false);
+    },
+  });
 
   const handleOnChangeStartDate = date => {
     setStartDate(date);
@@ -64,11 +118,24 @@ const Admin = () => {
   const handleSubmit = e => {
     e.preventDefault();
     console.log('create a new season');
-    // const createSeason = {
-    //   start_date: Math.round(startDate.getTime() / 1000),
-    //   end_date: Math.round(endDate.getTime() / 1000),
-    // };
-    // console.log('createSeason is', createSeason);
+    const createSeason = {
+      start_date: Math.round(startDate.getTime() / 1000),
+      end_date: Math.round(endDate.getTime() / 1000),
+    };
+    console.log('createSeason is', createSeason);
+    createSeasonMutation.mutate(createSeason);
+  };
+
+  const handleOnClose = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setShowModal(!showModal);
+  };
+
+  const handleOnUpdate = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setShowModal(!showModal);
   };
 
   return (
@@ -81,6 +148,7 @@ const Admin = () => {
               <th>Season</th>
               <th>Start Date</th>
               <th>End Date</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -90,6 +158,36 @@ const Admin = () => {
                   <td>Season {season.seasonId}</td>
                   <td>{season.startDate.slice(0, 10)}</td>
                   <td>{season.endDate.slice(0, 10)}</td>
+                  <td>
+                    <button
+                      disabled={buttonDisabled}
+                      className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                      onClick={e => {
+                        e.preventDefault();
+                        console.log(
+                          'update the season, seasonId is',
+                          season.seasonId,
+                        );
+                        setShowModal(!showModal);
+                      }}
+                    >
+                      Update
+                    </button>
+                    <button
+                      disabled={buttonDisabled}
+                      className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                      onClick={e => {
+                        e.preventDefault();
+                        console.log(
+                          'delete the season, seasonId is',
+                          season.seasonId,
+                        );
+                        deleteSeasonMutation.mutate(season.seasonId);
+                      }}
+                    >
+                      Delete
+                    </button>
+                  </td>
                 </tr>
               );
             })}
@@ -152,6 +250,18 @@ const Admin = () => {
             </button>
           )}
         </form>
+        <UpdateSeasonModal
+          visible={showModal}
+          startDate={startDate}
+          setStartDate={setStartDate}
+          endDate={endDate}
+          setEndDate={setEndDate}
+          onClose={handleOnClose}
+          onUpdate={handleOnUpdate}
+          DatePicker={DatePicker}
+          errors={errors}
+          setErrors={setErrors}
+        />
       </div>
     </div>
   );

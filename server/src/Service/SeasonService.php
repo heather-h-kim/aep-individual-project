@@ -103,7 +103,6 @@ class SeasonService extends AbstractDtoTransformers
             $seasonToUpdate->setEndDate($end_date);
         }
 
-        $this->seasonRepository->save($seasonToUpdate, true);
 
         return $this->transformToDto($seasonToUpdate);
     }

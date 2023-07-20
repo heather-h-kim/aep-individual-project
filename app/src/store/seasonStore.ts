@@ -15,6 +15,7 @@ interface Seasons {
   updateSeasonsToDate: (seasonArray: Season[]) => void;
   updateCurrentSeason: (currentSeason: Season) => void;
   updateCurrentSeasonId: (seasonId: number | unknown) => void;
+  addNewSeason: (newSeason: Season) => void;
 }
 
 export const useSeasonStore = create<Seasons>(set => ({
@@ -26,4 +27,6 @@ export const useSeasonStore = create<Seasons>(set => ({
   updateSeasonsToDate: seasonsArray => set({ seasonsToDate: seasonsArray }),
   updateCurrentSeason: currentSeason => set({ currentSeason: currentSeason }),
   updateCurrentSeasonId: seasonId => set({ currentSeasonId: seasonId }),
+  addNewSeason: newSeason =>
+    set(state => ({ allSeasons: [...state.allSeasons, newSeason] })),
 }));
