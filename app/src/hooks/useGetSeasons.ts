@@ -29,7 +29,7 @@ const useGetSeasons = () => {
     updateCurrentSeasonId: state.updateCurrentSeasonId,
   }));
 
-  useQuery({
+  const { isSuccess, data } = useQuery({
     queryKey: ['Seasons'],
     queryFn: getAllSeasons,
     onSuccess: data => {
@@ -49,6 +49,10 @@ const useGetSeasons = () => {
       console.log('something went wrong while getting seasons', error),
     refetchOnWindowFocus: false,
   });
+
+  if (isSuccess) {
+    console.log('data', data);
+  }
 };
 
 export default useGetSeasons;

@@ -9,8 +9,11 @@ import ShowInCorrect from './ShowIncorrect';
 import { useIsCorrectStore } from '../store/stateStore';
 import { Link } from '@tanstack/react-router';
 import ShowNumber from './ShowNumber';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { game, postGame } from '../services/gameApi';
+import { useSeasonStore } from '../store/seasonStore';
+import { useRankingStore } from '../store/rankingStore';
+import { getRankings } from '../services/rankingApi';
 
 const RoundSix = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -18,6 +21,20 @@ const RoundSix = props => {
     preview: state.preview,
   }));
   const globalUser = useUserStore(state => state.user);
+
+  const { allSeasons, seasonsToDate, currentSeason, currentSeasonId } =
+    useSeasonStore(state => ({
+      allSeasons: state.allSeasons,
+      seasonsToDate: state.seasonsToDate,
+      currentSeason: state.currentSeason,
+      currentSeasonId: state.currentSeasonId,
+    }));
+
+  const { rankings, updateRankings } = useRankingStore(state => ({
+    rankings: state.rankings,
+    updateRankings: state.updateRankings,
+  }));
+
   const [state, setState] = useState({
     levelNumber: props.level,
     roundNumber: props.round,
@@ -38,7 +55,20 @@ const RoundSix = props => {
   }));
   const [score, setScore] = useState(0);
 
-  const { data, mutate } = useMutation({
+  const { refetch } = useQuery({
+    queryKey: ['Rankings', currentSeasonId],
+    queryFn: () => getRankings(currentSeasonId),
+    enabled: false,
+    onSuccess: data => {
+      console.log(data);
+      updateRankings(data);
+    },
+    onError: error =>
+      console.log('something went wrong while getting seasons', error),
+    refetchOnWindowFocus: false,
+  });
+
+  const { data, mutate, isSuccess } = useMutation({
     mutationFn: (body: game) => postGame(body),
     onMutate: body => {
       console.log('mutate', body);
@@ -150,11 +180,6 @@ const RoundSix = props => {
     setState({ ...state, step: 'showScore' });
   };
 
-  // // button to click to play the same level once again
-  // const playAgain = () => {
-  //   // props.resetIndexState();
-  // };
-
   if (state.step == 'showNumber') {
     return <ShowNumber numberShown={state.numberShown} />;
   }
@@ -235,7 +260,14 @@ const RoundSix = props => {
   }
 
   if (state.step == 'showScore') {
+    //refetch rankings with the new game
+    if (isSuccess) {
+      console.log('refetch');
+      refetch();
+    }
+
     console.log('score is', score);
+
     if (score == 0) {
       return (
         <div

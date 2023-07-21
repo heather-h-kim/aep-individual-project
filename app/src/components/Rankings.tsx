@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useSeasonStore } from '../store/seasonStore';
 import { useRankingStore } from '../store/rankingStore';
 import Pagination from './Pagination';
+import { useQuery } from '@tanstack/react-query';
+import { getRankings } from '../services/rankingApi';
 
 const Rankings = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +19,11 @@ const Rankings = () => {
     }));
 
   //global states for rankings
-  const rankings = useRankingStore(state => state.rankings);
+  // const rankings = useRankingStore(state => state.rankings);
+  const { rankings, updateRankings } = useRankingStore(state => ({
+    rankings: state.rankings,
+    updateRankings: state.updateRankings,
+  }));
 
   const handleSelect = e => {
     updateCurrentSeasonId(e.target.value);
@@ -37,6 +43,22 @@ const Rankings = () => {
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   console.log(search);
+
+  const { isLoading } = useQuery({
+    queryKey: ['Rankings', currentSeasonId],
+    queryFn: () => getRankings(currentSeasonId),
+    onSuccess: data => {
+      console.log(data);
+      updateRankings(data);
+    },
+    onError: error =>
+      console.log('something went wrong while getting seasons', error),
+    refetchOnWindowFocus: false,
+  });
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
 
   if (search == '') {
     return (

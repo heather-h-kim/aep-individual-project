@@ -1,15 +1,50 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useUserStore } from '../store/userStore';
 import { useColorsStore } from '../store/colorStore';
 import useGetSeasons from '../hooks/useGetSeasons';
 import { useSeasonStore } from '../store/seasonStore';
+import { getAllSeasons, getRankings } from '../services/rankingApi';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useRankingStore } from '../store/rankingStore';
 
 const LoginHome = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
   const globalUser = useUserStore(state => state.user);
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const preview = useColorsStore(state => state.preview);
+  const client = useQueryClient();
+
+  useEffect(() => {
+    client.prefetchQuery({
+      queryKey: ['seasons'],
+      queryFn: getAllSeasons,
+    });
+
+    console.log('in useEffect');
+  }, []);
+
+  //fetch season and ranking related data in advance so that the rankings and admin component can load quickly
+  useGetSeasons();
+
+  const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
+
+  const { rankings, updateRankings } = useRankingStore(state => ({
+    rankings: state.rankings,
+    updateRankings: state.updateRankings,
+  }));
+
+  useQuery({
+    queryKey: ['Rankings', currentSeasonId],
+    queryFn: () => getRankings(currentSeasonId),
+    onSuccess: data => {
+      console.log(data);
+      updateRankings(data);
+    },
+    onError: error =>
+      console.log('something went wrong while getting seasons', error),
+    refetchOnWindowFocus: false,
+  });
 
   if (isAuthenticated && !globalUser.userId) {
     return (

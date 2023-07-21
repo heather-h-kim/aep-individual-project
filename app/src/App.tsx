@@ -2,6 +2,7 @@ import {
   QueryClient,
   QueryClientProvider,
   useQuery,
+  useQueryClient,
 } from '@tanstack/react-query';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation } from '@tanstack/react-query';
@@ -12,26 +13,13 @@ import { useColorsStore } from './store/colorStore';
 import { router } from './routes/rootRoute';
 import { RouterProvider } from '@tanstack/react-router';
 import useGetSeasons from './hooks/useGetSeasons';
-import { getRankings } from './services/rankingApi';
+import { getAllSeasons, getRankings } from './services/rankingApi';
 import { useRankingStore } from './store/rankingStore';
 import { useSeasonStore } from './store/seasonStore';
 
 const queryClient = new QueryClient();
 
 export default function App() {
-  // interface user {
-  //   given_name: string;
-  //   family_name: string;
-  //   nickname: string;
-  //   name: string;
-  //   picture: string;
-  //   email: string;
-  //   email_verified: boolean;
-  //   locale: string;
-  //   sub: string;
-  //   updated_at: string
-  // }
-
   const { user, isAuthenticated, isLoading, error } = useAuth0();
   const updateThemeBgColor = useColorsStore(state => state.updateBgcolor);
   const updateThemeFgColor = useColorsStore(state => state.updateFgcolor);
@@ -51,33 +39,6 @@ export default function App() {
     onSettled: (data, error, variables, context) => {
       console.log('complete', data);
     },
-  });
-
-  //Get seasons and ranking data here so that the ranking & admin components can load quickly
-  useGetSeasons();
-  const { allSeasons, seasonsToDate, currentSeason, currentSeasonId } =
-    useSeasonStore(state => ({
-      allSeasons: state.allSeasons,
-      seasonsToDate: state.seasonsToDate,
-      currentSeason: state.currentSeason,
-      currentSeasonId: state.currentSeasonId,
-    }));
-
-  const { rankings, updateRankings } = useRankingStore(state => ({
-    rankings: state.rankings,
-    updateRankings: state.updateRankings,
-  }));
-
-  useQuery({
-    queryKey: ['Rankings', currentSeasonId],
-    queryFn: () => getRankings(currentSeasonId),
-    onSuccess: data => {
-      console.log(data);
-      updateRankings(data);
-    },
-    onError: error =>
-      console.log('something went wrong while getting seasons', error),
-    refetchOnWindowFocus: false,
   });
 
   useEffect(() => {
@@ -110,12 +71,6 @@ export default function App() {
       }
     }
   }, [isAuthenticated, user]);
-
-  console.log('allSeasons', allSeasons);
-  console.log('seasonsToDate', seasonsToDate);
-  console.log('currentSeason', currentSeason);
-  console.log('current seasonId is', currentSeasonId);
-  console.log('rankings', rankings);
 
   if (isLoading) {
     return <div className="m-8 p-5 text-lg">Loading...</div>;
