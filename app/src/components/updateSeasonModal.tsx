@@ -81,10 +81,13 @@ export const UpdateSeasonModal = ({
   const handleUpdate = e => {
     e.preventDefault();
     setErrors('');
+
     const payload = {
       season_id: dates.seasonId,
       start_date: dates.startDate,
       end_date: dates.endDate,
+      prev_end_date: dates.prevEndDate,
+      next_start_date: dates.nextStartDate,
     };
 
     console.log('payload', payload);
@@ -94,7 +97,7 @@ export const UpdateSeasonModal = ({
   };
 
   console.log('dates', dates);
-  console.log('errors', errors);
+  // console.log('errors', errors);
 
   if (showModal) {
     return (

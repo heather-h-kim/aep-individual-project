@@ -106,7 +106,7 @@ class SeasonService extends AbstractDtoTransformers
 
         $this->seasonRepository->save($seasonToUpdate, true);
 
-        //
+
         $start_date = $seasonToUpdate->getStartDate();
         $end_date = $seasonToUpdate->getEndDate();
 
@@ -116,6 +116,29 @@ class SeasonService extends AbstractDtoTransformers
             $this->gameRepository->save($game, true);
         }
 
+        if($updateSeasonDto->getNextStartDate()) {
+            $nextStartDateTimestamp = ($updateSeasonDto->getNextStartDate()) / 1000;
+            $nextStartDate = new DateTime();
+            $nextStartDate->setTimestamp($nextStartDateTimestamp);
+            $games = $this->gameRepository->findALLBySeason($end_date, $nextStartDate);
+
+            foreach ($games as $game) {
+                $game->setSeason(null);
+                $this->gameRepository->save($game, true);
+            }
+        }
+
+        if($updateSeasonDto->getPrevEndDate()){
+            $prevEndDateTimestamp = ($updateSeasonDto->getPrevEndDate())/1000;
+            $prevEndDate = new DateTime();
+            $prevEndDate->setTimestamp($prevEndDateTimestamp);
+            $games = $this->gameRepository->findALLBySeason($prevEndDate, $start_date);
+
+            foreach ($games as $game) {
+                $game->setSeason(null);
+                $this->gameRepository->save($game, true);
+            }
+        }
 
         return $this->transformToDto($seasonToUpdate);
     }
