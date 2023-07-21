@@ -3,7 +3,12 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState } from 'react';
 import useSelectDateError from '../hooks/useSelectDateError';
-import { QueryClient, useMutation, useQuery } from '@tanstack/react-query';
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import { updateUser, updateUserProfile } from '../services/userApi';
 import {
   createNewSeason,
@@ -15,7 +20,7 @@ import { UpdateSeasonModal } from './updateSeasonModal';
 import { getAllSeasons } from '../services/rankingApi';
 
 const Admin = () => {
-  const queryClient = new QueryClient();
+  const queryClient = useQueryClient();
 
   const { isLoading, isSuccess, data } = useQuery({
     queryKey: ['Seasons'],
@@ -88,7 +93,6 @@ const Admin = () => {
     onMutate: seasonId => {
       console.log('mutate', seasonId);
       setIsUpdating(true);
-      console.log(isUpdating);
     },
 
     onError: (error, variables, context) => {
@@ -98,7 +102,9 @@ const Admin = () => {
 
     onSuccess: data => {
       console.log('Success', data);
+      queryClient.invalidateQueries({ queryKey: ['Seasons'] });
     },
+
     onSettled: data => {
       console.log('Complete', data);
       setIsUpdating(false);
@@ -201,12 +207,12 @@ const Admin = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map(el => {
+              {data.map(season => {
                 return (
-                  <tr key={el.seasonId}>
-                    <td>Season {el.seasonId}</td>
-                    <td>{el.startDate.slice(0, 10)}</td>
-                    <td>{el.endDate.slice(0, 10)}</td>
+                  <tr key={season.seasonId}>
+                    <td>Season {season.seasonId}</td>
+                    <td>{season.startDate.slice(0, 10)}</td>
+                    <td>{season.endDate.slice(0, 10)}</td>
                     <td>
                       <button
                         disabled={buttonDisabled}
@@ -215,18 +221,18 @@ const Admin = () => {
                           e.preventDefault();
                           console.log(
                             'update the season, seasonId is',
-                            el.seasonId,
+                            season.seasonId,
                           );
-                          const currentIndex = allSeasons.indexOf(el);
-                          const startDate = new Date(el.startDate);
-                          const endDate = new Date(el.endDate);
+                          const currentIndex = allSeasons.indexOf(season);
+                          const startDate = new Date(season.startDate);
+                          const endDate = new Date(season.endDate);
 
                           if (currentIndex == 0) {
                             setDates({
                               ...dates,
                               startDate: startDate,
                               endDate: endDate,
-                              seasonId: el.seasonId,
+                              seasonId: season.seasonId,
                               nextSeasonId:
                                 allSeasons[currentIndex + 1].seasonId,
                             });
@@ -239,7 +245,7 @@ const Admin = () => {
                               ...dates,
                               startDate: startDate,
                               endDate: endDate,
-                              seasonId: el.seasonId,
+                              seasonId: season.seasonId,
                               prevSeasonId:
                                 allSeasons[currentIndex - 1].seasonId,
                             });
@@ -251,7 +257,7 @@ const Admin = () => {
                             ...dates,
                             startDate: startDate,
                             endDate: endDate,
-                            seasonId: el.seasonId,
+                            seasonId: season.seasonId,
                             prevSeasonId: allSeasons[currentIndex - 1].seasonId,
                             nextSeasonId: allSeasons[currentIndex + 1].seasonId,
                           });
@@ -268,9 +274,9 @@ const Admin = () => {
                           e.preventDefault();
                           console.log(
                             'delete the season, seasonId is',
-                            el.seasonId,
+                            season.seasonId,
                           );
-                          deleteSeasonMutation.mutate(el.seasonId);
+                          deleteSeasonMutation.mutate(season.seasonId);
                         }}
                       >
                         Delete

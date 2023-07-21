@@ -17,7 +17,7 @@ class Game
     private ?int $game_id = null;
 
     #[ORM\ManyToOne(inversedBy: 'games')]
-    #[ORM\JoinColumn(name: 'season_id', referencedColumnName: 'season_id')]
+    #[ORM\JoinColumn(name: 'season_id', referencedColumnName: 'season_id', nullable: true)]
     private ?Season $season = null;
 
     #[ORM\ManyToOne(inversedBy: 'games')]
