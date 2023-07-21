@@ -3,12 +3,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState } from 'react';
 import useSelectDateError from '../hooks/useSelectDateError';
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import {
   createNewSeason,
   createSeason,
@@ -35,8 +30,8 @@ const Admin = () => {
     startDate: Date | null | number;
     endDate: Date | null | number;
     seasonId: number | null;
-    prevSeasonId: number | null;
-    nextSeasonId: number | null;
+    prevEndDate: number | null;
+    nextStartDate: number | null;
   }
 
   const { allSeasons, currentSeason, currentSeasonId, addNewSeason } =
@@ -58,8 +53,8 @@ const Admin = () => {
     startDate: null,
     endDate: null,
     seasonId: null,
-    prevSeasonId: null,
-    nextSeasonId: null,
+    prevEndDate: null,
+    nextStartDate: null,
   });
 
   const createSeasonMutation = useMutation({
@@ -167,7 +162,7 @@ const Admin = () => {
       }
     }
 
-    console.log('errors', errors);
+    // console.log('errors', errors);
   };
 
   const handleSubmit = e => {
@@ -181,73 +176,95 @@ const Admin = () => {
     createSeasonMutation.mutate(createSeason as createSeason);
   };
 
-  const handleOnClose = () => {
-    // setStartDate(null);
-    // setEndDate(null);
-    setDates({
-      ...dates,
-      startDate: null,
-      endDate: null,
-      seasonId: null,
-      prevSeasonId: null,
-      nextSeasonId: null,
-    });
-    setShowModal(!showModal);
-  };
+  // const handleOnClose = () => {
+  //   setDates({
+  //     ...dates,
+  //     startDate: null,
+  //     endDate: null,
+  //     seasonId: null,
+  //     prevSeasonId: null,
+  //     nextSeasonId: null,
+  //   });
+  //   setShowModal(!showModal);
+  // };
 
-  const handleOnUpdate = () => {
-    console.log('dates', dates);
-    if (typeof dates.startDate === 'object') {
-      const payload = {
-        season_id: dates.seasonId,
-        end_date: dates.endDate,
-      };
-      console.log('payload', payload);
-    }
-
-    if (typeof dates.endDate === 'object') {
-      const payload = {
-        season_id: dates.seasonId,
-        start_date: dates.startDate,
-      };
-      console.log('payload', payload);
-    }
-
-    if (
-      typeof dates.startDate !== 'object' &&
-      typeof dates.endDate !== 'object'
-    ) {
-      const payload = {
-        season_id: dates.seasonId,
-        start_date: dates.startDate,
-        end_date: dates.endDate,
-      };
-      console.log('payload', payload);
-    }
-
-    setDates({
-      ...dates,
-      startDate: null,
-      endDate: null,
-      seasonId: null,
-      prevSeasonId: null,
-      nextSeasonId: null,
-    });
-
-    // setStartDate(null);
-    // setEndDate(null);
-    setShowModal(!showModal);
-  };
+  // const handleOnUpdate = () => {
+  //   console.log('dates', dates);
+  //
+  //   if (typeof dates.startDate === 'object') {
+  //     const payload = {
+  //       season_id: dates.seasonId,
+  //       end_date: dates.endDate,
+  //     };
+  //     console.log('payload', payload);
+  //   }
+  //
+  //   if (typeof dates.endDate === 'object') {
+  //     const payload = {
+  //       season_id: dates.seasonId,
+  //       start_date: dates.startDate,
+  //     };
+  //     console.log('payload', payload);
+  //   }
+  //
+  //   if (
+  //     typeof dates.startDate !== 'object' &&
+  //     typeof dates.endDate !== 'object'
+  //   ) {
+  //     const payload = {
+  //       season_id: dates.seasonId,
+  //       start_date: dates.startDate,
+  //       end_date: dates.endDate,
+  //     };
+  //     console.log('payload', payload);
+  //   }
+  //
+  //   setDates({
+  //     ...dates,
+  //     startDate: null,
+  //     endDate: null,
+  //     seasonId: null,
+  //     prevSeasonId: null,
+  //     nextSeasonId: null,
+  //   });
+  //
+  //   // setStartDate(null);
+  //   // setEndDate(null);
+  //   setShowModal(!showModal);
+  // };
 
   // console.log(dates);
-  console.log('data', data);
-  console.log('dates', dates);
+  // console.log('data', data);
+  // console.log('dates', dates);
 
   if (isLoading) {
     return <h1>Loading</h1>;
   }
 
   if (isSuccess) {
+    const timestampData = data.map(season => ({
+      ...season,
+      startDate: Date.parse(season.startDate),
+      endDate: Date.parse(season.endDate),
+    }));
+    // console.log('newData', timestampData);
+
+    const formattedData = timestampData.map(season => ({
+      ...season,
+      startDate: new Date(season.startDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }),
+      endDate: new Date(season.endDate).toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }),
+    }));
+
+    // console.log('newNewData', formattedData);
+
     return (
       <div>
         <h1>Seasons</h1>
@@ -262,12 +279,12 @@ const Admin = () => {
               </tr>
             </thead>
             <tbody>
-              {data.map(season => {
+              {formattedData.map(season => {
                 return (
                   <tr key={season.seasonId}>
                     <td>Season {season.seasonId}</td>
-                    <td>{season.startDate.slice(0, 10)}</td>
-                    <td>{season.endDate.slice(0, 10)}</td>
+                    <td>{season.startDate}</td>
+                    <td>{season.endDate}</td>
                     <td>
                       <button
                         disabled={buttonDisabled}
@@ -278,46 +295,77 @@ const Admin = () => {
                             'update the season, seasonId is',
                             season.seasonId,
                           );
-                          const currentIndex = allSeasons.indexOf(season);
-                          const startDate = new Date(season.startDate);
-                          const endDate = new Date(season.endDate);
+                          const currentIndex = formattedData.indexOf(season);
+                          console.log('currentIndex', currentIndex);
 
-                          if (currentIndex == 0) {
+                          const startDateTimestamp = new Date(
+                            season.startDate,
+                          ).getTime();
+
+                          const endDateTimestamp = new Date(
+                            season.endDate,
+                          ).getTime();
+
+                          if (formattedData.length == 1) {
                             setDates({
                               ...dates,
-                              startDate: startDate,
-                              endDate: endDate,
+                              startDate: startDateTimestamp,
+                              endDate: endDateTimestamp,
                               seasonId: season.seasonId,
-                              nextSeasonId:
-                                allSeasons[currentIndex + 1].seasonId,
+                            });
+                            console.log(dates);
+                            setShowModal(!showModal);
+                          }
+
+                          if (currentIndex == 0 && formattedData.length !== 1) {
+                            setDates({
+                              ...dates,
+                              startDate: startDateTimestamp,
+                              endDate: endDateTimestamp,
+                              seasonId: season.seasonId,
+                              nextStartDate: new Date(
+                                formattedData[currentIndex + 1].startDate,
+                              ).getTime(),
+                            });
+                            setShowModal(!showModal);
+                          }
+
+                          if (
+                            formattedData.length !== 1 &&
+                            currentIndex == formattedData.length - 1
+                          ) {
+                            setDates({
+                              ...dates,
+                              startDate: startDateTimestamp,
+                              endDate: endDateTimestamp,
+                              seasonId: season.seasonId,
+                              prevEndDate: new Date(
+                                formattedData[currentIndex - 1].seasonId,
+                              ).getTime(),
+                            });
+                            setShowModal(!showModal);
+                          }
+
+                          if (
+                            formattedData.length !== 1 &&
+                            currentIndex !== formattedData.length - 1 &&
+                            currentIndex !== 0
+                          ) {
+                            setDates({
+                              ...dates,
+                              startDate: startDateTimestamp,
+                              endDate: endDateTimestamp,
+                              seasonId: season.seasonId,
+                              prevEndDate: new Date(
+                                formattedData[currentIndex - 1].seasonId,
+                              ).getTime(),
+                              nextStartDate: new Date(
+                                formattedData[currentIndex + 1].startDate,
+                              ).getTime(),
                             });
 
                             setShowModal(!showModal);
                           }
-
-                          if (currentIndex == allSeasons.length - 1) {
-                            setDates({
-                              ...dates,
-                              startDate: startDate,
-                              endDate: endDate,
-                              seasonId: season.seasonId,
-                              prevSeasonId:
-                                allSeasons[currentIndex - 1].seasonId,
-                            });
-
-                            setShowModal(!showModal);
-                          }
-
-                          setDates({
-                            ...dates,
-                            startDate: startDate,
-                            endDate: endDate,
-                            seasonId: season.seasonId,
-                            prevSeasonId: allSeasons[currentIndex - 1].seasonId,
-                            nextSeasonId: allSeasons[currentIndex + 1].seasonId,
-                          });
-
-                          setShowModal(!showModal);
                         }}
                       >
                         Update
@@ -400,15 +448,11 @@ const Admin = () => {
             )}
           </form>
           <UpdateSeasonModal
-            visible={showModal}
-            // startDate={startDate}
-            // setStartDate={setStartDate}
-            // endDate={endDate}
-            // setEndDate={setEndDate}
-            onClose={handleOnClose}
-            onUpdate={handleOnUpdate}
+            showModal={showModal}
+            setShowModal={setShowModal}
+            isUpdating={isUpdating}
+            setIsUpdating={setIsUpdating}
             DatePicker={DatePicker}
-            errors={errors}
             setErrors={setErrors}
             dates={dates}
             setDates={setDates}
