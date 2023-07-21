@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Dto\Incoming\CreateSeasonDto;
+use App\Dto\Incoming\UpdateSeasonDto;
 use App\Exception\InvalidRequestDataException;
 use App\Serialization\SerializationService;
 use App\Service\SeasonService;
@@ -60,6 +61,20 @@ class SeasonController extends ApiController
     public function deleteSeason(int $seasonId): Response
     {
         return $this->json($this->seasonService->deleteSeason($seasonId));
+    }
+
+    /**
+     * @throws \JsonException
+     * @throws InvalidRequestDataException
+     */
+    #[Route('api/season', methods:['PATCH'])]
+    /**
+     * @var UpdateSeasonDto $dto
+     */
+    public function updateSeason(Request $request): Response
+    {
+        $dto = $this->getValidatedDto($request, UpdateSeasonDto::class);
+        return $this->json($this->seasonService->updateSeason($dto));
     }
 
 //    #[Route('api/seasons/toDate', methods:['GET'])]

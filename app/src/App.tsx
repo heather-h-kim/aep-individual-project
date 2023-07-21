@@ -41,6 +41,27 @@ export default function App() {
     },
   });
 
+  useGetSeasons();
+
+  const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
+
+  const { rankings, updateRankings } = useRankingStore(state => ({
+    rankings: state.rankings,
+    updateRankings: state.updateRankings,
+  }));
+
+  const { isSuccess, isLoading: useQueryLoading } = useQuery({
+    queryKey: ['Rankings', currentSeasonId],
+    queryFn: () => getRankings(currentSeasonId),
+    onSuccess: data => {
+      console.log('in app.tsx', data);
+      updateRankings(data);
+    },
+    onError: error =>
+      console.log('something went wrong while getting seasons', error),
+    refetchOnWindowFocus: false,
+  });
+
   useEffect(() => {
     if (isAuthenticated && user) {
       console.log('user is', user);
@@ -76,6 +97,10 @@ export default function App() {
     return <div className="m-8 p-5 text-lg">Loading...</div>;
   }
 
+  if (useQueryLoading) {
+    return <div className="m-8 p-5 text-lg">Loading...</div>;
+  }
+
   if (error) {
     return (
       <div className="m-8 p-5 text-lg">
@@ -84,11 +109,13 @@ export default function App() {
     );
   }
 
-  return (
-    <QueryClientProvider client={queryClient}>
-      <div className="m-10 p-5">
-        <RouterProvider router={router} />
-      </div>
-    </QueryClientProvider>
-  );
+  if (isSuccess) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <div className="m-10 p-5">
+          <RouterProvider router={router} />
+        </div>
+      </QueryClientProvider>
+    );
+  }
 }

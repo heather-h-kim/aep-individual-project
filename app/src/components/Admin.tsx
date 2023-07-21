@@ -9,13 +9,11 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { updateUser, updateUserProfile } from '../services/userApi';
 import {
   createNewSeason,
   createSeason,
   deleteSeason,
 } from '../services/seasonApi';
-import { UpdateUserModal } from './UpdateUserModal';
 import { UpdateSeasonModal } from './updateSeasonModal';
 import { getAllSeasons } from '../services/rankingApi';
 
@@ -34,8 +32,8 @@ const Admin = () => {
   });
 
   interface dates {
-    startDate: Date | null;
-    endDate: Date | null;
+    startDate: Date | null | number;
+    endDate: Date | null | number;
     seasonId: number | null;
     prevSeasonId: number | null;
     nextSeasonId: number | null;
@@ -49,8 +47,6 @@ const Admin = () => {
       addNewSeason: state.addNewSeason,
     }));
 
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
   const [errors, setErrors] = useState({
     startDate: '',
     endDate: '',
@@ -80,7 +76,7 @@ const Admin = () => {
 
     onSuccess: data => {
       console.log('Success', data);
-      addNewSeason(data);
+      queryClient.invalidateQueries({ queryKey: ['Seasons'] });
     },
     onSettled: data => {
       console.log('Complete', data);
@@ -115,59 +111,79 @@ const Admin = () => {
     console.log('date', date);
     console.log('type', typeof date);
 
-    setStartDate(date);
-    // console.log('startDate', startDate);
-    // setErrors({
-    //   ...errors,
-    //   startDate: '',
-    // });
-    // const timestampSelectedDate = date.getTime();
-    // const timestampCurrentSeasonEndDate = Date.parse(currentSeason.endDate);
-    //
-    // console.log('errors', errors);
-    //
-    // if (timestampSelectedDate < timestampCurrentSeasonEndDate) {
-    //   setErrors({
-    //     ...errors,
-    //     startDate:
-    //       'The start date of the new season should be later than the end date of the current season',
-    //   });
-    // }
+    const dateHours = date.setHours(0, 0, 0);
+    console.log('dateHours', dateHours, typeof dateHours);
+
+    setDates({ ...dates, startDate: dateHours });
+
+    setErrors({
+      ...errors,
+      startDate: '',
+    });
+
+    if (currentSeason) {
+      console.log('currentSeason', currentSeason);
+      const timestampCurrentSeasonEndDate = Date.parse(currentSeason.endDate);
+
+      console.log('errors', errors);
+
+      if (dateHours / 1000 < timestampCurrentSeasonEndDate) {
+        setErrors({
+          ...errors,
+          startDate:
+            'The start date of the new season should be later than the end date of the current season',
+        });
+      }
+    }
+
+    if (dates.endDate) {
+      console.log('endDate', dates.endDate);
+      if (dateHours > dates.endDate) {
+        setErrors({
+          ...errors,
+          startDate:
+            'The start date of the new season should be earlier than the end date',
+        });
+      }
+    }
   };
 
   const handleOnChangeEndDate = date => {
-    setEndDate(date);
+    const dateHours = date.setHours(23, 59, 59);
+    console.log('dateHours', dateHours);
+    setDates({ ...dates, endDate: dateHours });
     setErrors({
       ...errors,
       endDate: '',
     });
-    const timestampSelectedDate = date.getTime();
-    const timestampStartDate = startDate.getTime();
+
+    if (dates.startDate) {
+      const timestampStartDate = dates.startDate;
+      if (dateHours < timestampStartDate) {
+        setErrors({
+          ...errors,
+          endDate: 'The end date should be later than the start date',
+        });
+      }
+    }
 
     console.log('errors', errors);
-
-    if (timestampSelectedDate < timestampStartDate) {
-      setErrors({
-        ...errors,
-        endDate: 'The end date should be later than the start date',
-      });
-    }
   };
 
   const handleSubmit = e => {
     e.preventDefault();
     console.log('create a new season');
     const createSeason = {
-      start_date: Math.round(startDate.getTime() / 1000),
-      end_date: Math.round(endDate.getTime() / 1000),
+      start_date: dates.startDate,
+      end_date: dates.endDate,
     };
     console.log('createSeason is', createSeason);
-    createSeasonMutation.mutate(createSeason);
+    createSeasonMutation.mutate(createSeason as createSeason);
   };
 
   const handleOnClose = () => {
-    setStartDate(null);
-    setEndDate(null);
+    // setStartDate(null);
+    // setEndDate(null);
     setDates({
       ...dates,
       startDate: null,
@@ -180,13 +196,52 @@ const Admin = () => {
   };
 
   const handleOnUpdate = () => {
-    setStartDate(null);
-    setEndDate(null);
+    console.log('dates', dates);
+    if (typeof dates.startDate === 'object') {
+      const payload = {
+        season_id: dates.seasonId,
+        end_date: dates.endDate,
+      };
+      console.log('payload', payload);
+    }
+
+    if (typeof dates.endDate === 'object') {
+      const payload = {
+        season_id: dates.seasonId,
+        start_date: dates.startDate,
+      };
+      console.log('payload', payload);
+    }
+
+    if (
+      typeof dates.startDate !== 'object' &&
+      typeof dates.endDate !== 'object'
+    ) {
+      const payload = {
+        season_id: dates.seasonId,
+        start_date: dates.startDate,
+        end_date: dates.endDate,
+      };
+      console.log('payload', payload);
+    }
+
+    setDates({
+      ...dates,
+      startDate: null,
+      endDate: null,
+      seasonId: null,
+      prevSeasonId: null,
+      nextSeasonId: null,
+    });
+
+    // setStartDate(null);
+    // setEndDate(null);
     setShowModal(!showModal);
   };
 
   // console.log(dates);
   console.log('data', data);
+  console.log('dates', dates);
 
   if (isLoading) {
     return <h1>Loading</h1>;
@@ -273,7 +328,7 @@ const Admin = () => {
                         onClick={e => {
                           e.preventDefault();
                           console.log(
-                            'delete the season, seasonId is',
+                            'delete the season, payload is',
                             season.seasonId,
                           );
                           deleteSeasonMutation.mutate(season.seasonId);
@@ -293,7 +348,7 @@ const Admin = () => {
               Start date:
               <DatePicker
                 name="startDate"
-                selected={startDate}
+                selected={dates.startDate}
                 placeholderText={'select a date'}
                 onChange={handleOnChangeStartDate}
               />
@@ -303,7 +358,7 @@ const Admin = () => {
               End date:
               <DatePicker
                 name="endDate"
-                selected={endDate}
+                selected={dates.endDate}
                 placeholderText={'select a date'}
                 onChange={handleOnChangeEndDate}
               />
@@ -346,10 +401,10 @@ const Admin = () => {
           </form>
           <UpdateSeasonModal
             visible={showModal}
-            startDate={startDate}
-            setStartDate={setStartDate}
-            endDate={endDate}
-            setEndDate={setEndDate}
+            // startDate={startDate}
+            // setStartDate={setStartDate}
+            // endDate={endDate}
+            // setEndDate={setEndDate}
             onClose={handleOnClose}
             onUpdate={handleOnUpdate}
             DatePicker={DatePicker}

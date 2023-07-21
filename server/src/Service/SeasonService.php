@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Service;
+use App\Dto\Incoming\DeleteSeasonDto;
 use App\Dto\Incoming\UpdateSeasonDto;
 use App\Dto\Outgoing\SeasonDto;
 use App\Dto\Incoming\CreateSeasonDto;
@@ -58,21 +59,21 @@ class SeasonService extends AbstractDtoTransformers
     {
         $newSeason = new Season();
 
-        $start_date_timestamp = $createSeasonDto->getStartDate();
-        $end_date_timestamp = $createSeasonDto->getEndDate();
+        $startDateTimestamp = ($createSeasonDto->getStartDate()) / 1000;
+        $endDateTimestamp = ($createSeasonDto->getEndDate()) / 1000;
 
-        $start_date = new DateTime();
-        $start_date->setTimestamp($start_date_timestamp);
+        $startDate = new DateTime();
+        $startDate->setTimestamp($startDateTimestamp);
 
-        $end_date = new DateTime();
-        $end_date->setTimestamp($end_date_timestamp);
+        $endDate = new DateTime();
+        $endDate->setTimestamp($endDateTimestamp);
 
-        $newSeason->setStartDate($start_date);
-        $newSeason->setEndDate($end_date);
+        $newSeason->setStartDate($startDate);
+        $newSeason->setEndDate($endDate);
 
         $this->seasonRepository->save($newSeason, true);
 
-        $seasonlessGames = $this->gameRepository->findALLByNullSeason($start_date, $end_date);
+        $seasonlessGames = $this->gameRepository->findALLByNullSeason($startDate, $endDate);
 
         foreach($seasonlessGames as $game){
             $game->setSeason($newSeason);
@@ -86,8 +87,8 @@ class SeasonService extends AbstractDtoTransformers
     public function updateSeason(UpdateSeasonDto $updateSeasonDto): SeasonDto
     {
         $season_id = $updateSeasonDto->getSeasonId();
-        $start_date_timestamp = $updateSeasonDto->getStartDate();
-        $end_date_timestamp = $updateSeasonDto->getEndDate();
+        $start_date_timestamp = ($updateSeasonDto->getStartDate())/1000;
+        $end_date_timestamp = ($updateSeasonDto->getEndDate())/1000;
 
         $seasonToUpdate = $this->seasonRepository->find($season_id);
 
@@ -103,20 +104,40 @@ class SeasonService extends AbstractDtoTransformers
             $seasonToUpdate->setEndDate($end_date);
         }
 
+        $this->seasonRepository->save($seasonToUpdate, true);
+
+        //
+        $start_date = $seasonToUpdate->getStartDate();
+        $end_date = $seasonToUpdate->getEndDate();
+
+        $seasonlessGames = $this->gameRepository->findALLBySeason($start_date, $end_date);
+        foreach($seasonlessGames as $game){
+            $game->setSeason($seasonToUpdate);
+            $this->gameRepository->save($game, true);
+        }
+
 
         return $this->transformToDto($seasonToUpdate);
     }
 
-    public function deleteSeason(int $id): string
+    public function deleteSeason(int $seasonId): string
     {
-        $seasonToDelete = $this->seasonRepository->find($id);
+        $seasonToDelete = $this->seasonRepository->find($seasonId);
 
         if(!$seasonToDelete){
-            return "Season {$id} does not exist";
+            return "Season {$seasonId} does not exist";
+        }
+
+        //update seasonId to null for the games that belong to the season to delete to prevent the foreign key error
+        $games = $seasonToDelete->getGames();
+
+        foreach($games as $game){
+            $game->setSeason(null);
+            $this->gameRepository->save($game, true);
         }
 
         $this->seasonRepository->remove($seasonToDelete, true);
-        return "Season {$id} is deleted";
+        return "Season {$seasonId} is deleted";
     }
 
     public function transformToDto($object): SeasonDto

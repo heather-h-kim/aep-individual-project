@@ -18,10 +18,12 @@ export const UpdateSeasonModal = ({
 
   const handleOnChangeUpdateStartDate = date => {
     console.log('type of date', typeof date, date);
-    // setStartDate(date);
+    console.log('dates', dates);
+    console.log(date.setHours(0, 0, 0));
+
     setDates({
       ...dates,
-      startDate: date,
+      startDate: date.setHours(0, 0, 0),
     });
     setErrors({
       ...errors,
@@ -32,10 +34,13 @@ export const UpdateSeasonModal = ({
   };
 
   const handleOnChangeUpdateEndDate = date => {
-    // setEndDate(date);
+    console.log('type of date', typeof date, date);
+    console.log('dates', dates);
+    console.log(date.setHours(23, 59, 59));
+
     setDates({
       ...dates,
-      endDate: date,
+      endDate: date.setHours(23, 59, 59),
     });
     setErrors({
       ...errors,
@@ -45,7 +50,7 @@ export const UpdateSeasonModal = ({
     console.log('errors', errors);
   };
 
-  // console.log(dates);
+  console.log(dates);
 
   return (
     <div
@@ -66,7 +71,6 @@ export const UpdateSeasonModal = ({
                     <DatePicker
                       name="startDate"
                       selected={dates.startDate}
-                      // placeholderText={'select a date'}
                       onChange={handleOnChangeUpdateStartDate}
                     />
                   </label>
@@ -75,7 +79,6 @@ export const UpdateSeasonModal = ({
                     <DatePicker
                       name="endDate"
                       selected={dates.endDate}
-                      // placeholderText={'select a date'}
                       onChange={handleOnChangeUpdateEndDate}
                     />
                   </label>

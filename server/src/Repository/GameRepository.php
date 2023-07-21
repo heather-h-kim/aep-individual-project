@@ -73,6 +73,22 @@ class GameRepository extends ServiceEntityRepository
     }
 
 
+    /**
+     * @return Game[] Returns an array of Game objects
+     */
+    public function findALLBySeason(DateTime $start_date, DateTime $end_date): array
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.played_at >= :startDate')
+            ->andWhere('g.played_at <= :endDate')
+            ->setParameters(['startDate'=> $start_date, 'endDate'=>$end_date])
+            ->orderBy('g.game_id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
 //    /**
 //     * @return Game[] Returns an array of Game objects
 //     */
