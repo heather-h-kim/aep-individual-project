@@ -8,7 +8,6 @@ export const CreateSeasonModal = ({
   setShowCreateModal,
   dates,
   setDates,
-  currentSeason,
 }) => {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
@@ -58,36 +57,46 @@ export const CreateSeasonModal = ({
     });
 
     const dateHours = date.setHours(0, 0, 0);
-    setDates({ ...dates, startDate: dateHours });
 
     //input validation
-    if (currentSeason) {
-      const timestampCurrentSeasonEndDate = Date.parse(currentSeason.endDate);
-      if (dateHours < timestampCurrentSeasonEndDate) {
-        setErrors({
-          ...errors,
-          startDate:
-            'The start date of the new season should be later than the end date of the current season',
-        });
-        setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
-      }
-    }
-
-    if (dates.endDate) {
-      console.log('endDate', dates.endDate);
+    if (!dates.prevEndDate && dates.endDate) {
       if (dateHours > dates.endDate) {
         setErrors({
           ...errors,
-          startDate:
-            'The start date of the new season should be earlier than the end date',
+          startDate: 'The start date should be earlier than the end date',
         });
         setIsDisabled(true);
       } else {
         setIsDisabled(false);
       }
     }
+
+    if (dates.prevEndDate) {
+      if (dateHours < dates.prevEndDate) {
+        setErrors({
+          ...errors,
+          startDate:
+            'The start date of the new season should be later than the end date of the previous season',
+        });
+        setIsDisabled(true);
+      } else {
+        setIsDisabled(false);
+      }
+
+      if (dates.endDate) {
+        if (dateHours > dates.endDate) {
+          setErrors({
+            ...errors,
+            startDate: 'The start date should be earlier than the end date',
+          });
+          setIsDisabled(true);
+        } else {
+          setIsDisabled(false);
+        }
+      }
+    }
+
+    setDates({ ...dates, startDate: dateHours });
   };
 
   const handleOnChangeEndDate = date => {
@@ -100,8 +109,7 @@ export const CreateSeasonModal = ({
     setDates({ ...dates, endDate: dateHours });
 
     if (dates.startDate) {
-      const timestampStartDate = dates.startDate;
-      if (dateHours < timestampStartDate) {
+      if (dateHours < dates.startDate) {
         setErrors({
           ...errors,
           endDate: 'The end date should be later than the start date',
@@ -115,11 +123,17 @@ export const CreateSeasonModal = ({
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('create a new season');
-    setErrors({
-      ...errors,
-      update: '',
-    });
+    console.log('in create season submit', dates, errors);
+
+    if (!dates.startDate && !dates.endDate) {
+      setErrors({
+        ...errors,
+        update: 'The start date and the end date should be selected',
+      });
+      setIsDisabled(true);
+    } else {
+      setIsDisabled(false);
+    }
 
     if (!dates.startDate || !dates.endDate) {
       setErrors({
@@ -130,6 +144,7 @@ export const CreateSeasonModal = ({
     } else {
       setIsDisabled(false);
     }
+
     const createSeason = {
       start_date: dates.startDate,
       end_date: dates.endDate,
@@ -142,6 +157,8 @@ export const CreateSeasonModal = ({
       update: '',
     });
   };
+
+  console.log(errors);
 
   const closeModal = () => {
     setErrors({
@@ -199,8 +216,8 @@ export const CreateSeasonModal = ({
                       </label>
                       {errors.endDate && <h3>{errors.endDate}</h3>}
                     </div>
+                    {errors.update && <h3>{errors.update}</h3>}
                   </div>
-                  {errors.update && <h3>{errors.update}</h3>}
 
                   {isUpdating ? (
                     <div className="flex flex-row items-center justify-center">
@@ -213,7 +230,6 @@ export const CreateSeasonModal = ({
                       </button>
                       <button
                         disabled
-                        type="button"
                         className="mx-6 mb-1 mt-4  inline-flex items-center rounded bg-neutral-600 px-2 py-1 text-center text-sm font-medium text-white hover:bg-neutral-700 focus:ring-4 focus:ring-blue-300"
                       >
                         <svg

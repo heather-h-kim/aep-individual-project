@@ -48,15 +48,12 @@ export const UpdateSeasonModal = ({
   });
 
   const handleOnChangeUpdateStartDate = date => {
-    console.log('dates', dates);
     setErrors({
       ...errors,
       startDate: '',
     });
 
     const dateHours = date.setHours(0, 0, 0);
-    console.log('dateHours', dateHours);
-
     //input validation
     if (dates.prevEndDate) {
       console.log(dates.prevEndDate);
@@ -100,14 +97,12 @@ export const UpdateSeasonModal = ({
   };
 
   const handleOnChangeUpdateEndDate = date => {
-    console.log('dates', dates);
     setErrors({
       ...errors,
       endDate: '',
     });
 
     const dateHours = date.setHours(23, 59, 59);
-    console.log('dateHours', dateHours);
     //input validation
     if (!dates.nextStartDate) {
       if (dateHours < dates.startDate) {
@@ -157,7 +152,6 @@ export const UpdateSeasonModal = ({
       next_start_date: dates.nextStartDate,
     };
 
-    console.log('payload', payload);
     updateSeasonMutation.mutate(payload);
   };
 
@@ -181,9 +175,6 @@ export const UpdateSeasonModal = ({
 
     setShowUpdateModal(!showUpdateModal);
   };
-
-  console.log('disabled', isDisabled);
-  console.log('errors', errors);
 
   if (showUpdateModal) {
     return (
