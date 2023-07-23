@@ -15,7 +15,6 @@ export const UpdateSeasonModal = ({
   const [errors, setErrors] = useState({
     startDate: '',
     endDate: '',
-    update: '',
   });
 
   const updateSeasonMutation = useMutation({
@@ -53,27 +52,12 @@ export const UpdateSeasonModal = ({
     setErrors({
       ...errors,
       startDate: '',
-      update: '',
     });
 
     const dateHours = date.setHours(0, 0, 0);
-    setDates({ ...dates, startDate: dateHours });
+    console.log('dateHours', dateHours);
 
     //input validation
-    if (!dates.prevEndDate && dates.endDate) {
-      console.log('test');
-      if (dateHours > dates.endDate) {
-        setErrors({
-          ...errors,
-          startDate:
-            'The start date of the new season should be earlier than the end date',
-        });
-        setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
-      }
-    }
-
     if (dates.prevEndDate) {
       console.log(dates.prevEndDate);
       console.log(dateHours);
@@ -88,28 +72,82 @@ export const UpdateSeasonModal = ({
       } else {
         setIsDisabled(false);
       }
+
+      if (dateHours > dates.endDate) {
+        setErrors({
+          ...errors,
+          startDate: 'The start date should be earlier than the end date',
+        });
+        setIsDisabled(true);
+      } else {
+        setIsDisabled(false);
+      }
     }
+
+    if (!dates.prevEndDate) {
+      if (dateHours > dates.endDate) {
+        setErrors({
+          ...errors,
+          startDate: 'The start date should be earlier than the end date',
+        });
+        setIsDisabled(true);
+      } else {
+        setIsDisabled(false);
+      }
+    }
+
+    setDates({ ...dates, startDate: dateHours });
   };
 
   const handleOnChangeUpdateEndDate = date => {
     console.log('dates', dates);
     setErrors({
       ...errors,
-      startDate: '',
-      update: '',
+      endDate: '',
     });
 
     const dateHours = date.setHours(23, 59, 59);
+    console.log('dateHours', dateHours);
+    //input validation
+    if (!dates.nextStartDate) {
+      if (dateHours < dates.startDate) {
+        setErrors({
+          ...errors,
+          endDate: 'The end date should be later than the start date',
+        });
+        setIsDisabled(true);
+      } else {
+        setIsDisabled(false);
+      }
+    }
 
+    if (dates.nextStartDate) {
+      if (dateHours > dates.nextStartDate) {
+        setErrors({
+          ...errors,
+          endDate:
+            'The end date should be earlier than the start date of the next season',
+        });
+        setIsDisabled(true);
+      } else {
+        setIsDisabled(false);
+      }
+
+      if (dateHours < dates.startDate) {
+        setErrors({
+          ...errors,
+          endDate: 'The end date should be later than the start date',
+        });
+        setIsDisabled(true);
+      } else {
+        setIsDisabled(false);
+      }
+    }
     setDates({ ...dates, endDate: dateHours });
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    setErrors({
-      ...errors,
-      update: '',
-    });
 
     const payload = {
       season_id: dates.seasonId,
@@ -121,19 +159,15 @@ export const UpdateSeasonModal = ({
 
     console.log('payload', payload);
     updateSeasonMutation.mutate(payload);
-
-    setErrors({
-      ...errors,
-      update: '',
-    });
   };
 
   const closeModal = e => {
     e.preventDefault();
+    console.log('cancel');
     setErrors({
       ...errors,
       startDate: '',
-      update: '',
+      endDate: '',
     });
 
     setDates({
@@ -149,6 +183,7 @@ export const UpdateSeasonModal = ({
   };
 
   console.log('disabled', isDisabled);
+  console.log('errors', errors);
 
   if (showUpdateModal) {
     return (
@@ -190,7 +225,6 @@ export const UpdateSeasonModal = ({
                       {errors.endDate && <h3>{errors.endDate}</h3>}
                     </div>
                   </div>
-                  {errors.update && <h3>{errors.update}</h3>}
 
                   {isUpdating ? (
                     <div className="flex flex-row items-center justify-center">
