@@ -46,9 +46,7 @@ const Admin = () => {
     currentSeason: state.currentSeason,
     currentSeasonId: state.currentSeasonId,
   }));
-
   const [isUpdating, setIsUpdating] = useState(false);
-
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
@@ -105,6 +103,89 @@ const Admin = () => {
       }),
     }));
 
+    const handleUpdateClick = (e, season) => {
+      console.log('update button clicked');
+      e.preventDefault();
+      console.log('update the season, seasonId', season.seasonId);
+      const currentIndex = formattedData.indexOf(season);
+      console.log('currentIndex', currentIndex);
+      const startDateTimestamp = new Date(season.startDate).getTime();
+
+      const endDateTimestamp = new Date(season.endDate).getTime();
+      console.log('start and end', startDateTimestamp, endDateTimestamp);
+
+      if (currentIndex == 0 && formattedData.length == 1) {
+        console.log('I am the only one');
+
+        setDates({
+          ...dates,
+          startDate: startDateTimestamp,
+          endDate: endDateTimestamp,
+          seasonId: season.seasonId,
+        });
+
+        setShowUpdateModal(!showUpdateModal);
+      }
+
+      if (currentIndex == 0 && formattedData.length > 1) {
+        console.log('I am the first one');
+        setDates({
+          ...dates,
+          startDate: startDateTimestamp,
+          endDate: endDateTimestamp,
+          seasonId: season.seasonId,
+          nextStartDate: new Date(
+            formattedData[currentIndex + 1].startDate,
+          ).getTime(),
+        });
+
+        setShowUpdateModal(!showUpdateModal);
+      }
+
+      if (
+        currentIndex > 0 &&
+        currentIndex < formattedData.length - 1 &&
+        formattedData.length > 1
+      ) {
+        console.log('I am in the middle');
+
+        setDates({
+          ...dates,
+          startDate: startDateTimestamp,
+          endDate: endDateTimestamp,
+          seasonId: season.seasonId,
+          prevEndDate: new Date(
+            formattedData[currentIndex - 1].endDate,
+          ).getTime(),
+          nextStartDate: new Date(
+            formattedData[currentIndex + 1].startDate,
+          ).getTime(),
+        });
+
+        setShowUpdateModal(!showUpdateModal);
+      }
+
+      if (
+        currentIndex == formattedData.length - 1 &&
+        formattedData.length > 1
+      ) {
+        console.log('I am the last');
+        setDates({
+          ...dates,
+          startDate: startDateTimestamp,
+          endDate: endDateTimestamp,
+          seasonId: season.seasonId,
+          prevEndDate: new Date(
+            formattedData[currentIndex - 1].endDate,
+          ).getTime(),
+        });
+
+        setShowUpdateModal(!showUpdateModal);
+      }
+    };
+
+    console.log('dates', dates);
+
     return (
       <div
         style={
@@ -114,7 +195,6 @@ const Admin = () => {
         }
         className="my-10 flex h-screen flex-col px-20 py-14 "
       >
-        {/*<div className="flex flex-col">*/}
         <table className="table-auto text-center">
           <thead className="border-collapse border-b border-black text-xl">
             <tr>
@@ -140,82 +220,7 @@ const Admin = () => {
                         disabled={buttonDisabled}
                         className="mx-6 my-2 rounded bg-neutral-600 px-4 py-2 font-bold text-white hover:bg-neutral-700"
                         onClick={e => {
-                          e.preventDefault();
-                          console.log(
-                            'update the season, seasonId is',
-                            season.seasonId,
-                          );
-                          const currentIndex = formattedData.indexOf(season);
-                          console.log('currentIndex', currentIndex);
-
-                          const startDateTimestamp = new Date(
-                            season.startDate,
-                          ).getTime();
-
-                          const endDateTimestamp = new Date(
-                            season.endDate,
-                          ).getTime();
-
-                          if (formattedData.length == 1) {
-                            setDates({
-                              ...dates,
-                              startDate: startDateTimestamp,
-                              endDate: endDateTimestamp,
-                              seasonId: season.seasonId,
-                            });
-                            console.log(dates);
-                            setShowUpdateModal(!showUpdateModal);
-                          }
-
-                          if (currentIndex == 0 && formattedData.length !== 1) {
-                            setDates({
-                              ...dates,
-                              startDate: startDateTimestamp,
-                              endDate: endDateTimestamp,
-                              seasonId: season.seasonId,
-                              nextStartDate: new Date(
-                                formattedData[currentIndex + 1].startDate,
-                              ).getTime(),
-                            });
-                            setShowUpdateModal(!showUpdateModal);
-                          }
-
-                          if (
-                            formattedData.length !== 1 &&
-                            currentIndex == formattedData.length - 1
-                          ) {
-                            setDates({
-                              ...dates,
-                              startDate: startDateTimestamp,
-                              endDate: endDateTimestamp,
-                              seasonId: season.seasonId,
-                              prevEndDate: new Date(
-                                formattedData[currentIndex - 1].seasonId,
-                              ).getTime(),
-                            });
-                            setShowUpdateModal(!showUpdateModal);
-                          }
-
-                          if (
-                            formattedData.length !== 1 &&
-                            currentIndex !== formattedData.length - 1 &&
-                            currentIndex !== 0
-                          ) {
-                            setDates({
-                              ...dates,
-                              startDate: startDateTimestamp,
-                              endDate: endDateTimestamp,
-                              seasonId: season.seasonId,
-                              prevEndDate: new Date(
-                                formattedData[currentIndex - 1].seasonId,
-                              ).getTime(),
-                              nextStartDate: new Date(
-                                formattedData[currentIndex + 1].startDate,
-                              ).getTime(),
-                            });
-
-                            setShowUpdateModal(!showUpdateModal);
-                          }
+                          handleUpdateClick(e, season);
                         }}
                       >
                         Update
@@ -263,7 +268,6 @@ const Admin = () => {
           setDates={setDates}
         />
       </div>
-      // </div>
     );
   }
 };
