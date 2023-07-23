@@ -17,39 +17,6 @@ export const CreateSeasonModal = ({
     endDate: '',
     update: '',
   });
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  // interface dates {
-  //   startDate: Date | null | number;
-  //   endDate: Date | null | number;
-  //   seasonId: number | null;
-  //   prevEndDate: number | null;
-  //   nextStartDate: number | null;
-  // }
-  // const [dates, setDates] = useState<dates>({
-  //   startDate: null,
-  //   endDate: null,
-  //   seasonId: null,
-  //   prevEndDate: null,
-  //   nextStartDate: null,
-  // });
-  // useEffect(() => {
-  //   if (currentSeason) {
-  //     const timestampCurrentSeasonEndDate = Date.parse(currentSeason.endDate);
-  //     console.log(
-  //       'currentSeason',
-  //       currentSeason,
-  //       timestampCurrentSeasonEndDate,
-  //     );
-  //
-  //     if (dateHours / 1000 < timestampCurrentSeasonEndDate) {
-  //       setErrors({
-  //         ...errors,
-  //         startDate:
-  //           'The start date of the new season should be later than the end date of the current season',
-  //       });
-  //     }
-  //   }
-  // }, [dates]);
 
   const createSeasonMutation = useMutation({
     mutationFn: (body: createSeason) => createNewSeason(body),
@@ -145,7 +112,10 @@ export const CreateSeasonModal = ({
       end_date: dates.endDate,
     };
     console.log('createSeason is', createSeason);
-    // createSeasonMutation.mutate(createSeason as createSeason);
+
+    createSeasonMutation.mutate(createSeason as createSeason);
+
+    setShowCreateModal(!showCreateModal);
   };
 
   const closeModal = () => {
@@ -175,37 +145,43 @@ export const CreateSeasonModal = ({
       >
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
         <div className="fixed inset-0 z-10 overflow-y-auto">
-          <div className="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
-            <div className="relative transform  rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
-              <div className="h-1/6 bg-white px-4 pb-4 pt-5 lg:p-6 lg:pb-4">
-                <form onSubmit={handleSubmit}>
-                  <h1>Create a new season</h1>
-                  <label htmlFor="startDate">
-                    Start date:
-                    <DatePicker
-                      name="startDate"
-                      selected={dates.startDate}
-                      placeholderText={'select a date'}
-                      onChange={handleOnChangeStartDate}
-                    />
-                  </label>
-                  {errors.startDate && <h3>{errors.startDate}</h3>}
-                  <label htmlFor="endDate">
-                    End date:
-                    <DatePicker
-                      name="endDate"
-                      selected={dates.endDate}
-                      placeholderText={'select a date'}
-                      onChange={handleOnChangeEndDate}
-                    />
-                  </label>
-                  {errors.endDate && <h3>{errors.endDate}</h3>}
+          <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
+            <div className="relative transform  rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
+              <div className="h-1/3 bg-white px-4 pb-4 pt-5 lg:p-6 lg:pb-4">
+                <form className="flex flex-col" onSubmit={handleSubmit}>
+                  <div className="flex flex-row">
+                    <div className="flex flex-col">
+                      <label htmlFor="startDate">
+                        Start date:
+                        <DatePicker
+                          name="startDate"
+                          selected={dates.startDate}
+                          placeholderText={'select a date'}
+                          onChange={handleOnChangeStartDate}
+                        />
+                      </label>
+                      {errors.startDate && <h3>{errors.startDate}</h3>}
+                    </div>
+                    <div>
+                      <label htmlFor="endDate">
+                        End date:
+                        <DatePicker
+                          name="endDate"
+                          selected={dates.endDate}
+                          placeholderText={'select a date'}
+                          onChange={handleOnChangeEndDate}
+                        />
+                      </label>
+                      {errors.endDate && <h3>{errors.endDate}</h3>}
+                    </div>
+                  </div>
                   {errors.update && <h3>{errors.update}</h3>}
+
                   {isUpdating ? (
                     <button
                       disabled
                       type="button"
-                      className="mr-2 inline-flex items-center rounded-lg bg-blue-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                      className="mr-2 inline-flex w-52 items-center rounded-lg bg-neutral-600 px-2 py-1 text-center text-sm font-medium text-white hover:bg-neutral-700 focus:ring-4 focus:ring-blue-300"
                     >
                       <svg
                         aria-hidden="true"
@@ -224,21 +200,19 @@ export const CreateSeasonModal = ({
                           fill="currentColor"
                         />
                       </svg>
-                      Updating...
+                      Creating...
                     </button>
                   ) : (
-                    <div>
+                    <div className="flex flex-row items-center justify-center">
                       <button
-                        disabled={buttonDisabled}
-                        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                        className="mx-6 mb-1 mt-4 rounded bg-neutral-600 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-700"
                         onClick={closeModal}
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        disabled={buttonDisabled}
-                        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                        className="mx-6 mb-1 mt-4 rounded bg-neutral-600 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-700"
                       >
                         Create Season
                       </button>

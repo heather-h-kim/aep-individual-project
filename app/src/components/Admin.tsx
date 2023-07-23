@@ -1,5 +1,4 @@
 import { useSeasonStore } from '../store/seasonStore';
-import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import React, { useEffect, useState } from 'react';
 
@@ -12,8 +11,16 @@ import {
 import { CreateSeasonModal } from './createSeasonModal';
 import { UpdateSeasonModal } from './updateSeasonModal';
 import { getAllSeasons } from '../services/rankingApi';
+import { useUserStore } from '../store/userStore';
+import { useColorsStore } from '../store/colorStore';
 
 const Admin = () => {
+  const globalUser = useUserStore(state => state.user);
+  const { themeBgColor, themeFgColor, preview } = useColorsStore(state => ({
+    themeBgColor: state.bgcolor,
+    themeFgColor: state.fgcolor,
+    preview: state.preview,
+  }));
   const queryClient = useQueryClient();
 
   const { isLoading, isSuccess, data } = useQuery({
@@ -99,29 +106,39 @@ const Admin = () => {
     }));
 
     return (
-      <div>
-        <h1>Seasons</h1>
-        <div className="flex flex-col">
-          <table className="table-auto">
-            <thead>
-              <tr>
-                <th>Season</th>
-                <th>Start Date</th>
-                <th>End Date</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {formattedData.map(season => {
-                return (
-                  <tr key={season.seasonId}>
-                    <td>Season {season.seasonId}</td>
-                    <td>{season.startDate}</td>
-                    <td>{season.endDate}</td>
-                    <td>
+      <div
+        style={
+          preview
+            ? { backgroundColor: themeBgColor }
+            : { backgroundColor: globalUser.bgcolor }
+        }
+        className="my-10 flex h-screen flex-col px-20 py-14 "
+      >
+        {/*<div className="flex flex-col">*/}
+        <table className="table-auto text-center">
+          <thead className="border-collapse border-b border-black text-xl">
+            <tr>
+              <th>Season</th>
+              <th>Start Date</th>
+              <th>End Date</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {formattedData.map(season => {
+              return (
+                <tr
+                  className="border-collapse border-b border-black"
+                  key={season.seasonId}
+                >
+                  <td>Season {season.seasonId}</td>
+                  <td>{season.startDate}</td>
+                  <td>{season.endDate}</td>
+                  <td>
+                    <div className="flex flex-row items-center justify-center">
                       <button
                         disabled={buttonDisabled}
-                        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                        className="mx-6 my-2 rounded bg-neutral-600 px-4 py-2 font-bold text-white hover:bg-neutral-700"
                         onClick={e => {
                           e.preventDefault();
                           console.log(
@@ -205,7 +222,7 @@ const Admin = () => {
                       </button>
                       <button
                         disabled={buttonDisabled}
-                        className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                        className="rounded bg-neutral-600 px-4 py-2 font-bold text-white hover:bg-neutral-700"
                         onClick={e => {
                           e.preventDefault();
                           console.log(
@@ -217,32 +234,36 @@ const Admin = () => {
                       >
                         Delete
                       </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+                    </div>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
 
-          <button onClick={() => setShowCreateModal(!showCreateModal)}>
-            Create Season
-          </button>
+        <button
+          className="mt-8  w-60  rounded bg-neutral-600 px-4 py-2 font-bold text-white hover:bg-neutral-700"
+          onClick={() => setShowCreateModal(!showCreateModal)}
+        >
+          Create Season
+        </button>
 
-          <CreateSeasonModal
-            showCreateModal={showCreateModal}
-            setShowCreateModal={setShowCreateModal}
-            dates={dates}
-            setDates={setDates}
-            currentSeason={currentSeason}
-          />
-          <UpdateSeasonModal
-            showUpdateModal={showUpdateModal}
-            setShowUpdateModal={setShowUpdateModal}
-            dates={dates}
-            setDates={setDates}
-          />
-        </div>
+        <CreateSeasonModal
+          showCreateModal={showCreateModal}
+          setShowCreateModal={setShowCreateModal}
+          dates={dates}
+          setDates={setDates}
+          currentSeason={currentSeason}
+        />
+        <UpdateSeasonModal
+          showUpdateModal={showUpdateModal}
+          setShowUpdateModal={setShowUpdateModal}
+          dates={dates}
+          setDates={setDates}
+        />
       </div>
+      // </div>
     );
   }
 };
