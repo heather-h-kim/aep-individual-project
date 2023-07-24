@@ -7,6 +7,7 @@ import { useSeasonStore } from '../store/seasonStore';
 import { getAllSeasons, getRankings } from '../services/rankingApi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRankingStore } from '../store/rankingStore';
+import { getSeasonsToDate } from '../services/seasonApi';
 
 const LoginHome = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
@@ -27,6 +28,16 @@ const LoginHome = () => {
   //fetch season and ranking related data in advance so that the rankings and admin component can load quickly
   useGetSeasons();
 
+  useQuery({
+    queryKey: ['SeasonsToDate'],
+    queryFn: getSeasonsToDate,
+    onSuccess: data => {
+      console.log('seasons todate', data);
+    },
+    onError: error =>
+      console.log('something went wrong while getting seasons', error),
+  });
+
   const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
 
   const { rankings, updateRankings } = useRankingStore(state => ({
@@ -43,7 +54,6 @@ const LoginHome = () => {
     },
     onError: error =>
       console.log('something went wrong while getting seasons', error),
-    refetchOnWindowFocus: false,
   });
 
   if (isAuthenticated && !globalUser.userId) {

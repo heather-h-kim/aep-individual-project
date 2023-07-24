@@ -58,3 +58,20 @@ export async function updateSeason(body: updateSeason) {
     console.log('Something went wrong while updating a season', error);
   }
 }
+
+export async function getSeasonsToDate() {
+  try {
+    const url = 'http://localhost:8000/api/seasons/toDate';
+    const response = await fetch(url, {
+      headers: {
+        'Content-type': 'application/json',
+      },
+      method: 'GET',
+    });
+    const jsonResponse = await response.json();
+    console.log(jsonResponse);
+    return jsonResponse;
+  } catch (error) {
+    console.log('Something went wrong while getting seasons  to date', error);
+  }
+}

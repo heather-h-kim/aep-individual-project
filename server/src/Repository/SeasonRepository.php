@@ -54,19 +54,6 @@ class SeasonRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
-//        /**
-//     * @return Season[] Returns an array of Season objects
-//     */
-//    public function findByStartDate(DateTime $currentDate): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.start_date <= :currentDate')
-//            ->setParameter('currentDate', $currentDate)
-//            ->orderBy('s.start_date', 'ASC')
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
 
     /**
      * @return Season[] Returns an array of Season objects
@@ -75,6 +62,21 @@ class SeasonRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('s')
             ->orderBy('s.start_date', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
+
+    /**
+     * @return Season[] Returns an array of Season objects
+     */
+    public function findAllSeasonsToDate(DateTime $currentDate): array
+    {
+        return $this->createQueryBuilder('s')
+            ->andWhere('s.start_date <= :currentDate')
+            ->setParameter('currentDate', $currentDate)
+            ->orderBy('s.start_date', 'DESC')
             ->getQuery()
             ->getResult()
             ;

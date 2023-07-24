@@ -148,6 +148,17 @@ class GameService extends AbstractDtoTransformers
 
     }
 
+//    public function getAllRankings():array
+//    {
+//        $allSeasons = $this->seasonService->getAllSeasons();
+//        $array = [];
+//        foreach($allSeasons as $season){
+//
+//            $this->getRankingBySeason($season->getId());
+//
+//        }
+//    }
+
     public function calculateScorePerGame(Game $game): int
     {
         $levels = $game->getLevels();
