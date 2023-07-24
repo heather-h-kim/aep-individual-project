@@ -7,6 +7,9 @@ import { getRankings } from '../services/rankingApi';
 import useGetSeasons from '../hooks/useGetSeasons';
 import { getSeasonsToDate } from '../services/seasonApi';
 
+import { useUserStore } from '../store/userStore';
+import { useColorsStore } from '../store/colorStore';
+
 const Rankings = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rankingsPerPage, setRankingsPerPage] = useState(5);
@@ -17,7 +20,12 @@ const Rankings = () => {
   }));
 
   const [selectedSeason, setSelectedSeason] = useState(currentSeasonId);
-
+  const globalUser = useUserStore(state => state.user);
+  const { themeBgColor, themeFgColor, preview } = useColorsStore(state => ({
+    themeBgColor: state.bgcolor,
+    themeFgColor: state.fgcolor,
+    preview: state.preview,
+  }));
   const {
     data: seasons,
     isSuccess: isSuccessSeasons,
@@ -71,7 +79,14 @@ const Rankings = () => {
 
     if (search == '') {
       return (
-        <div>
+        <div
+          style={
+            preview
+              ? { backgroundColor: themeBgColor }
+              : { backgroundColor: globalUser.bgcolor }
+          }
+          className="my-10 flex h-screen flex-col px-20 py-14 "
+        >
           <div className="flex flex-row justify-evenly">
             <div>
               <label
@@ -86,9 +101,6 @@ const Rankings = () => {
                 onChange={handleSelect}
                 defaultValue={selectedSeason}
               >
-                {/*<option defaultValue={selectedSeason}>*/}
-                {/*  Season {currentSeasonId}*/}
-                {/*</option>*/}
                 {seasons.map(season => {
                   return (
                     <option key={season.seasonId} value={season.seasonId}>
@@ -109,8 +121,8 @@ const Rankings = () => {
               </label>
             </form>
           </div>
-          <table className="table-auto">
-            <thead>
+          <table className="table-auto  text-center">
+            <thead className="border-collapse border-b border-black text-xl">
               <tr>
                 <th>Rank</th>
                 <th>Username</th>
@@ -120,7 +132,10 @@ const Rankings = () => {
             <tbody>
               {rankingsToDisplayPerPage.map(ranking => {
                 return (
-                  <tr key={ranking.userName}>
+                  <tr
+                    className="border-collapse border-b border-black"
+                    key={ranking.userName}
+                  >
                     <td>{ranking.rank}</td>
                     <td>{ranking.userName}</td>
                     <td>{ranking.topScore}</td>
@@ -140,7 +155,14 @@ const Rankings = () => {
 
     if (search !== '') {
       return (
-        <div>
+        <div
+          style={
+            preview
+              ? { backgroundColor: themeBgColor }
+              : { backgroundColor: globalUser.bgcolor }
+          }
+          className="my-10 flex h-screen flex-col px-20 py-14 "
+        >
           <div className="flex flex-row justify-evenly">
             <div>
               <label
@@ -153,10 +175,8 @@ const Rankings = () => {
                 id="seasons"
                 className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                 onChange={handleSelect}
+                defaultValue={selectedSeason}
               >
-                <option defaultValue={seasons[0].seasonId}>
-                  Season {seasons[0].seasonId}
-                </option>
                 {seasons.map(season => {
                   return (
                     <option key={season.seasonId} value={season.seasonId}>
@@ -178,8 +198,8 @@ const Rankings = () => {
               <button onClick={() => setSearch('')}>back</button>
             </form>
           </div>
-          <table className="table-auto">
-            <thead>
+          <table className="table-auto text-center">
+            <thead className="border-collapse border-b border-black text-xl">
               <tr>
                 <th>Rank</th>
                 <th>Username</th>
@@ -195,7 +215,10 @@ const Rankings = () => {
                 })
                 .map(ranking => {
                   return (
-                    <tr key={ranking.userName}>
+                    <tr
+                      className="border-collapse border-b border-black"
+                      key={ranking.userName}
+                    >
                       <td>{ranking.rank}</td>
                       <td>{ranking.userName}</td>
                       <td>{ranking.topScore}</td>
