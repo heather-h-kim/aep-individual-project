@@ -2,12 +2,11 @@ import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useUserStore } from '../store/userStore';
 import { useColorsStore } from '../store/colorStore';
-import useGetSeasons from '../hooks/useGetSeasons';
 import { useSeasonStore } from '../store/seasonStore';
-import { getAllSeasons, getRankings } from '../services/rankingApi';
+import { getRankings } from '../services/rankingApi';
+import { getAllSeasons, getSeasonsToDate } from '../services/seasonApi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRankingStore } from '../store/rankingStore';
-import { getSeasonsToDate } from '../services/seasonApi';
 
 const LoginHome = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
@@ -16,27 +15,26 @@ const LoginHome = () => {
   const preview = useColorsStore(state => state.preview);
   const client = useQueryClient();
 
-  useEffect(() => {
-    client.prefetchQuery({
-      queryKey: ['seasons'],
-      queryFn: getAllSeasons,
-    });
+  //prefetch seasons here
+  client.prefetchQuery({
+    queryKey: ['Seasons'],
+    queryFn: getAllSeasons,
+  });
 
-    console.log('in useEffect');
-  }, []);
-
-  //fetch season and ranking related data in advance so that the rankings and admin component can load quickly
-  useGetSeasons();
-
-  useQuery({
+  client.prefetchQuery({
     queryKey: ['SeasonsToDate'],
     queryFn: getSeasonsToDate,
-    onSuccess: data => {
-      console.log('seasons todate', data);
-    },
-    onError: error =>
-      console.log('something went wrong while getting seasons', error),
   });
+
+  // useQuery({
+  //   queryKey: ['SeasonsToDate'],
+  //   queryFn: getSeasonsToDate,
+  //   onSuccess: data => {
+  //     console.log('seasons todate', data);
+  //   },
+  //   onError: error =>
+  //     console.log('something went wrong while getting seasons', error),
+  // });
 
   const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
 
