@@ -125,20 +125,10 @@ export const CreateSeasonModal = ({
     e.preventDefault();
     console.log('in create season submit', dates, errors);
 
-    if (!dates.startDate && !dates.endDate) {
-      setErrors({
-        ...errors,
-        update: 'The start date and the end date should be selected',
-      });
-      setIsDisabled(true);
-    } else {
-      setIsDisabled(false);
-    }
-
     if (!dates.startDate || !dates.endDate) {
       setErrors({
         ...errors,
-        update: 'The start date and the end date should be selected',
+        update: 'The start and end dates should be selected',
       });
       setIsDisabled(true);
     } else {
@@ -154,11 +144,14 @@ export const CreateSeasonModal = ({
     createSeasonMutation.mutate(createSeason as createSeason);
     setErrors({
       ...errors,
+      startDate: '',
+      endDate: '',
       update: '',
     });
   };
 
   console.log(errors);
+  console.log('isDisabled', isDisabled);
 
   const closeModal = () => {
     setErrors({
@@ -174,6 +167,7 @@ export const CreateSeasonModal = ({
       endDate: null,
     });
 
+    setIsDisabled(false);
     setShowCreateModal(!showCreateModal);
   };
 
