@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { getSeasons } from '../services/rankingApi';
+import { getAllSeasons } from '../services/rankingApi';
 import { useSeasonStore } from '../store/seasonStore';
 
 const useGetSeasons = () => {
@@ -9,34 +9,50 @@ const useGetSeasons = () => {
     endDate: string;
   }
 
-  const { seasons, currentSeasonId, updateSeasons, updateCurrentSeasonId } =
-    useSeasonStore(state => ({
-      seasons: state.seasons,
-      currentSeasonId: state.currentSeasonId,
-      updateSeasons: state.updateSeasons,
-      updateCurrentSeasonId: state.updateCurrentSeasonId,
-    }));
+  const {
+    allSeasons,
+    seasonsToDate,
+    currentSeason,
+    currentSeasonId,
+    updateAllSeasons,
+    updateSeasonsToDate,
+    updateCurrentSeason,
+    updateCurrentSeasonId,
+  } = useSeasonStore(state => ({
+    allSeasons: state.allSeasons,
+    seasonsToDate: state.seasonsToDate,
+    currentSeason: state.currentSeason,
+    currentSeasonId: state.currentSeasonId,
+    updateAllSeasons: state.updateAllSeasons,
+    updateSeasonsToDate: state.updateSeasonsToDate,
+    updateCurrentSeason: state.updateCurrentSeason,
+    updateCurrentSeasonId: state.updateCurrentSeasonId,
+  }));
 
-  useQuery({
+  const { isSuccess, data } = useQuery({
     queryKey: ['Seasons'],
-    queryFn: getSeasons,
+    queryFn: getAllSeasons,
     onSuccess: data => {
       console.log(data);
-      updateSeasons(data);
-      updateCurrentSeasonId(Object.values(data[data.length - 1])[0]);
+      updateAllSeasons(data);
+      const array = [];
+      for (const season of data) {
+        if (new Date(season.startDate).getTime() < Date.now()) {
+          array.push(season);
+        }
+      }
+      updateSeasonsToDate(array);
+      updateCurrentSeason(array[array.length - 1]);
+      updateCurrentSeasonId(Object.values(array[array.length - 1])[0]);
     },
     onError: error =>
       console.log('something went wrong while getting seasons', error),
     refetchOnWindowFocus: false,
   });
 
-  console.log(seasons);
-  console.log(currentSeasonId);
-
-  return {
-    seasons,
-    currentSeasonId,
-  };
+  if (isSuccess) {
+    console.log('data', data);
+  }
 };
 
 export default useGetSeasons;

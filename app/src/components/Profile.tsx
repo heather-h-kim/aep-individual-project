@@ -343,7 +343,7 @@ const Profile = () => {
                   fill="currentColor"
                 />
               </svg>
-              Loading...
+              Updating...
             </button>
           ) : (
             <button

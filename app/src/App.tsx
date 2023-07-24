@@ -2,6 +2,7 @@ import {
   QueryClient,
   QueryClientProvider,
   useQuery,
+  useQueryClient,
 } from '@tanstack/react-query';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useMutation } from '@tanstack/react-query';
@@ -12,8 +13,9 @@ import { useColorsStore } from './store/colorStore';
 import { router } from './routes/rootRoute';
 import { RouterProvider } from '@tanstack/react-router';
 import useGetSeasons from './hooks/useGetSeasons';
-import { getRankings } from './services/rankingApi';
+import { getAllSeasons, getRankings } from './services/rankingApi';
 import { useRankingStore } from './store/rankingStore';
+import { useSeasonStore } from './store/seasonStore';
 
 const queryClient = new QueryClient();
 
@@ -39,18 +41,20 @@ export default function App() {
     },
   });
 
-  //Get seasons and ranking here so that the ranking component can load quickly with the ranking of the current season
-  const { seasons, currentSeasonId } = useGetSeasons();
+  useGetSeasons();
+
+  const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
+
   const { rankings, updateRankings } = useRankingStore(state => ({
     rankings: state.rankings,
     updateRankings: state.updateRankings,
   }));
 
-  useQuery({
+  const { isSuccess, isLoading: useQueryLoading } = useQuery({
     queryKey: ['Rankings', currentSeasonId],
     queryFn: () => getRankings(currentSeasonId),
     onSuccess: data => {
-      console.log(data);
+      console.log('in app.tsx', data);
       updateRankings(data);
     },
     onError: error =>
@@ -93,6 +97,10 @@ export default function App() {
     return <div className="m-8 p-5 text-lg">Loading...</div>;
   }
 
+  if (useQueryLoading) {
+    return <div className="m-8 p-5 text-lg">Loading...</div>;
+  }
+
   if (error) {
     return (
       <div className="m-8 p-5 text-lg">
@@ -101,15 +109,13 @@ export default function App() {
     );
   }
 
-  console.log('seasons are', seasons);
-  console.log('current seasonId is', currentSeasonId);
-  console.log('ranking', rankings);
-
-  return (
-    <QueryClientProvider client={queryClient}>
-      <div className="m-10 p-5">
-        <RouterProvider router={router} />
-      </div>
-    </QueryClientProvider>
-  );
+  if (isSuccess) {
+    return (
+      <QueryClientProvider client={queryClient}>
+        <div className="m-10 p-5">
+          <RouterProvider router={router} />
+        </div>
+      </QueryClientProvider>
+    );
+  }
 }

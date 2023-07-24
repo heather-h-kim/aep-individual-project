@@ -16,10 +16,10 @@ class Season
     #[ORM\Column]
     private ?int $season_id = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $start_date = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTime $end_date = null;
 
     #[ORM\OneToMany(mappedBy: 'season', targetEntity: Game::class)]

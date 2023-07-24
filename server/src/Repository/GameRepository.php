@@ -3,7 +3,9 @@
 namespace App\Repository;
 
 use App\Entity\Game;
+use DateTime;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -38,6 +40,54 @@ class GameRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+
+//    /**
+//     * @return Game[] Returns an array of Game objects
+//     * @throws Exception
+//     */
+//    public function findAllBySeason(): array
+//    {
+//      $conn = $this->getEntityManager()->getConnection();
+//
+//      $sql = 'SELECT * FROM game WHERE season_id IS NULL';
+//      return $resultSet = $conn->executeQuery($sql);
+//
+//      return $resultSet->fetchAllAssociative();
+//    }
+
+
+    /**
+     * @return Game[] Returns an array of Game objects
+     */
+    public function findALLByNullSeason(DateTime $start_date, DateTime $end_date): array
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.season is NULL')
+            ->andWhere('g.played_at >= :startDate')
+            ->andWhere('g.played_at <= :endDate')
+            ->setParameters(['startDate'=> $start_date, 'endDate'=>$end_date])
+            ->orderBy('g.game_id', 'ASC')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+
+    /**
+     * @return Game[] Returns an array of Game objects
+     */
+    public function findALLBySeason(DateTime $start_date, DateTime $end_date): array
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.played_at >= :startDate')
+            ->andWhere('g.played_at <= :endDate')
+            ->setParameters(['startDate'=> $start_date, 'endDate'=>$end_date])
+            ->orderBy('g.game_id', 'ASC')
+            ->getQuery()
+            ->getResult()
+            ;
+    }
+
 
 //    /**
 //     * @return Game[] Returns an array of Game objects

@@ -10,6 +10,8 @@ const LogoutButton = () => {
   const themeFgColor = useColorsStore(state => state.fgcolor);
   const preview = useColorsStore(state => state.preview);
 
+  // console.log(themeBgColor);
+
   if (isAuthenticated) {
     return (
       <button

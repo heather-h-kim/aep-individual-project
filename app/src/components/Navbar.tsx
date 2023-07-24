@@ -12,9 +12,11 @@ import { useIsCorrectStore } from '../store/stateStore';
 const Navbar = () => {
   const { isAuthenticated } = useAuth0();
   const globalUser = useUserStore(state => state.user);
-  const themeBgColor = useColorsStore(state => state.bgcolor);
-  const themeFgColor = useColorsStore(state => state.fgcolor);
-  const preview = useColorsStore(state => state.preview);
+  const { themeBgColor, themeFgColor, preview } = useColorsStore(state => ({
+    themeBgColor: state.bgcolor,
+    themeFgColor: state.fgcolor,
+    preview: state.preview,
+  }));
   const resetRounds = useRoundStore(state => state.resetRounds);
   const resetGame = useGameStore(state => state.resetGame);
   const resetIsCorrect = useIsCorrectStore(state => state.resetIsCorrect);
@@ -300,7 +302,6 @@ const Navbar = () => {
                   Profile
                 </Link>
               </li>
-
               <li className="mr-3">
                 <Logout />
               </li>
