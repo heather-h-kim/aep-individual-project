@@ -1,12 +1,8 @@
 import { useState } from 'react';
-import { useSeasonStore } from '../store/seasonStore';
-import { useRankingStore } from '../store/rankingStore';
 import Pagination from './Pagination';
 import { useQuery } from '@tanstack/react-query';
 import { getRankings } from '../services/rankingApi';
-import useGetSeasons from '../hooks/useGetSeasons';
 import { getSeasonsToDate } from '../services/seasonApi';
-
 import { useUserStore } from '../store/userStore';
 import { useColorsStore } from '../store/colorStore';
 
@@ -14,18 +10,14 @@ const Rankings = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rankingsPerPage, setRankingsPerPage] = useState(5);
   const [search, setSearch] = useState('');
-  const { currentSeasonId, updateCurrentSeasonId } = useSeasonStore(state => ({
-    currentSeasonId: state.currentSeasonId,
-    updateCurrentSeasonId: state.updateCurrentSeasonId,
-  }));
-
-  const [selectedSeason, setSelectedSeason] = useState(currentSeasonId);
+  const [selectedSeason, setSelectedSeason] = useState<number>(null);
   const globalUser = useUserStore(state => state.user);
   const { themeBgColor, themeFgColor, preview } = useColorsStore(state => ({
     themeBgColor: state.bgcolor,
     themeFgColor: state.fgcolor,
     preview: state.preview,
   }));
+
   const {
     data: seasons,
     isSuccess: isSuccessSeasons,
@@ -35,6 +27,7 @@ const Rankings = () => {
     queryFn: getSeasonsToDate,
     onSuccess: data => {
       console.log('seasons todate', data);
+      setSelectedSeason(data[0].seasonId);
     },
     onError: error =>
       console.log('something went wrong while getting seasons', error),
@@ -44,11 +37,13 @@ const Rankings = () => {
     data: rankings,
     isSuccess: isSuccessRankings,
     isLoading: isLoadingRankings,
+    isIdle,
   } = useQuery({
     queryKey: ['Rankings', selectedSeason],
     queryFn: () => getRankings(selectedSeason),
+    enabled: !!selectedSeason,
     onSuccess: data => {
-      console.log(data);
+      console.log('rankings for the current season', data);
     },
     onError: error =>
       console.log('something went wrong while getting seasons', error),

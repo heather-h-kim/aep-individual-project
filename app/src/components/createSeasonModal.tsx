@@ -150,9 +150,6 @@ export const CreateSeasonModal = ({
     });
   };
 
-  console.log(errors);
-  console.log('isDisabled', isDisabled);
-
   const closeModal = () => {
     setErrors({
       ...errors,
