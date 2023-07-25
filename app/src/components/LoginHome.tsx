@@ -4,7 +4,11 @@ import { useUserStore } from '../store/userStore';
 import { useColorsStore } from '../store/colorStore';
 import { useSeasonStore } from '../store/seasonStore';
 import { getRankings } from '../services/rankingApi';
-import { getAllSeasons, getSeasonsToDate } from '../services/seasonApi';
+import {
+  getAllSeasons,
+  getCurrentSeason,
+  getSeasonsToDate,
+} from '../services/seasonApi';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRankingStore } from '../store/rankingStore';
 import LoadingSpinner from './LoadingSpinner';

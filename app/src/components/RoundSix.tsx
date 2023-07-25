@@ -9,11 +9,13 @@ import ShowInCorrect from './ShowIncorrect';
 import { useIsCorrectStore } from '../store/stateStore';
 import { Link } from '@tanstack/react-router';
 import ShowNumber from './ShowNumber';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { game, postGame } from '../services/gameApi';
 import { useSeasonStore } from '../store/seasonStore';
 import { useRankingStore } from '../store/rankingStore';
 import { getRankings } from '../services/rankingApi';
+import { getCurrentSeason } from '../services/seasonApi';
+import Rankings from './Rankings';
 
 const RoundSix = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -22,18 +24,18 @@ const RoundSix = props => {
   }));
   const globalUser = useUserStore(state => state.user);
 
-  const { allSeasons, seasonsToDate, currentSeason, currentSeasonId } =
-    useSeasonStore(state => ({
-      allSeasons: state.allSeasons,
-      seasonsToDate: state.seasonsToDate,
-      currentSeason: state.currentSeason,
-      currentSeasonId: state.currentSeasonId,
-    }));
-
-  const { rankings, updateRankings } = useRankingStore(state => ({
-    rankings: state.rankings,
-    updateRankings: state.updateRankings,
-  }));
+  // const { allSeasons, seasonsToDate, currentSeason, currentSeasonId } =
+  //   useSeasonStore(state => ({
+  //     allSeasons: state.allSeasons,
+  //     seasonsToDate: state.seasonsToDate,
+  //     currentSeason: state.currentSeason,
+  //     currentSeasonId: state.currentSeasonId,
+  //   }));
+  //
+  // const { rankings, updateRankings } = useRankingStore(state => ({
+  //   rankings: state.rankings,
+  //   updateRankings: state.updateRankings,
+  // }));
 
   const [state, setState] = useState({
     levelNumber: props.level,
@@ -54,19 +56,7 @@ const RoundSix = props => {
     resetIsCorrect: state.resetIsCorrect,
   }));
   const [score, setScore] = useState(0);
-
-  const { refetch } = useQuery({
-    queryKey: ['Rankings', currentSeasonId],
-    queryFn: () => getRankings(currentSeasonId),
-    enabled: false,
-    onSuccess: data => {
-      console.log(data);
-      updateRankings(data);
-    },
-    onError: error =>
-      console.log('something went wrong while getting seasons', error),
-    refetchOnWindowFocus: false,
-  });
+  const [scoreIsReady, setScoreIsReady] = useState(false);
 
   const { data, mutate, isSuccess } = useMutation({
     mutationFn: (body: game) => postGame(body),
@@ -80,6 +70,7 @@ const RoundSix = props => {
     onSuccess: data => {
       console.log('Success', data);
       setScore(data);
+      setScoreIsReady(!scoreIsReady);
     },
     onSettled: (data, error, variables, context) => {
       console.log('Complete', data);
@@ -260,15 +251,9 @@ const RoundSix = props => {
   }
 
   if (state.step == 'showScore') {
-    //refetch rankings with the new game
-    if (isSuccess) {
-      console.log('refetch');
-      refetch();
-    }
-
     console.log('score is', score);
 
-    if (score == 0) {
+    if (!scoreIsReady) {
       return (
         <div
           style={
@@ -283,21 +268,23 @@ const RoundSix = props => {
       );
     }
 
-    return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col items-center justify-center"
-      >
-        <h1 className="text-7xl font-extrabold tracking-widest">
-          {' '}
-          Your score is:{score}
-        </h1>
-      </div>
-    );
+    if (scoreIsReady) {
+      return (
+        <div
+          style={
+            preview
+              ? { backgroundColor: themeBgColor }
+              : { backgroundColor: globalUser.bgcolor }
+          }
+          className="my-10 flex h-screen flex-col items-center justify-center"
+        >
+          <h1 className="text-7xl font-extrabold tracking-widest">
+            {' '}
+            Your score is:{score}
+          </h1>
+        </div>
+      );
+    }
   }
 };
 

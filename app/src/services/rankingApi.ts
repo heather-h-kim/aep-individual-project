@@ -8,7 +8,7 @@ export async function getRankings(seasonId) {
       method: 'GET',
     });
     const jsonResponse = await response.json();
-    // console.log(jsonResponse);
+    console.log('rankings', jsonResponse);
     return jsonResponse;
   } catch (error) {
     console.log('Something went wrong while getting rankings', error);
