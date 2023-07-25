@@ -9,13 +9,8 @@ import ShowInCorrect from './ShowIncorrect';
 import { useIsCorrectStore } from '../store/stateStore';
 import { Link } from '@tanstack/react-router';
 import ShowNumber from './ShowNumber';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { game, postGame } from '../services/gameApi';
-import { useSeasonStore } from '../store/seasonStore';
-import { useRankingStore } from '../store/rankingStore';
-import { getRankings } from '../services/rankingApi';
-import { getCurrentSeason } from '../services/seasonApi';
-import Rankings from './Rankings';
 
 const RoundSix = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -23,19 +18,6 @@ const RoundSix = props => {
     preview: state.preview,
   }));
   const globalUser = useUserStore(state => state.user);
-
-  // const { allSeasons, seasonsToDate, currentSeason, currentSeasonId } =
-  //   useSeasonStore(state => ({
-  //     allSeasons: state.allSeasons,
-  //     seasonsToDate: state.seasonsToDate,
-  //     currentSeason: state.currentSeason,
-  //     currentSeasonId: state.currentSeasonId,
-  //   }));
-  //
-  // const { rankings, updateRankings } = useRankingStore(state => ({
-  //   rankings: state.rankings,
-  //   updateRankings: state.updateRankings,
-  // }));
 
   const [state, setState] = useState({
     levelNumber: props.level,
@@ -58,22 +40,18 @@ const RoundSix = props => {
   const [score, setScore] = useState(0);
   const [scoreIsReady, setScoreIsReady] = useState(false);
 
-  const { data, mutate, isSuccess } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (body: game) => postGame(body),
     onMutate: body => {
       console.log('mutate', body);
     },
-    onError: (error, variables, context) => {
-      console.log('Something went wrong...', error, variables, context);
-    },
-
     onSuccess: data => {
       console.log('Success', data);
       setScore(data);
       setScoreIsReady(!scoreIsReady);
     },
-    onSettled: (data, error, variables, context) => {
-      console.log('Complete', data);
+    onError: (error, variables, context) => {
+      console.log('Something went wrong...', error, variables, context);
     },
   });
 

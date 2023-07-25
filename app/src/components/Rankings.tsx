@@ -37,7 +37,6 @@ const Rankings = () => {
     data: rankings,
     isSuccess: isSuccessRankings,
     isLoading: isLoadingRankings,
-    isIdle,
   } = useQuery({
     queryKey: ['Rankings', selectedSeason],
     queryFn: () => getRankings(selectedSeason),

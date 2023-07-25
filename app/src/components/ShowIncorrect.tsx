@@ -7,14 +7,15 @@ const ShowInCorrect = prop => {
     preview: state.preview,
   }));
   const globalUser = useUserStore(state => state.user);
+  const style = {
+    ...(preview
+      ? { backgroundColor: themeBgColor }
+      : { backgroundColor: globalUser.bgcolor }),
+  };
 
   return (
     <div
-      style={
-        preview
-          ? { backgroundColor: themeBgColor }
-          : { backgroundColor: globalUser.bgcolor }
-      }
+      style={style}
       className="my-10 flex h-screen flex-col items-center justify-center"
     >
       <h1 className="text-8xl font-extrabold tracking-widest">

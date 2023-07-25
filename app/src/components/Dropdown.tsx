@@ -15,6 +15,17 @@ const Dropdown = () => {
   const resetGame = useGameStore(state => state.resetGame);
   const resetIsCorrect = useIsCorrectStore(state => state.resetIsCorrect);
   const navigate = useNavigate();
+  const style = {
+    ...(preview
+      ? {
+          color: themeBgColor,
+          backgroundColor: themeFgColor,
+        }
+      : {
+          color: globalUser.bgcolor,
+          backgroundColor: globalUser.fgcolor,
+        }),
+  };
 
   const handleClick = () => {
     console.log('game menu clicked');
@@ -34,19 +45,8 @@ const Dropdown = () => {
       <div>
         <button
           type="button"
-          style={
-            preview
-              ? {
-                  color: themeBgColor,
-                  backgroundColor: themeFgColor,
-                }
-              : {
-                  color: globalUser.bgcolor,
-                  backgroundColor: globalUser.fgcolor,
-                }
-          }
+          style={style}
           className="inline-flex gap-x-1.5 rounded px-3 py-1"
-          // className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           id="menu-button"
           aria-expanded="true"
           aria-haspopup="true"
@@ -55,17 +55,7 @@ const Dropdown = () => {
           Game
           <svg
             className="-mr-1 h-5 w-5 "
-            style={
-              preview
-                ? {
-                    color: themeBgColor,
-                    backgroundColor: themeFgColor,
-                  }
-                : {
-                    color: globalUser.bgcolor,
-                    backgroundColor: globalUser.fgcolor,
-                  }
-            }
+            style={style}
             viewBox="0 0 20 20"
             fill="currentColor"
             aria-hidden="true"
@@ -94,7 +84,7 @@ const Dropdown = () => {
               tabIndex="-1"
               to="/game-level1/1"
             >
-              Level 1
+              Level 1: 8 digits
             </Link>
             <Link
               className="block px-4 py-2 text-sm text-gray-700"
@@ -102,7 +92,7 @@ const Dropdown = () => {
               tabIndex="-1"
               to="/game-level2/2"
             >
-              Level 2
+              Level 2: 10 digits
             </Link>
             <Link
               className="block px-4 py-2 text-sm text-gray-700"
@@ -110,7 +100,7 @@ const Dropdown = () => {
               tabIndex="-1"
               to="/game-level3/3"
             >
-              Level 3
+              Level 3: 12 digits
             </Link>
             <Link
               className="block px-4 py-2 text-sm text-gray-700"
@@ -118,7 +108,7 @@ const Dropdown = () => {
               tabIndex="-1"
               to="/game-level4/4"
             >
-              Level 4
+              Level 4: 14 digits
             </Link>
           </div>
         </div>
