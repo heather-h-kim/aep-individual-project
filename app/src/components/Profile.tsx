@@ -183,7 +183,11 @@ const Profile = () => {
   };
 
   if (isLoading) {
-    return <div>Loading ...</div>;
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>Error...</div>;
   }
 
   if (isAuthenticated && globalUser.userId) {
@@ -191,7 +195,7 @@ const Profile = () => {
     console.log('new theme bgcolor', themeBgColor);
     console.log('preview is', preview);
     return (
-      <div style={style} className="m-8 p-5">
+      <div style={style} className="my-10 p-5">
         <h2>User Profile</h2>
         <Avatar />
         <form onSubmit={handleSubmit}>

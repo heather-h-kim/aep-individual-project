@@ -1,6 +1,5 @@
 import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
-// import { useIsCorrectStore } from '../store/stateStore';
 
 const ShowCorrect = () => {
   const { themeBgColor, preview } = useColorsStore(state => ({

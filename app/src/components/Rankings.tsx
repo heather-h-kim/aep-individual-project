@@ -5,18 +5,20 @@ import { getRankings } from '../services/rankingApi';
 import { getSeasonsToDate } from '../services/seasonApi';
 import { useUserStore } from '../store/userStore';
 import { useColorsStore } from '../store/colorStore';
+import { useSeasonStore } from '../store/seasonStore';
 
 const Rankings = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rankingsPerPage, setRankingsPerPage] = useState(5);
-  const [search, setSearch] = useState('');
-  const [selectedSeason, setSelectedSeason] = useState<number>(null);
   const globalUser = useUserStore(state => state.user);
   const { themeBgColor, themeFgColor, preview } = useColorsStore(state => ({
     themeBgColor: state.bgcolor,
     themeFgColor: state.fgcolor,
     preview: state.preview,
   }));
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rankingsPerPage, setRankingsPerPage] = useState(5);
+  const [search, setSearch] = useState('');
+  // const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
+  const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
 
   const {
     data: seasons,
@@ -54,11 +56,12 @@ const Rankings = () => {
     setSelectedSeason(e.target.value);
   };
 
-  console.log('season', selectedSeason);
-  console.log('rankings', rankings);
+  if (isLoadingRankings) {
+    return <div>Rankings Loading...</div>;
+  }
 
-  if (isLoadingRankings || isLoadingSeasons) {
-    return <div>Loading...</div>;
+  if (isLoadingSeasons) {
+    return <div>Seasons Loading...</div>;
   }
 
   if (isSuccessSeasons && isSuccessRankings) {
