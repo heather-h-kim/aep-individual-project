@@ -16,10 +16,11 @@ import useGetSeasons from './hooks/useGetSeasons';
 import { getAllSeasons, getRankings } from './services/rankingApi';
 import { useRankingStore } from './store/rankingStore';
 import { useSeasonStore } from './store/seasonStore';
-
-const queryClient = new QueryClient();
+import LoadingSpinner from './components/LoadingSpinner';
+// const queryClient = new QueryClient();
 
 export default function App() {
+  const queryClient = new QueryClient();
   const { user, isAuthenticated, isLoading, error } = useAuth0();
   const updateThemeBgColor = useColorsStore(state => state.updateBgcolor);
   const updateThemeFgColor = useColorsStore(state => state.updateFgcolor);
@@ -50,17 +51,17 @@ export default function App() {
     updateRankings: state.updateRankings,
   }));
 
-  const { isSuccess, isLoading: useQueryLoading } = useQuery({
-    queryKey: ['Rankings', currentSeasonId],
-    queryFn: () => getRankings(currentSeasonId),
-    onSuccess: data => {
-      console.log('in app.tsx', data);
-      updateRankings(data);
-    },
-    onError: error =>
-      console.log('something went wrong while getting seasons', error),
-    refetchOnWindowFocus: false,
-  });
+  // const { isSuccess, isLoading: useQueryLoading } = useQuery({
+  //   queryKey: ['Rankings', currentSeasonId],
+  //   queryFn: () => getRankings(currentSeasonId),
+  //   onSuccess: data => {
+  //     console.log('in app.tsx', data);
+  //     updateRankings(data);
+  //   },
+  //   onError: error =>
+  //     console.log('something went wrong while getting seasons', error),
+  //   refetchOnWindowFocus: false,
+  // });
 
   useEffect(() => {
     if (isAuthenticated && user) {
@@ -94,12 +95,13 @@ export default function App() {
   }, [isAuthenticated, user]);
 
   if (isLoading) {
-    return <div className="m-8 p-5 text-lg">Loading...</div>;
+    return <LoadingSpinner></LoadingSpinner>;
+    // return <div className="m-8 p-5 text-lg">Loading...</div>;
   }
 
-  if (useQueryLoading) {
-    return <div className="m-8 p-5 text-lg">Loading...</div>;
-  }
+  // if (useQueryLoading) {
+  //   return <div className="m-8 p-5 text-lg">Loading...</div>;
+  // }
 
   if (error) {
     return (
@@ -109,13 +111,11 @@ export default function App() {
     );
   }
 
-  if (isSuccess) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <div className="m-10 p-5">
-          <RouterProvider router={router} />
-        </div>
-      </QueryClientProvider>
-    );
-  }
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div className="m-10 p-5">
+        <RouterProvider router={router} />
+      </div>
+    </QueryClientProvider>
+  );
 }
