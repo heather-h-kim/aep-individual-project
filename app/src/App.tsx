@@ -20,7 +20,7 @@ export default function App() {
   const updateThemeBgColor = useColorsStore(state => state.updateBgcolor);
   const updateThemeFgColor = useColorsStore(state => state.updateFgcolor);
   const updateGlobalUser = useUserStore(state => state.updateUser);
-  const { mutate, isSuccess } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: (body: createUser) => addUser(body),
     onMutate: body => console.log('mutate', body),
     onError: (error, variables, context) => {
@@ -71,10 +71,6 @@ export default function App() {
   }, [isAuthenticated, user]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
-  if (!isSuccess && !error) {
     return <LoadingSpinner></LoadingSpinner>;
   }
 
@@ -86,13 +82,11 @@ export default function App() {
     );
   }
 
-  if (isSuccess) {
-    return (
-      <QueryClientProvider client={queryClient}>
-        <div className="m-10 p-5">
-          <RouterProvider router={router} />
-        </div>
-      </QueryClientProvider>
-    );
-  }
+  return (
+    <QueryClientProvider client={queryClient}>
+      <div className="m-10 p-5">
+        <RouterProvider router={router} />
+      </div>
+    </QueryClientProvider>
+  );
 }
