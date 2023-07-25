@@ -53,3 +53,22 @@ export async function updateUserProfile(body: updateUser) {
     throw error;
   }
 }
+
+export async function getAllUsers() {
+  try {
+    const url = `http://localhost:8000/api/users`;
+    const response = await fetch(url, {
+      headers: {
+        'Content-type': 'application/json',
+      },
+      method: 'GET',
+    });
+
+    const jsonResponse = await response.json();
+    console.log('all users', jsonResponse);
+    return jsonResponse;
+  } catch (error) {
+    console.log('Something went wrong', error);
+    throw error;
+  }
+}

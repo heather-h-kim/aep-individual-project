@@ -43,8 +43,8 @@ const Profile = () => {
   });
 
   const [showModal, setShowModal] = useState(false);
-  const { errors, validate } = useFormError();
-  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const { errors, validate, buttonDisabled, setButtonDisabled } =
+    useFormError();
   const [isUpdating, setIsUpdating] = useState(false);
 
   const { mutate } = useMutation({
@@ -52,7 +52,6 @@ const Profile = () => {
     onMutate: body => {
       console.log('mutate', body);
       setIsUpdating(true);
-      console.log(isUpdating);
     },
     onSuccess: data => {
       console.log('Success', data);
@@ -98,38 +97,17 @@ const Profile = () => {
 
     //input validation
     validate(e, name, value);
-    console.log('error', errors);
-    if (
-      errors.firstName !== '' ||
-      errors.lastName !== '' ||
-      errors.userName !== ''
-    ) {
-      //disable the update button if there's any error
-      setButtonDisabled(true);
-      console.log(buttonDisabled);
-    } else if (
-      errors.firstName === '' &&
-      errors.lastName === '' &&
-      errors.userName === ''
-    ) {
-      //un-disable the button if there's no error
-      setButtonDisabled(false);
-      console.log(buttonDisabled);
-    }
-
     setFormData({ ...formData, [name]: value });
   };
 
   const onChangeCompleteBgColor = color => {
     setFormData({ ...formData, bgcolor: color.hex });
-    console.log('selected bgcolor is', color.hex);
     updateThemeBgColor(color.hex);
     updatePreviewState(true);
   };
 
   const onChangeCompleteFgColor = color => {
     setFormData({ ...formData, fgcolor: color.hex });
-    console.log('selected fgcolor is', color.hex);
     updateThemeFgColor(color.hex);
     updatePreviewState(true);
   };
@@ -137,8 +115,6 @@ const Profile = () => {
   //close the modal when cancel option is clicked
   const handleOnClose = () => {
     setShowModal(!showModal);
-    console.log('cancel clicked, formData is', formData);
-    console.log('cancel clicked globalUser is', globalUser);
     updatePreviewState(false);
 
     //reset the formData
@@ -167,17 +143,14 @@ const Profile = () => {
 
   //update the user profile when update option in the modal is clicked
   const handleOnUpdate = () => {
-    console.log('update clicked', formData);
     //Don't send email to the backend as it should not be updated
     delete formData.email;
-    console.log('new formData', formData);
     mutate(formData);
     setShowModal(!showModal);
   };
 
   const handleSubmit = e => {
     e.preventDefault();
-    console.log('Submit button is clicked');
     //triggers the confirmation modal
     setShowModal(!showModal);
   };
@@ -191,12 +164,8 @@ const Profile = () => {
   }
 
   if (isAuthenticated && globalUser.userId) {
-    console.log('selected bgcolor is', formData.bgcolor);
-    console.log('new theme bgcolor', themeBgColor);
-    console.log('preview is', preview);
     return (
       <div style={style} className="my-10 p-5">
-        <h2>User Profile</h2>
         <Avatar />
         <form onSubmit={handleSubmit}>
           <div className="mb-6 grid gap-6 md:grid-cols-1">
@@ -265,10 +234,11 @@ const Profile = () => {
                   id="email"
                   name="email"
                   className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                  disabled="disabled"
+                  disabled
                   defaultValue={formData.email}
                 />
               </label>
+              <p>*Email cannot be changed</p>
             </div>
           </div>
           <div className="mb-6 grid gap-6 md:grid-cols-2">
@@ -317,7 +287,7 @@ const Profile = () => {
             <button
               type="submit"
               disabled={buttonDisabled}
-              className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+              className="rounded bg-neutral-700 px-4 py-2 font-bold text-white hover:bg-neutral-800"
             >
               Update Profile
             </button>

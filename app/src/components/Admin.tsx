@@ -199,7 +199,7 @@ const Admin = () => {
                   <td>
                     <div className="flex flex-row items-center justify-center">
                       <button
-                        className="mx-6 my-2 rounded bg-neutral-600 px-4 py-2 font-bold text-white hover:bg-neutral-700"
+                        className="mx-6 my-2 rounded bg-neutral-700 px-4 py-2 font-bold text-white hover:bg-neutral-800"
                         onClick={e => {
                           handleUpdateClick(e, season);
                         }}
@@ -207,7 +207,7 @@ const Admin = () => {
                         Update
                       </button>
                       <button
-                        className="rounded bg-neutral-600 px-4 py-2 font-bold text-white hover:bg-neutral-700"
+                        className="rounded bg-neutral-700 px-4 py-2 font-bold text-white hover:bg-neutral-800"
                         onClick={e => {
                           handleDeleteClick(e, season);
                         }}
@@ -223,9 +223,8 @@ const Admin = () => {
         </table>
 
         <button
-          className="mt-8  w-60  rounded bg-neutral-600 px-4 py-2 font-bold text-white hover:bg-neutral-700"
+          className="mt-8  w-60  rounded bg-neutral-700 px-4 py-2 font-bold text-white hover:bg-neutral-800"
           onClick={handleCreateClick}
-          // onClick={() => setShowCreateModal(!showCreateModal)}
         >
           Create Season
         </button>

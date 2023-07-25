@@ -16,29 +16,29 @@ class User
     #[ORM\Column]
     private ?int $user_id = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 12)]
     private ?string $first_name = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 12)]
     private ?string $last_name = null;
 
-    #[ORM\Column(length: 100)]
+    #[ORM\Column(length: 24)]
     private ?string $email = null;
 
     #[ORM\ManyToOne(inversedBy: 'users')]
     #[ORM\JoinColumn(name: 'role_id', referencedColumnName: 'role_id')]
     private ?Role $role = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 10)]
     private ?string $fgcolor = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 10)]
     private ?string $bgcolor = null;
 
-    #[ORM\Column(length: 50)]
+    #[ORM\Column(length: 10)]
     private ?string $username = null;
 
-    #[ORM\Column(length: 100, nullable: true)]
+    #[ORM\Column(length: 50, nullable: true)]
     private ?string $auth0token = null;
 
     #[ORM\OneToMany(mappedBy: 'user', targetEntity: Game::class)]
