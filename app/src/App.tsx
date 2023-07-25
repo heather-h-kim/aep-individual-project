@@ -70,6 +70,10 @@ export default function App() {
     }
   }, [isAuthenticated, user]);
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   if (!isSuccess && !error) {
     return <LoadingSpinner></LoadingSpinner>;
   }
