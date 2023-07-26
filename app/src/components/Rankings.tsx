@@ -18,7 +18,7 @@ const Rankings = () => {
   const [rankingsPerPage, setRankingsPerPage] = useState(5);
   const [search, setSearch] = useState('');
   // const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
-  const [selectedSeason, setSelectedSeason] = useState<number | null>(null);
+  const [selectedSeason, setSelectedSeason] = useState(null);
 
   const {
     data: seasons,
@@ -84,7 +84,7 @@ const Rankings = () => {
           }
           className="my-10 flex h-screen flex-col px-20 py-14 "
         >
-          <div className="flex flex-row justify-evenly">
+          <div className="mb-10 mt-3 flex flex-row justify-between">
             <div>
               <label
                 htmlFor="seasons"
@@ -111,6 +111,7 @@ const Rankings = () => {
               <label>
                 Search by Username:
                 <input
+                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   type="text"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
@@ -118,7 +119,7 @@ const Rankings = () => {
               </label>
             </form>
           </div>
-          <table className="table-auto  text-center">
+          <table className="mb-10  table-auto text-center">
             <thead className="border-collapse border-b border-black text-xl">
               <tr>
                 <th>Rank</th>
@@ -130,7 +131,7 @@ const Rankings = () => {
               {rankingsToDisplayPerPage.map(ranking => {
                 return (
                   <tr
-                    className="border-collapse border-b border-black"
+                    className="h-3 border-collapse border-b border-black"
                     key={ranking.userName}
                   >
                     <td>{ranking.rank}</td>
@@ -160,7 +161,7 @@ const Rankings = () => {
           }
           className="my-10 flex h-screen flex-col px-20 py-14 "
         >
-          <div className="flex flex-row justify-evenly">
+          <div className="flex flex-row justify-between">
             <div>
               <label
                 htmlFor="seasons"
@@ -187,12 +188,18 @@ const Rankings = () => {
               <label>
                 Search by Username:
                 <input
+                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
                   type="text"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                 />
               </label>
-              <button onClick={() => setSearch('')}>back</button>
+              <button
+                className="rounded-lg bg-gray-50"
+                onClick={() => setSearch('')}
+              >
+                back
+              </button>
             </form>
           </div>
           <table className="table-auto text-center">

@@ -1,8 +1,17 @@
 import React from 'react';
+import { useUserStore } from '../store/userStore';
+import { useColorsStore } from '../store/colorStore';
 
 export default function LoadingSpinner() {
+  const globalUser = useUserStore(state => state.user);
+  const style = {
+    ...(globalUser.userId
+      ? { backgroundColor: globalUser.bgcolor, opacity: 0.5 }
+      : { backgroundColor: 'ECFEFF', opacity: 0.6 }),
+  };
+
   return (
-    <div className="fixed inset-0 bg-sky-50 bg-opacity-40 transition-opacity">
+    <div style={style} className="fixed inset-0 transition-opacity">
       <div className="flex h-screen items-center justify-center">
         <div role="status">
           <svg

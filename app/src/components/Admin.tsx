@@ -7,6 +7,7 @@ import { DeleteSeasonModal } from './deleteSeasonModal';
 import { getAllSeasons } from '../services/seasonApi';
 import { useUserStore } from '../store/userStore';
 import { useColorsStore } from '../store/colorStore';
+import LoadingSpinner from './LoadingSpinner';
 
 const Admin = () => {
   const globalUser = useUserStore(state => state.user);
@@ -15,6 +16,11 @@ const Admin = () => {
     themeFgColor: state.fgcolor,
     preview: state.preview,
   }));
+  const style = {
+    ...(preview
+      ? { backgroundColor: themeBgColor }
+      : { backgroundColor: globalUser.bgcolor }),
+  };
   const { isLoading, isSuccess, data, isRefetching } = useQuery({
     queryKey: ['Seasons'],
     queryFn: getAllSeasons,
@@ -43,7 +49,7 @@ const Admin = () => {
   });
 
   if (isLoading) {
-    return <h1>Loading</h1>;
+    return <LoadingSpinner></LoadingSpinner>;
   }
 
   if (isSuccess) {
@@ -169,14 +175,7 @@ const Admin = () => {
     };
 
     return (
-      <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
-        className="my-10 flex h-screen flex-col px-20 py-14 "
-      >
+      <div style={style} className="my-10 flex h-screen flex-col px-20 py-14 ">
         <table className="table-auto text-center">
           <thead className="border-collapse border-b border-black text-xl">
             <tr>

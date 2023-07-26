@@ -8,6 +8,7 @@ import { SketchPicker } from 'react-color';
 import { UpdateUserModal } from './UpdateUserModal';
 import useFormError from '../hooks/useFormError';
 import { useColorsStore } from '../store/colorStore';
+import LoadingSpinner from './LoadingSpinner';
 
 const Profile = () => {
   const { isAuthenticated, isLoading, error } = useAuth0();
@@ -156,7 +157,7 @@ const Profile = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingSpinner></LoadingSpinner>;
   }
 
   if (error) {

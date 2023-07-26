@@ -6,8 +6,24 @@ import Giphy from './Giphy';
 import RandomFacts from './RandomFacts';
 import { useDistractionStore } from '../store/distractionStore';
 import DemoTimer from './DemoTimer';
+import { useUserStore } from '../store/userStore';
+import { useColorsStore } from '../store/colorStore';
 
 const Demo = () => {
+  const globalUser = useUserStore(state => state.user);
+  const { themeBgColor, themeFgColor, preview } = useColorsStore(state => ({
+    themeBgColor: state.bgcolor,
+    themeFgColor: state.fgcolor,
+    preview: state.preview,
+  }));
+  const style = {
+    ...(globalUser.userId
+      ? preview
+        ? { backgroundColor: themeBgColor }
+        : { backgroundColor: globalUser.bgcolor }
+      : { backgroundColor: '#ECFEFF' }),
+  };
+
   const [numberArray, setNumberArray] = useState([]);
   const [step, setStep] = useState('');
   const [index, setIndex] = useState(0);
@@ -111,9 +127,14 @@ const Demo = () => {
     setAnswer('');
   };
 
+  console.log('test', globalUser);
+
   if (step == 'showNumber') {
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={style}
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <h1 className="text-8xl font-extrabold tracking-widest">
           {numberArray[index]}
         </h1>
@@ -128,7 +149,10 @@ const Demo = () => {
 
     if (index == 1) {
       return (
-        <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+        <div
+          style={style}
+          className="my-10 flex h-screen flex-col items-center justify-center"
+        >
           <img className="h-180 w-260" src={gif[0]} alt="cat gif" />
         </div>
       );
@@ -136,7 +160,10 @@ const Demo = () => {
 
     if (index == 2) {
       return (
-        <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+        <div
+          style={style}
+          className="my-10 flex h-screen flex-col items-center justify-center"
+        >
           <h1 className=" px-8 pb-8 text-6xl font-medium">{randomFact[0]}</h1>
         </div>
       );
@@ -145,7 +172,10 @@ const Demo = () => {
 
   if (step == 'showQuestion') {
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={style}
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <span className=" pb-8 text-4xl font-medium">What was the number?</span>
         <form className="flex flex-row space-x-4" onSubmit={handleSubmit}>
           <label
@@ -176,7 +206,10 @@ const Demo = () => {
 
   if (step == 'correct') {
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={style}
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <h1 className=" pb-8 text-6xl font-medium">Correct!</h1>
       </div>
     );
@@ -184,7 +217,10 @@ const Demo = () => {
 
   if (step == 'incorrect') {
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={style}
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <h1 className=" pb-8 text-6xl font-medium">
           Wrong...! The number was {numberArray[index]}
         </h1>
@@ -195,7 +231,10 @@ const Demo = () => {
   if (step == 'showScore') {
     console.log('score is', score);
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={style}
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <h1 className=" pb-8 text-6xl font-medium">
           Your score is:{' '}
           <span className="font-bold text-pink-900">{score}</span>
@@ -206,14 +245,20 @@ const Demo = () => {
 
   if (step == 'lastStep') {
     return (
-      <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+      <div
+        style={style}
+        className="my-10 flex h-screen flex-col items-center justify-center"
+      >
         <h1 className=" pb-8 text-6xl font-medium">Log in to play more!</h1>
       </div>
     );
   }
 
   return (
-    <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+    <div
+      style={style}
+      className="my-10 flex h-screen flex-col items-center justify-center "
+    >
       <button
         className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
         onClick={handleClick}
