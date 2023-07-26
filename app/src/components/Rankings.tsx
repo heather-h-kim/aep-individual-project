@@ -6,6 +6,7 @@ import { getSeasonsToDate } from '../services/seasonApi';
 import { useUserStore } from '../store/userStore';
 import { useColorsStore } from '../store/colorStore';
 import { useSeasonStore } from '../store/seasonStore';
+import LoadingSpinner from './LoadingSpinner';
 
 const Rankings = () => {
   const globalUser = useUserStore(state => state.user);
@@ -18,7 +19,7 @@ const Rankings = () => {
   const [rankingsPerPage, setRankingsPerPage] = useState(5);
   const [search, setSearch] = useState('');
   // const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
-  const [selectedSeason, setSelectedSeason] = useState(null);
+  const [selectedSeason, setSelectedSeason] = useState<number>(null);
 
   const {
     data: seasons,
@@ -28,7 +29,7 @@ const Rankings = () => {
     queryKey: ['SeasonsToDate'],
     queryFn: getSeasonsToDate,
     onSuccess: data => {
-      console.log('seasons todate', data);
+      console.log('seasons todate', data[0].seasonId);
       setSelectedSeason(data[0].seasonId);
     },
     onError: error =>
@@ -52,16 +53,22 @@ const Rankings = () => {
 
   const handleSelect = e => {
     e.preventDefault();
-    console.log('in handleSelect');
-    setSelectedSeason(e.target.value);
+    console.log('in handleSelect', e.target.value);
+    setSelectedSeason(Number(e.target.value));
   };
 
-  if (isLoadingRankings) {
-    return <div>Rankings Loading...</div>;
-  }
+  console.log('selected season', selectedSeason);
 
-  if (isLoadingSeasons) {
-    return <div>Seasons Loading...</div>;
+  // if (isLoadingRankings) {
+  //   return <div>Rankings Loading...</div>;
+  // }
+  //
+  // if (isLoadingSeasons) {
+  //   return <div>Seasons Loading...</div>;
+  // }
+
+  if (isLoadingRankings || isLoadingSeasons) {
+    return <LoadingSpinner></LoadingSpinner>;
   }
 
   if (isSuccessSeasons && isSuccessRankings) {

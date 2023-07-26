@@ -27,15 +27,34 @@ const LoginHome = () => {
 
   //prefetch seasons here
 
-  const { data } = useQuery({
-    queryKey: ['CurrentSeason'],
-    queryFn: getCurrentSeason,
+  // const { data } = useQuery({
+  //   queryKey: ['CurrentSeason'],
+  //   queryFn: getCurrentSeason,
+  //   onSuccess: data => {
+  //     console.log('currentSeasonId', data);
+  //     // updateCurrentSeasonId(data);
+  //     client.prefetchQuery({
+  //       queryKey: ['Rankings', data],
+  //       queryFn: () => getRankings(data),
+  //     });
+  //   },
+  //   onError: error =>
+  //     console.log('something went wrong while getting seasons', error),
+  // });
+  //
+  // client.prefetchQuery({
+  //   queryKey: ['SeasonsToDate'],
+  //   queryFn: getSeasonsToDate,
+  // });
+
+  useQuery({
+    queryKey: ['SeasonsToDate'],
+    queryFn: getSeasonsToDate,
     onSuccess: data => {
-      console.log('currentSeasonId', data);
-      // updateCurrentSeasonId(data);
+      console.log('seasons todate', data[0].seasonId, typeof data[0].seasonId);
       client.prefetchQuery({
-        queryKey: ['Rankings', data],
-        queryFn: () => getRankings(data),
+        queryKey: ['Rankings', data[0].seasonId],
+        queryFn: () => getRankings(data[0].seasonId),
       });
     },
     onError: error =>
@@ -45,11 +64,6 @@ const LoginHome = () => {
   client.prefetchQuery({
     queryKey: ['Seasons'],
     queryFn: getAllSeasons,
-  });
-
-  client.prefetchQuery({
-    queryKey: ['SeasonsToDate'],
-    queryFn: getSeasonsToDate,
   });
 
   if (isAuthenticated && !globalUser.userId) {
