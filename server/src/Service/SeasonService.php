@@ -45,11 +45,13 @@ class SeasonService extends AbstractDtoTransformers
     /**
      * @throws NonUniqueResultException
      */
-    public function getSeasonByCurrentDate(): SeasonDto{
+    public function getCurrentSeason(): int
+    {
         $currentDate= new DateTime('now');
         $season = $this->seasonRepository->findOneByCurrentDate($currentDate);
+        $seasonId = $season->getId();
 
-        return $this->transformToDto($season);
+        return $seasonId;
     }
 
     /**

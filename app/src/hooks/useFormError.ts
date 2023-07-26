@@ -1,10 +1,30 @@
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
+import { getAllUsers } from '../services/userApi';
 
 const useFormError = () => {
   const [errors, setErrors] = useState({
     firstName: '',
     lastName: '',
     userName: '',
+  });
+  const [buttonDisabled, setButtonDisabled] = useState(false);
+  const [usernames, setUsernames] = useState<string[]>([]);
+  const [emails, setEmails] = useState<string[]>([]);
+
+  useQuery({
+    queryKey: ['Users'],
+    queryFn: getAllUsers,
+    onSuccess: data => {
+      console.log('users', data);
+      const usernameArr = data.map(user => user.username.toUpperCase().trim());
+      const emailArr = data.map(user => user.email.toUpperCase().trim());
+      setUsernames(usernameArr);
+      setEmails(emailArr);
+    },
+    onError: error => {
+      console.log('Error while fetching users', error);
+    },
   });
 
   const validate = (event: Event, name: string, value: string) => {
@@ -15,13 +35,16 @@ const useFormError = () => {
             ...errors,
             firstName: 'First name cannot be empty',
           });
-        } else if (value.trim().length > 50) {
+          setButtonDisabled(true);
+        } else if (value.trim().length > 12) {
           setErrors({
             ...errors,
-            firstName: 'First name cannot be longer than 50 characters',
+            firstName: 'First name cannot be longer than 12 characters',
           });
+          setButtonDisabled(true);
         } else {
           setErrors({ ...errors, firstName: '' });
+          setButtonDisabled(false);
         }
         break;
       case 'lastName':
@@ -30,8 +53,16 @@ const useFormError = () => {
             ...errors,
             lastName: 'Last name cannot be empty',
           });
+          setButtonDisabled(true);
+        } else if (value.trim().length > 12) {
+          setErrors({
+            ...errors,
+            lastName: 'Last name cannot be longer than 12 characters',
+          });
+          setButtonDisabled(true);
         } else {
           setErrors({ ...errors, lastName: '' });
+          setButtonDisabled(false);
         }
         break;
       case 'username':
@@ -40,8 +71,22 @@ const useFormError = () => {
             ...errors,
             userName: 'Username cannot be empty',
           });
+          setButtonDisabled(true);
+        } else if (value.trim().length > 10) {
+          setErrors({
+            ...errors,
+            userName: 'Username cannot be longer than 10 characters',
+          });
+          setButtonDisabled(true);
+        } else if (usernames.includes(value.toUpperCase().trim())) {
+          setErrors({
+            ...errors,
+            userName: 'Username is already taken',
+          });
+          setButtonDisabled(true);
         } else {
           setErrors({ ...errors, userName: '' });
+          setButtonDisabled(false);
         }
         break;
       default:
@@ -50,6 +95,8 @@ const useFormError = () => {
   };
 
   return {
+    buttonDisabled,
+    setButtonDisabled,
     errors,
     validate,
   };

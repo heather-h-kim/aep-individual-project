@@ -8,29 +8,29 @@ export async function getRankings(seasonId) {
       method: 'GET',
     });
     const jsonResponse = await response.json();
-    // console.log(jsonResponse);
+    console.log('rankings', jsonResponse);
     return jsonResponse;
   } catch (error) {
     console.log('Something went wrong while getting rankings', error);
   }
 }
 
-export async function getAllSeasons() {
-  try {
-    const url = 'http://localhost:8000/api/seasons';
-    const response = await fetch(url, {
-      headers: {
-        'content-type': 'application/json',
-      },
-      method: 'GET',
-    });
-    const jsonResponse = response.json();
-    // console.log(jsonResponse);
-    return jsonResponse;
-  } catch (error) {
-    console.log('Something went wrong while getting all seasons', error);
-  }
-}
+// export async function getAllSeasons() {
+//   try {
+//     const url = 'http://localhost:8000/api/seasons';
+//     const response = await fetch(url, {
+//       headers: {
+//         'content-type': 'application/json',
+//       },
+//       method: 'GET',
+//     });
+//     const jsonResponse = response.json();
+//     // console.log(jsonResponse);
+//     return jsonResponse;
+//   } catch (error) {
+//     console.log('Something went wrong while getting all seasons', error);
+//   }
+// }
 
 // export async function getAllSeasons() {
 //   try {

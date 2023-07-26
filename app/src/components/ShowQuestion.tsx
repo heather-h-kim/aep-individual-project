@@ -14,6 +14,11 @@ const ShowQuestion = props => {
   const updateGame = useGameStore(state => state.updateGame);
   const updateIsCorrect = useIsCorrectStore(state => state.updateIsCorrect);
   const [answer, setAnswer] = useState('');
+  const style = {
+    ...(preview
+      ? { backgroundColor: themeBgColor }
+      : { backgroundColor: globalUser.bgcolor }),
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -42,11 +47,7 @@ const ShowQuestion = props => {
 
   return (
     <div
-      style={
-        preview
-          ? { backgroundColor: themeBgColor }
-          : { backgroundColor: globalUser.bgcolor }
-      }
+      style={style}
       className="my-10 flex h-screen flex-col items-center justify-center"
     >
       <span className=" pb-8 text-4xl font-medium">What was the number?</span>

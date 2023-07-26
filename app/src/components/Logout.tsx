@@ -9,23 +9,22 @@ const LogoutButton = () => {
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const themeFgColor = useColorsStore(state => state.fgcolor);
   const preview = useColorsStore(state => state.preview);
-
-  // console.log(themeBgColor);
+  const style = {
+    ...(preview
+      ? {
+          color: themeBgColor,
+          backgroundColor: themeFgColor,
+        }
+      : {
+          color: globalUser.bgcolor,
+          backgroundColor: globalUser.fgcolor,
+        }),
+  };
 
   if (isAuthenticated) {
     return (
       <button
-        style={
-          preview
-            ? {
-                color: themeBgColor,
-                backgroundColor: themeFgColor,
-              }
-            : {
-                color: globalUser.bgcolor,
-                backgroundColor: globalUser.fgcolor,
-              }
-        }
+        style={style}
         className="inline-block rounded px-3 py-1 "
         onClick={() => logout()}
       >

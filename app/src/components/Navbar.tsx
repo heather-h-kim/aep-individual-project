@@ -28,6 +28,36 @@ const Navbar = () => {
     resetIsCorrect();
   };
 
+  const navStyle = {
+    ...(preview
+      ? { backgroundColor: themeBgColor }
+      : { backgroundColor: globalUser.bgcolor }),
+  };
+
+  const spanStyle = {
+    ...(preview
+      ? {
+          color: themeFgColor,
+          backgroundColor: themeBgColor,
+        }
+      : {
+          color: globalUser.fgcolor,
+          backgroundColor: globalUser.bgcolor,
+        }),
+  };
+
+  const linkStyle = {
+    ...(preview
+      ? {
+          color: themeBgColor,
+          backgroundColor: themeFgColor,
+        }
+      : {
+          color: globalUser.bgcolor,
+          backgroundColor: globalUser.fgcolor,
+        }),
+  };
+
   if (!isAuthenticated) {
     return (
       <nav className="mx-auto flex max-w-full flex-wrap items-center justify-between bg-cyan-50 p-4">
@@ -73,25 +103,11 @@ const Navbar = () => {
       <div>
         <Navigate to="/loginHome" />
         <nav
-          style={
-            preview
-              ? { backgroundColor: themeBgColor }
-              : { backgroundColor: globalUser.bgcolor }
-          }
+          style={navStyle}
           className="mx-auto flex max-w-full flex-wrap items-center justify-between p-4"
         >
           <span
-            style={
-              preview
-                ? {
-                    color: themeFgColor,
-                    backgroundColor: themeBgColor,
-                  }
-                : {
-                    color: globalUser.fgcolor,
-                    backgroundColor: globalUser.bgcolor,
-                  }
-            }
+            style={spanStyle}
             className="self-center whitespace-nowrap text-2xl font-semibold"
           >
             Number Memory Game
@@ -100,17 +116,7 @@ const Navbar = () => {
             <ul className="mt-4 flex flex-col items-center p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
               <li className="mr-3">
                 <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
+                  style={linkStyle}
                   className="inline-block rounded px-3 py-1 "
                   to="/loginHome"
                   onClick={clearGame}
@@ -120,17 +126,7 @@ const Navbar = () => {
               </li>
               <li className="mr-3">
                 <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
+                  style={linkStyle}
                   className="inline-block rounded px-3 py-1 "
                   to="/demo"
                   onClick={clearGame}
@@ -143,17 +139,7 @@ const Navbar = () => {
               </li>
               <li className="mr-3">
                 <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
+                  style={linkStyle}
                   className="inline-block rounded px-3 py-1 "
                   to="/rankings"
                   onClick={clearGame}
@@ -163,17 +149,7 @@ const Navbar = () => {
               </li>
               <li className="mr-3">
                 <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
+                  style={linkStyle}
                   className="inline-block rounded px-3 py-1 "
                   to="/profile"
                   onClick={clearGame}
@@ -197,25 +173,11 @@ const Navbar = () => {
       <div>
         <Navigate to="/loginHome" />
         <nav
-          style={
-            preview
-              ? { backgroundColor: themeBgColor }
-              : { backgroundColor: globalUser.bgcolor }
-          }
+          style={navStyle}
           className="mx-auto flex max-w-full flex-wrap items-center justify-between p-4"
         >
           <span
-            style={
-              preview
-                ? {
-                    color: themeFgColor,
-                    backgroundColor: themeBgColor,
-                  }
-                : {
-                    color: globalUser.fgcolor,
-                    backgroundColor: globalUser.bgcolor,
-                  }
-            }
+            style={spanStyle}
             className="self-center whitespace-nowrap text-2xl font-semibold"
           >
             Number Memory Game
@@ -224,17 +186,7 @@ const Navbar = () => {
             <ul className="mt-4 flex flex-col items-center p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
               <li className="mr-3">
                 <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
+                  style={linkStyle}
                   className="inline-block rounded px-3 py-1 "
                   to="/loginHome"
                 >
@@ -246,17 +198,7 @@ const Navbar = () => {
               </li>
               <li className="mr-3">
                 <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
+                  style={linkStyle}
                   className="inline-block rounded px-3 py-1 "
                   to="/rankings"
                 >
@@ -265,17 +207,7 @@ const Navbar = () => {
               </li>
               <li className="mr-3">
                 <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
+                  style={linkStyle}
                   className="inline-block rounded px-3 py-1 "
                   to="/admin"
                 >
@@ -285,17 +217,7 @@ const Navbar = () => {
 
               <li className="mr-3">
                 <Link
-                  style={
-                    preview
-                      ? {
-                          color: themeBgColor,
-                          backgroundColor: themeFgColor,
-                        }
-                      : {
-                          color: globalUser.bgcolor,
-                          backgroundColor: globalUser.fgcolor,
-                        }
-                  }
+                  style={linkStyle}
                   className="inline-block rounded px-3 py-1 "
                   to="/profile"
                 >

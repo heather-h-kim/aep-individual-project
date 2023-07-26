@@ -3,6 +3,19 @@ import { useColorsStore } from '../store/colorStore';
 import { useUserStore } from '../store/userStore';
 
 const DemoTimer = () => {
+  const globalUser = useUserStore(state => state.user);
+  const { themeBgColor, themeFgColor, preview } = useColorsStore(state => ({
+    themeBgColor: state.bgcolor,
+    themeFgColor: state.fgcolor,
+    preview: state.preview,
+  }));
+  const style = {
+    ...(globalUser.userId
+      ? preview
+        ? { backgroundColor: themeBgColor }
+        : { backgroundColor: globalUser.bgcolor }
+      : { backgroundColor: '#ECFEFF' }),
+  };
   const [seconds, setSeconds] = useState(0);
   const deadline = Date.now();
   const getTime = () => {
@@ -20,7 +33,10 @@ const DemoTimer = () => {
   }, []);
 
   return (
-    <div className="my-10 flex h-screen flex-col items-center justify-center bg-cyan-50">
+    <div
+      style={style}
+      className="my-10 flex h-screen flex-col items-center justify-center"
+    >
       <svg
         className="h-90 w-90 flex"
         fill="none"
