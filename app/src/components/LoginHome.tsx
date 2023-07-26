@@ -12,7 +12,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from './LoadingSpinner';
 
 const LoginHome = () => {
-  const { isAuthenticated, isLoading, error } = useAuth0();
+  const { isAuthenticated } = useAuth0();
   const globalUser = useUserStore(state => state.user);
   const { themeBgColor, preview } = useColorsStore(state => ({
     themeBgColor: state.bgcolor,
@@ -24,7 +24,7 @@ const LoginHome = () => {
   }));
   const client = useQueryClient();
 
-  //get the current season Id to prefetch rankings to display in the rankings page
+  //get the current seasonId to prefetch rankings to display in the rankings page
   useQuery({
     queryKey: ['CurrentSeason'],
     queryFn: getCurrentSeason,
