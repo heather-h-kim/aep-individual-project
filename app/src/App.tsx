@@ -15,7 +15,13 @@ import { RouterProvider } from '@tanstack/react-router';
 import LoadingSpinner from './components/LoadingSpinner';
 
 export default function App() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        cacheTime: 1200000,
+      },
+    },
+  });
   const { user, isAuthenticated, isLoading, error } = useAuth0();
   const updateThemeBgColor = useColorsStore(state => state.updateBgcolor);
   const updateThemeFgColor = useColorsStore(state => state.updateFgcolor);

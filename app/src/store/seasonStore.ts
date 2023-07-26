@@ -6,6 +6,6 @@ interface CurrentSeason {
 }
 
 export const useSeasonStore = create<CurrentSeason>(set => ({
-  selectedSeason: null,
+  currentSeasonId: null,
   updateCurrentSeasonId: seasonId => set({ currentSeasonId: seasonId }),
 }));

@@ -9,8 +9,10 @@ import ShowInCorrect from './ShowIncorrect';
 import { useIsCorrectStore } from '../store/stateStore';
 import { Link } from '@tanstack/react-router';
 import ShowNumber from './ShowNumber';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { game, postGame } from '../services/gameApi';
+import { useSeasonStore } from '../store/seasonStore';
+import { getRankings } from '../services/rankingApi';
 
 const RoundSix = props => {
   const { themeBgColor, preview } = useColorsStore(state => ({
@@ -18,7 +20,7 @@ const RoundSix = props => {
     preview: state.preview,
   }));
   const globalUser = useUserStore(state => state.user);
-
+  const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
   const [state, setState] = useState({
     levelNumber: props.level,
     roundNumber: props.round,
@@ -39,6 +41,7 @@ const RoundSix = props => {
   }));
   const [score, setScore] = useState(0);
   const [scoreIsReady, setScoreIsReady] = useState(false);
+  const client = useQueryClient();
 
   const { mutate } = useMutation({
     mutationFn: (body: game) => postGame(body),
@@ -49,6 +52,11 @@ const RoundSix = props => {
       console.log('Success', data);
       setScore(data);
       setScoreIsReady(!scoreIsReady);
+      //prefetch rankings so that the rankings taking account of the new game can show up quickly in the rankings page
+      client.prefetchQuery({
+        queryKey: ['Rankings', currentSeasonId],
+        queryFn: () => getRankings(currentSeasonId),
+      });
     },
     onError: (error, variables, context) => {
       console.log('Something went wrong...', error, variables, context);
@@ -109,7 +117,6 @@ const RoundSix = props => {
           setState({ ...state, step: 'showScoreButton' });
           break;
         default:
-          console.log('timeout hook');
       }
     }, delay);
 
@@ -129,10 +136,7 @@ const RoundSix = props => {
 
   //function to send the payload to the backend and reset the game
   const getScore = () => {
-    console.log('end the game');
-    // const timestamp = Date.now();
     const payload = {
-      // played_at: timestamp,
       user_id: globalUser.userId,
       levels_rounds: levelsRounds,
     };

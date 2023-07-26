@@ -9,6 +9,7 @@ use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\RoleRepository;
 use App\Repository\UserRepository;
+use Exception;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UserService extends AbstractDtoTransformers
@@ -25,7 +26,10 @@ class UserService extends AbstractDtoTransformers
         $this->roleRepository = $roleRepository;
     }
 
-    public function createUser(CreateUserDto $createUserDto): UserDto | string
+    /**
+     * @throws Exception
+     */
+    public function createUser(CreateUserDto $createUserDto): UserDto
     {
         //return the existing user with the token if the user's token matches
         $userWithToken = $this->getUserByToken($createUserDto->getAuth0token());
@@ -38,7 +42,7 @@ class UserService extends AbstractDtoTransformers
         $role = $this->roleRepository->find($createUserDto->getRoleId());
 
         if (!$role) {
-            throw new BadRequestHttpException('Role not found');
+            throw new Exception('Role not found');
         }
 
         //create a new user
@@ -87,7 +91,10 @@ class UserService extends AbstractDtoTransformers
         return $this->transformToDto($user);
     }
 
-    public function updateUser(UpdateUserDto $updateUserDto): UserDto | string
+    /**
+     * @throws Exception
+     */
+    public function updateUser(UpdateUserDto $updateUserDto): UserDto
     {
         $user_id = $updateUserDto->getUserId();
         $role_id = $updateUserDto->getRoleId();
@@ -102,7 +109,7 @@ class UserService extends AbstractDtoTransformers
         $userToUpdate = $this->userRepository->find($user_id);
 
         if(!$userToUpdate){
-            return 'No user to update';
+            throw new Exception('No user to update');
         }
         if($role_id){
             $role = $this->roleRepository->find($updateUserDto->getRoleId());
@@ -117,7 +124,7 @@ class UserService extends AbstractDtoTransformers
         if($email){
             $user = $this->userRepository->findBy(['email' => $email]);
             if($user) {
-                return 'User with the same email exists. Please use a different email';
+                throw new Exception('User with the same email exists. Please use a different email');
             }
             $userToUpdate->setEmail($email);
         }
@@ -130,8 +137,8 @@ class UserService extends AbstractDtoTransformers
         if($username){
             $userByUsername = $this->userRepository->findOneBy(['username' => $username]);
 
-            if($userByUsername !== null && $userByUsername != $userToUpdate) {
-                return 'User with the same username exists. Please use a different username';
+            if($userByUsername !== null && $userByUsername !== $userToUpdate) {
+                throw new Exception('User with the same username exists. Please use a different username');
             }
 
             if($userByUsername === null){
@@ -149,11 +156,14 @@ class UserService extends AbstractDtoTransformers
         return $this->transformToDto($userToUpdate);
     }
 
+    /**
+     * @throws Exception
+     */
     public function deleteUser(int $id): string
     {
         $userToDelete = $this->userRepository->find($id);
         if(!$userToDelete){
-            return "User ID {$id} does not exist";
+            throw new Exception("User ID {$id} does not exist");
         }
         $this->userRepository->remove($userToDelete, true);
 

@@ -18,9 +18,13 @@ const Rankings = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [rankingsPerPage, setRankingsPerPage] = useState(5);
   const [search, setSearch] = useState('');
-  // const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
-  const [selectedSeason, setSelectedSeason] = useState<number>(null);
-
+  const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
+  const [selectedSeason, setSelectedSeason] = useState<number>(currentSeasonId);
+  const style = {
+    ...(preview
+      ? { backgroundColor: themeBgColor }
+      : { backgroundColor: globalUser.bgcolor }),
+  };
   const {
     data: seasons,
     isSuccess: isSuccessSeasons,
@@ -29,8 +33,7 @@ const Rankings = () => {
     queryKey: ['SeasonsToDate'],
     queryFn: getSeasonsToDate,
     onSuccess: data => {
-      console.log('seasons todate', data[0].seasonId);
-      setSelectedSeason(data[0].seasonId);
+      console.log('seasons to date in the Rankings component', data);
     },
     onError: error =>
       console.log('something went wrong while getting seasons', error),
@@ -45,7 +48,10 @@ const Rankings = () => {
     queryFn: () => getRankings(selectedSeason),
     enabled: !!selectedSeason,
     onSuccess: data => {
-      console.log('rankings for the current season', data);
+      console.log(
+        'rankings for the current season in the Rankings component',
+        data,
+      );
     },
     onError: error =>
       console.log('something went wrong while getting seasons', error),
@@ -56,16 +62,6 @@ const Rankings = () => {
     console.log('in handleSelect', e.target.value);
     setSelectedSeason(Number(e.target.value));
   };
-
-  console.log('selected season', selectedSeason);
-
-  // if (isLoadingRankings) {
-  //   return <div>Rankings Loading...</div>;
-  // }
-  //
-  // if (isLoadingSeasons) {
-  //   return <div>Seasons Loading...</div>;
-  // }
 
   if (isLoadingRankings || isLoadingSeasons) {
     return <LoadingSpinner></LoadingSpinner>;
@@ -161,11 +157,7 @@ const Rankings = () => {
     if (search !== '') {
       return (
         <div
-          style={
-            preview
-              ? { backgroundColor: themeBgColor }
-              : { backgroundColor: globalUser.bgcolor }
-          }
+          style={style}
           className="my-10 flex h-screen flex-col px-20 py-14 "
         >
           <div className="flex flex-row justify-between">
