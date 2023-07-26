@@ -21,6 +21,11 @@ const Game = () => {
   const [level, setLevel] = useState(Number(param.level));
   const [numberArray, setNumberArray] = useState([]);
   const [index, setIndex] = useState(10);
+  const style = {
+    ...(preview
+      ? { backgroundColor: themeBgColor }
+      : { backgroundColor: globalUser.bgcolor }),
+  };
 
   //Fetch distractions from third party APIs
   useGetGifs();
@@ -146,15 +151,11 @@ const Game = () => {
 
   return (
     <div
-      style={
-        preview
-          ? { backgroundColor: themeBgColor }
-          : { backgroundColor: globalUser.bgcolor }
-      }
+      style={style}
       className="my-10 flex h-screen flex-col items-center justify-center"
     >
       <button
-        className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+        className="inline-block rounded bg-neutral-700 px-3 py-2 text-6xl font-medium text-white hover:bg-neutral-800"
         onClick={handleClick}
       >
         START

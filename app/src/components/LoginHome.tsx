@@ -22,6 +22,11 @@ const LoginHome = () => {
     currentSeasonId: state.currentSeasonId,
     updateCurrentSeasonId: state.updateCurrentSeasonId,
   }));
+  const style = {
+    ...(preview
+      ? { backgroundColor: themeBgColor }
+      : { backgroundColor: globalUser.bgcolor }),
+  };
   const client = useQueryClient();
 
   //get the current seasonId to prefetch rankings to display in the rankings page
@@ -62,11 +67,7 @@ const LoginHome = () => {
 
   return (
     <div
-      style={
-        preview
-          ? { backgroundColor: themeBgColor }
-          : { backgroundColor: globalUser.bgcolor }
-      }
+      style={style}
       className="my-10 flex h-screen flex-col items-center justify-center"
     >
       <h1 className=" pb-8 text-6xl font-bold">

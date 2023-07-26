@@ -80,11 +80,7 @@ const Rankings = () => {
     if (search == '') {
       return (
         <div
-          style={
-            preview
-              ? { backgroundColor: themeBgColor }
-              : { backgroundColor: globalUser.bgcolor }
-          }
+          style={style}
           className="my-10 flex h-screen flex-col px-20 py-14 "
         >
           <div className="mb-10 mt-3 flex flex-row justify-between">
