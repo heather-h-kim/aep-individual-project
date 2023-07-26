@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
 import { useUserStore } from '../store/userStore';
 import { useColorsStore } from '../store/colorStore';
-// import { useSeasonStore } from '../store/seasonStore';
+import { useSeasonStore } from '../store/seasonStore';
 import { getRankings } from '../services/rankingApi';
 import {
   getAllSeasons,
@@ -19,52 +18,43 @@ const LoginHome = () => {
     themeBgColor: state.bgcolor,
     preview: state.preview,
   }));
-  // const { currentSeasonId, updateCurrentSeasonId } = useSeasonStore(state => ({
-  //   selectedSeason: state.currentSeasonId,
-  //   updateCurrentSeasonId: state.updateCurrentSeasonId,
-  // }));
+  const { currentSeasonId, updateCurrentSeasonId } = useSeasonStore(state => ({
+    currentSeasonId: state.currentSeasonId,
+    updateCurrentSeasonId: state.updateCurrentSeasonId,
+  }));
   const client = useQueryClient();
 
-  //prefetch seasons here
-
-  // const { data } = useQuery({
-  //   queryKey: ['CurrentSeason'],
-  //   queryFn: getCurrentSeason,
-  //   onSuccess: data => {
-  //     console.log('currentSeasonId', data);
-  //     // updateCurrentSeasonId(data);
-  //     client.prefetchQuery({
-  //       queryKey: ['Rankings', data],
-  //       queryFn: () => getRankings(data),
-  //     });
-  //   },
-  //   onError: error =>
-  //     console.log('something went wrong while getting seasons', error),
-  // });
-  //
-  // client.prefetchQuery({
-  //   queryKey: ['SeasonsToDate'],
-  //   queryFn: getSeasonsToDate,
-  // });
-
+  //get the current season Id to prefetch rankings to display in the rankings page
   useQuery({
-    queryKey: ['SeasonsToDate'],
-    queryFn: getSeasonsToDate,
+    queryKey: ['CurrentSeason'],
+    queryFn: getCurrentSeason,
     onSuccess: data => {
-      console.log('seasons todate', data[0].seasonId, typeof data[0].seasonId);
-      client.prefetchQuery({
-        queryKey: ['Rankings', data[0].seasonId],
-        queryFn: () => getRankings(data[0].seasonId),
-      });
+      console.log('currentSeasonId', data);
+      updateCurrentSeasonId(data);
     },
     onError: error =>
       console.log('something went wrong while getting seasons', error),
   });
 
-  client.prefetchQuery({
-    queryKey: ['Seasons'],
-    queryFn: getAllSeasons,
-  });
+  if (currentSeasonId) {
+    //prefetch seasons up to the current date for the dropdown menu in the rankings page
+    client.prefetchQuery({
+      queryKey: ['SeasonsToDate'],
+      queryFn: getSeasonsToDate,
+    });
+
+    //prefetch current season's rankings to display when the rankings page loads
+    client.prefetchQuery({
+      queryKey: ['Rankings', currentSeasonId],
+      queryFn: () => getRankings(currentSeasonId),
+    });
+
+    //prefetch all seasons including future seasons to show in the admin page
+    client.prefetchQuery({
+      queryKey: ['Seasons'],
+      queryFn: getAllSeasons,
+    });
+  }
 
   if (isAuthenticated && !globalUser.userId) {
     return <LoadingSpinner></LoadingSpinner>;
