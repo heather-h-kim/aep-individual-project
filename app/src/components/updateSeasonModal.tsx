@@ -201,7 +201,7 @@ export const UpdateSeasonModal = ({
                           onChange={handleOnChangeUpdateStartDate}
                         />
                       </label>
-                      {errors.startDate && <h3>{errors.startDate}</h3>}
+                      {errors.startDate && <span>{errors.startDate}</span>}
                     </div>
                     <div>
                       <label htmlFor="endDate">
@@ -213,14 +213,14 @@ export const UpdateSeasonModal = ({
                           onChange={handleOnChangeUpdateEndDate}
                         />
                       </label>
-                      {errors.endDate && <h3>{errors.endDate}</h3>}
+                      {errors.endDate && <span>{errors.endDate}</span>}
                     </div>
                   </div>
 
                   {isUpdating ? (
                     <div className="flex flex-row items-center justify-center">
                       <button
-                        className="mx-6 mb-1 mt-4 rounded bg-neutral-700 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-800"
+                        className="mx-6 mb-1 mt-4 rounded bg-neutral-600 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-700"
                         onClick={closeModal}
                         disabled
                       >
@@ -229,7 +229,7 @@ export const UpdateSeasonModal = ({
                       <button
                         disabled
                         type="button"
-                        className="mx-6 mb-1 mt-4 inline-flex items-center rounded bg-neutral-700 px-2 py-1 text-center text-sm font-medium text-white hover:bg-neutral-800 focus:ring-4 focus:ring-blue-300"
+                        className="mx-6 mb-1 mt-4 inline-flex items-center rounded bg-neutral-600 px-2 py-1 text-center text-sm font-medium text-white hover:bg-neutral-800 focus:ring-4 focus:ring-blue-300"
                       >
                         <svg
                           aria-hidden="true"
@@ -254,14 +254,14 @@ export const UpdateSeasonModal = ({
                   ) : (
                     <div className="flex flex-row items-center justify-center">
                       <button
-                        className="mx-6 mb-1 mt-4 rounded bg-neutral-700 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-800"
+                        className="mx-6 mb-1 mt-4 rounded bg-neutral-600 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-700"
                         onClick={closeModal}
                       >
                         Cancel
                       </button>
                       <button
                         type="submit"
-                        className="mx-6 mb-1 mt-4 rounded bg-neutral-700 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-800"
+                        className="mx-6 mb-1 mt-4 rounded bg-neutral-600 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-700"
                         disabled={isDisabled}
                       >
                         Update

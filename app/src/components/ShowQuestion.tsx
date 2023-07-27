@@ -67,7 +67,7 @@ const ShowQuestion = props => {
           autoFocus
         />
         <button
-          className="inline-block rounded bg-neutral-700 px-3 py-1 text-xl font-medium text-white hover:bg-neutral-800"
+          className="inline-block rounded bg-neutral-600 px-3 py-1 text-xl font-medium text-white hover:bg-neutral-700"
           type="submit"
         >
           Enter

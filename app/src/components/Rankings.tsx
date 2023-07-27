@@ -130,12 +130,12 @@ const Rankings = () => {
               {rankingsToDisplayPerPage.map(ranking => {
                 return (
                   <tr
-                    className="h-3 border-collapse border-b border-black"
+                    className="border-collapse border-b border-black"
                     key={ranking.userName}
                   >
-                    <td>{ranking.rank}</td>
-                    <td>{ranking.userName}</td>
-                    <td>{ranking.topScore}</td>
+                    <td className="py-2.5">{ranking.rank}</td>
+                    <td className="py-2.5">{ranking.userName}</td>
+                    <td className="py-2.5">{ranking.topScore}</td>
                   </tr>
                 );
               })}
@@ -179,22 +179,22 @@ const Rankings = () => {
                 })}
               </select>
             </div>
-            <form className="flex flex-row items-center">
-              <label>
-                Search by Username:
+            <form className="flex flex-col">
+              <label>Search by Username:</label>
+              <div className="flex flex-row items-center">
                 <input
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  className="mr-2 block min-w-min rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   type="text"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                 />
-              </label>
-              <button
-                className="rounded-lg bg-gray-50"
-                onClick={() => setSearch('')}
-              >
-                back
-              </button>
+                <button
+                  className="text-md rounded-lg bg-neutral-200 p-2 hover:bg-neutral-300"
+                  onClick={() => setSearch('')}
+                >
+                  Clear
+                </button>
+              </div>
             </form>
           </div>
           <table className="table-auto text-center">

@@ -20,7 +20,9 @@ export const RandomFacts = props => {
         style={style}
         className="my-10 flex h-screen flex-col items-center justify-center"
       >
-        <h1 className=" px-8 pb-8 text-6xl font-medium">{randomFact[0]}</h1>
+        <h1 className="justify-center px-8  text-6xl font-medium">
+          {randomFact[0]}
+        </h1>
       </div>
     );
   }
@@ -31,7 +33,9 @@ export const RandomFacts = props => {
         style={style}
         className="my-10 flex h-screen flex-col items-center justify-center"
       >
-        <h1 className=" px-8 pb-8 text-6xl font-medium">{randomFact[1]}</h1>
+        <h1 className="justify-center px-8 text-6xl font-medium">
+          {randomFact[1]}
+        </h1>
       </div>
     );
   }

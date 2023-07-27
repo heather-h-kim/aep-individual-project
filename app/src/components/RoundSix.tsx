@@ -196,7 +196,7 @@ const RoundSix = props => {
         className="my-10 flex h-screen flex-row items-center justify-center"
       >
         <button
-          className="inline-block rounded bg-neutral-700 p-3 text-4xl font-medium text-white hover:bg-neutral-800"
+          className="inline-block rounded bg-neutral-600 p-3 text-4xl font-medium text-white hover:bg-neutral-700"
           onClick={getScore}
         >
           See my score
@@ -212,14 +212,14 @@ const RoundSix = props => {
         className="my-10 flex h-screen flex-row items-center justify-center"
       >
         <Link
-          className="mr-0.5 inline-block rounded bg-neutral-700 p-3 text-4xl font-medium text-white hover:hover:bg-neutral-800"
+          className="mr-0.5 inline-block rounded bg-neutral-600 p-3 text-4xl font-medium text-white hover:hover:bg-neutral-700"
           to={`/game-level${props.level + 1}/${props.level + 1}`}
           onClick={updateGame}
         >
           Play next level
         </Link>
         <button
-          className="ml-0.5 inline-block rounded bg-neutral-700 p-3 text-4xl font-medium text-white hover:hover:bg-neutral-800"
+          className="ml-0.5 inline-block rounded bg-neutral-600 p-3 text-4xl font-medium text-white hover:hover:bg-neutral-700"
           onClick={getScore}
         >
           Stop and see my score

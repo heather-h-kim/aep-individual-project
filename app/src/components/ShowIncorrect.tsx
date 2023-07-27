@@ -18,7 +18,7 @@ const ShowInCorrect = prop => {
       style={style}
       className="my-10 flex h-screen flex-col items-center justify-center"
     >
-      <h1 className="text-8xl font-extrabold tracking-widest">
+      <h1 className="justify-center px-8 text-7xl font-extrabold">
         Wrong... The number was {prop.numberShown}.
       </h1>
     </div>

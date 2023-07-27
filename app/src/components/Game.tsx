@@ -155,7 +155,7 @@ const Game = () => {
       className="my-10 flex h-screen flex-col items-center justify-center"
     >
       <button
-        className="inline-block rounded bg-neutral-700 px-3 py-2 text-6xl font-medium text-white hover:bg-neutral-800"
+        className="inline-block rounded bg-neutral-600 px-3 py-2 text-6xl font-medium text-white hover:bg-neutral-700"
         onClick={handleClick}
       >
         START

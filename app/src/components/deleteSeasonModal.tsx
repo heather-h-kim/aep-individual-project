@@ -49,13 +49,13 @@ export const DeleteSeasonModal = ({
           <div className="flex min-h-full items-center justify-center p-4 text-center sm:items-center sm:p-0">
             <div className="relative transform  rounded-lg bg-white text-center shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
               <div className="h-1/3 bg-white px-4 pb-4 pt-5 lg:p-6 lg:pb-4">
-                <div className="flex flex-col">
+                <div className="flex flex-col ">
                   <h1>Are you sure?</h1>
                   {isUpdating ? (
                     <div className="flex flex-row items-center justify-center">
                       <button
                         disabled
-                        className="mx-6 mb-1 mt-4 rounded bg-neutral-700 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-800"
+                        className="mx-6 mb-1 mt-4 rounded bg-neutral-600 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-700"
                         onClick={() => {
                           setShowDeleteModal(!showDeleteModal);
                         }}
@@ -65,7 +65,7 @@ export const DeleteSeasonModal = ({
                       <button
                         disabled
                         onClick={handleClick}
-                        className="mx-6 mb-1 mt-4  inline-flex items-center rounded bg-neutral-700 px-2 py-1 text-center text-sm font-medium text-white hover:bg-neutral-800 focus:ring-4 focus:ring-blue-300"
+                        className="mx-6 mb-1 mt-4  inline-flex items-center rounded bg-neutral-600 px-2 py-1 text-center text-sm font-medium text-white hover:bg-neutral-700 focus:ring-4 focus:ring-blue-300"
                       >
                         <svg
                           aria-hidden="true"
@@ -88,9 +88,9 @@ export const DeleteSeasonModal = ({
                       </button>
                     </div>
                   ) : (
-                    <div className="flex flex-row">
+                    <div className="flex flex-row items-center justify-center">
                       <button
-                        className="mx-6 mb-1 mt-4 rounded bg-neutral-700 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-800"
+                        className="mx-6 mb-1 mt-4 rounded bg-neutral-600 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-700"
                         onClick={() => {
                           setShowDeleteModal(!showDeleteModal);
                         }}
@@ -98,7 +98,7 @@ export const DeleteSeasonModal = ({
                         Cancel
                       </button>
                       <button
-                        className="mx-6 mb-1 mt-4 rounded bg-neutral-700 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-800"
+                        className="mx-6 mb-1 mt-4 rounded bg-neutral-600 px-2 py-1 text-sm font-bold text-white hover:bg-neutral-700"
                         onClick={handleClick}
                       >
                         Delete
