@@ -166,132 +166,162 @@ const Profile = () => {
 
   if (isAuthenticated && globalUser.userId) {
     return (
-      <div style={style} className="my-10 p-5">
+      <div
+        style={style}
+        className="my-10 flex flex-col items-center justify-center px-40 py-10"
+      >
         <Avatar />
-        <form onSubmit={handleSubmit}>
-          <div className="mb-6 grid gap-6 md:grid-cols-1">
-            <div>
+        <form className="mt-4 flex w-full flex-col" onSubmit={handleSubmit}>
+          <div className="mx-4 mt-4 flex items-center">
+            <div className="w-1/5">
               <label
                 htmlFor="firstName"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
+                className="text-md flex justify-center font-bold text-black"
               >
                 First name:
-                <input
-                  type="text"
-                  id="firstName"
-                  name="firstName"
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900  placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                  // required
-                  value={formData.firstName}
-                  onChange={handleChange}
-                />
               </label>
-              {errors.firstName && <h3>{errors.firstName}</h3>}
             </div>
-            <div>
-              <label
-                htmlFor="lastName"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Last name:
-                <input
-                  type="text"
-                  id="lastName"
-                  name="lastName"
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                  required
-                  value={formData.lastName}
-                  onChange={handleChange}
-                />
-              </label>
-              {errors.lastName && <h3>{errors.lastName}</h3>}
-            </div>
-            <div>
-              <label
-                htmlFor="username"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Username:
-                <input
-                  type="text"
-                  id="username"
-                  name="username"
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                  required
-                  value={formData.username}
-                  onChange={handleChange}
-                />
-              </label>
-              {errors.userName && <h3>{errors.userName}</h3>}
-            </div>
-            <div>
-              <label
-                htmlFor="email"
-                className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"
-              >
-                Email:
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
-                  disabled
-                  defaultValue={formData.email}
-                />
-              </label>
-              <p>*Email cannot be changed</p>
+            <div className="w-4/5">
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                className="text-md block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-black focus:border-blue-500 focus:ring-blue-500"
+                value={formData.firstName}
+                onChange={handleChange}
+              />
             </div>
           </div>
-          <div className="mb-6 grid gap-6 md:grid-cols-2">
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-              Avatar background color:
+          {errors.firstName && (
+            <span className="ml-40 text-red-500">{errors.firstName}</span>
+          )}
+          <div className="mx-4 mt-4 flex items-center">
+            <div className="w-1/5">
+              <label
+                htmlFor="lastName"
+                className="text-md flex justify-center font-bold text-black"
+              >
+                Last name:
+              </label>
+            </div>
+            <div className="w-4/5">
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                className="text-md block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-black focus:border-blue-500 focus:ring-blue-500"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          {errors.lastName && (
+            <span className="ml-40 text-red-500">{errors.lastName}</span>
+          )}
+          <div className="mx-4 mt-4 flex items-center">
+            <div className="w-1/5">
+              <label
+                htmlFor="username"
+                className="text-md flex justify-center font-bold text-black"
+              >
+                Username:
+              </label>
+            </div>
+            <div className="w-4/5">
+              <input
+                type="text"
+                id="username"
+                name="username"
+                className="text-md block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-black focus:border-blue-500 focus:ring-blue-500"
+                value={formData.username}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          {errors.userName && (
+            <span className="ml-40 text-red-500">{errors.userName}</span>
+          )}
+          <div className="mx-4 mt-4  flex items-center">
+            <div className="w-1/5">
+              <label
+                htmlFor="email"
+                className="text-md flex justify-center font-bold text-black"
+              >
+                Email:
+              </label>
+            </div>
+            <div className="w-4/5">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                className="text-md block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-black focus:border-blue-500 focus:ring-blue-500"
+                disabled
+                defaultValue={formData.email}
+              />
+            </div>
+          </div>
+
+          <span className="ml-40 text-sky-900">*Email cannot be changed</span>
+
+          <div className="mb-6 mt-6 flex flex-row justify-around">
+            <div className="flex flex-col">
+              <label className="text-md mb-2 block font-bold text-black">
+                Avatar Background Color:
+              </label>
               <SketchPicker
                 color={formData.bgcolor}
                 onChangeComplete={onChangeCompleteBgColor}
               />
-            </label>
-
-            <label className="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-              Avatar font color:
+            </div>
+            <div className="flex flex-col">
+              <label className="text-md mb-2 block font-bold text-black">
+                Avatar font color:
+              </label>
               <SketchPicker
                 color={formData.fgcolor}
                 onChangeComplete={onChangeCompleteFgColor}
               />
-            </label>
+            </div>
           </div>
+
           {isUpdating ? (
-            <button
-              disabled
-              type="button"
-              className="mr-2 inline-flex items-center rounded-lg bg-neutral-700 px-4 py-2 text-center text-sm font-bold text-white hover:bg-neutral-800"
-            >
-              <svg
-                aria-hidden="true"
-                role="status"
-                className="mr-3 inline h-4 w-4 animate-spin text-white"
-                viewBox="0 0 100 101"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
+            <div className="flex justify-center">
+              <button
+                disabled
+                type="button"
+                className="mt-6 flex w-1/4 items-center justify-center rounded bg-neutral-700 px-4 py-2 font-bold text-white hover:bg-neutral-800"
               >
-                <path
-                  d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
-                  fill="#E5E7EB"
-                />
-                <path
-                  d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                  fill="currentColor"
-                />
-              </svg>
-              Updating...
-            </button>
+                <svg
+                  aria-hidden="true"
+                  role="status"
+                  className="mr-3 inline h-4 w-4 animate-spin text-white"
+                  viewBox="0 0 100 101"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    fill="#E5E7EB"
+                  />
+                  <path
+                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                    fill="currentColor"
+                  />
+                </svg>
+                Updating...
+              </button>
+            </div>
           ) : (
-            <button
-              type="submit"
-              disabled={buttonDisabled}
-              className="rounded bg-neutral-700 px-4 py-2 font-bold text-white hover:bg-neutral-800"
-            >
-              Update Profile
-            </button>
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                disabled={buttonDisabled}
+                className="mt-6 flex w-1/4 items-center justify-center rounded bg-neutral-700 px-4 py-2 font-bold text-white hover:bg-neutral-800"
+              >
+                Update Profile
+              </button>
+            </div>
           )}
         </form>
         <UpdateUserModal
