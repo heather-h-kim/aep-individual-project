@@ -149,7 +149,7 @@ const Rankings = () => {
         </div>
       );
     }
-
+    console.log('search', search);
     if (search !== '') {
       return (
         <div
@@ -179,24 +179,26 @@ const Rankings = () => {
                 })}
               </select>
             </div>
-            <form className="flex flex-col">
-              <label>Search by Username:</label>
-              <div className="flex flex-row items-center">
+
+            <form className="flex flex-row items-end">
+              <label>
+                Search by Username:
                 <input
                   className="mr-2 block min-w-min rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   type="text"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                 />
-                <button
-                  className="text-md rounded-lg bg-neutral-200 p-2 hover:bg-neutral-300"
-                  onClick={() => setSearch('')}
-                >
-                  Clear
-                </button>
-              </div>
+              </label>
+              <button
+                className="h-10 rounded-lg bg-neutral-200 px-2 py-1 text-sm hover:bg-neutral-300"
+                onClick={() => setSearch('')}
+              >
+                Clear
+              </button>
             </form>
           </div>
+
           <table className="table-auto text-center">
             <thead className="border-collapse border-b border-black text-xl">
               <tr>
