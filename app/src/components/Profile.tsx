@@ -172,7 +172,7 @@ const Profile = () => {
       >
         <Avatar />
         <form className="mt-4 flex w-full flex-col" onSubmit={handleSubmit}>
-          <div className="mx-4 mt-4 flex items-center">
+          <div className="mr-4 mt-4 flex items-center">
             <div className="w-1/5">
               <label
                 htmlFor="firstName"
@@ -195,7 +195,7 @@ const Profile = () => {
           {errors.firstName && (
             <span className="ml-40 text-red-500">{errors.firstName}</span>
           )}
-          <div className="mx-4 mt-4 flex items-center">
+          <div className="mr-4 mt-4 flex items-center">
             <div className="w-1/5">
               <label
                 htmlFor="lastName"
@@ -218,7 +218,7 @@ const Profile = () => {
           {errors.lastName && (
             <span className="ml-40 text-red-500">{errors.lastName}</span>
           )}
-          <div className="mx-4 mt-4 flex items-center">
+          <div className="mr-4 mt-4 flex items-center">
             <div className="w-1/5">
               <label
                 htmlFor="username"
@@ -241,7 +241,7 @@ const Profile = () => {
           {errors.userName && (
             <span className="ml-40 text-red-500">{errors.userName}</span>
           )}
-          <div className="mx-4 mt-4  flex items-center">
+          <div className="mr-4 mt-4  flex items-center">
             <div className="w-1/5">
               <label
                 htmlFor="email"
