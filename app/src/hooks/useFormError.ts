@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { getAllUsers } from '../services/userApi';
+import { useUserStore } from '../store/userStore';
 
 const useFormError = () => {
+  const globalUser = useUserStore(state => state.user);
   const [errors, setErrors] = useState({
     firstName: '',
     lastName: '',
@@ -78,7 +80,10 @@ const useFormError = () => {
             userName: 'Username cannot be longer than 10 characters',
           });
           setButtonDisabled(true);
-        } else if (usernames.includes(value.toUpperCase().trim())) {
+        } else if (
+          usernames.includes(value.toUpperCase().trim()) &&
+          globalUser.username !== value
+        ) {
           setErrors({
             ...errors,
             userName: 'Username is already taken',

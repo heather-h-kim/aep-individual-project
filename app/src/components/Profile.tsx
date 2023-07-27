@@ -193,7 +193,18 @@ const Profile = () => {
             </div>
           </div>
           {errors.firstName && (
-            <span className="ml-40 text-red-500">{errors.firstName}</span>
+            <div className="mr-4  flex items-center">
+              <div className="w-1/5"></div>
+              <span className="w-4/5 text-red-900">{errors.firstName}</span>
+            </div>
+          )}
+          {globalUser.firstName === 'first name' && (
+            <div className="mr-4  flex items-center">
+              <div className="w-1/5"></div>
+              <span className="w-4/5 text-red-900">
+                Please update your first name
+              </span>
+            </div>
           )}
           <div className="mr-4 mt-4 flex items-center">
             <div className="w-1/5">
@@ -216,7 +227,18 @@ const Profile = () => {
             </div>
           </div>
           {errors.lastName && (
-            <span className="ml-40 text-red-500">{errors.lastName}</span>
+            <div className="mr-4  flex items-center">
+              <div className="w-1/5"></div>
+              <span className="w-4/5 text-red-900">{errors.lastName}</span>
+            </div>
+          )}
+          {globalUser.lastName === 'last name' && (
+            <div className="mr-4  flex items-center">
+              <div className="w-1/5"></div>
+              <span className="w-4/5 text-red-900">
+                Please update your last name
+              </span>
+            </div>
           )}
           <div className="mr-4 mt-4 flex items-center">
             <div className="w-1/5">
