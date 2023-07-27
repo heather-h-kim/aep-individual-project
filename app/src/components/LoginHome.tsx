@@ -12,7 +12,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import LoadingSpinner from './LoadingSpinner';
 
 const LoginHome = () => {
-  const { isAuthenticated, isLoading, error } = useAuth0();
+  const { isAuthenticated } = useAuth0();
   const globalUser = useUserStore(state => state.user);
   const { themeBgColor, preview } = useColorsStore(state => ({
     themeBgColor: state.bgcolor,
@@ -22,9 +22,14 @@ const LoginHome = () => {
     currentSeasonId: state.currentSeasonId,
     updateCurrentSeasonId: state.updateCurrentSeasonId,
   }));
+  const style = {
+    ...(preview
+      ? { backgroundColor: themeBgColor }
+      : { backgroundColor: globalUser.bgcolor }),
+  };
   const client = useQueryClient();
 
-  //get the current season Id to prefetch rankings to display in the rankings page
+  //get the current seasonId to prefetch rankings to display in the rankings page
   useQuery({
     queryKey: ['CurrentSeason'],
     queryFn: getCurrentSeason,
@@ -62,11 +67,7 @@ const LoginHome = () => {
 
   return (
     <div
-      style={
-        preview
-          ? { backgroundColor: themeBgColor }
-          : { backgroundColor: globalUser.bgcolor }
-      }
+      style={style}
       className="my-10 flex h-screen flex-col items-center justify-center"
     >
       <h1 className=" pb-8 text-6xl font-bold">

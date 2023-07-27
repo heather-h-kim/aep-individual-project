@@ -39,6 +39,11 @@ const RoundSix = props => {
     isCorrect: state.isCorrect,
     resetIsCorrect: state.resetIsCorrect,
   }));
+  const style = {
+    ...(preview
+      ? { backgroundColor: themeBgColor }
+      : { backgroundColor: globalUser.bgcolor }),
+  };
   const [score, setScore] = useState(0);
   const [scoreIsReady, setScoreIsReady] = useState(false);
   const client = useQueryClient();
@@ -74,7 +79,7 @@ const RoundSix = props => {
     let delay;
     switch (state.step) {
       case 'showNumber':
-        delay = 3000;
+        delay = 4000;
         break;
       case 'showDistraction':
         delay = 15000;
@@ -187,15 +192,11 @@ const RoundSix = props => {
   if (state.step == 'showScoreButton') {
     return (
       <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
+        style={style}
         className="my-10 flex h-screen flex-row items-center justify-center"
       >
         <button
-          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          className="inline-block rounded bg-neutral-600 p-3 text-4xl font-medium text-white hover:bg-neutral-700"
           onClick={getScore}
         >
           See my score
@@ -207,23 +208,18 @@ const RoundSix = props => {
   if (state.step == 'showKeepPlaying') {
     return (
       <div
-        style={
-          preview
-            ? { backgroundColor: themeBgColor }
-            : { backgroundColor: globalUser.bgcolor }
-        }
+        style={style}
         className="my-10 flex h-screen flex-row items-center justify-center"
       >
         <Link
-          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          className="mr-0.5 inline-block rounded bg-neutral-600 p-3 text-4xl font-medium text-white hover:hover:bg-neutral-700"
           to={`/game-level${props.level + 1}/${props.level + 1}`}
           onClick={updateGame}
         >
-          {' '}
           Play next level
         </Link>
         <button
-          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          className="ml-0.5 inline-block rounded bg-neutral-600 p-3 text-4xl font-medium text-white hover:hover:bg-neutral-700"
           onClick={getScore}
         >
           Stop and see my score
@@ -238,14 +234,12 @@ const RoundSix = props => {
     if (!scoreIsReady) {
       return (
         <div
-          style={
-            preview
-              ? { backgroundColor: themeBgColor }
-              : { backgroundColor: globalUser.bgcolor }
-          }
+          style={style}
           className="my-10 flex h-screen flex-row items-center justify-center"
         >
-          <h1 className="text-8xl font-extrabold tracking-widest"> Wait...</h1>
+          <h1 className="animate-pulse text-8xl font-extrabold tracking-widest">
+            Wait...
+          </h1>
         </div>
       );
     }
@@ -253,16 +247,11 @@ const RoundSix = props => {
     if (scoreIsReady) {
       return (
         <div
-          style={
-            preview
-              ? { backgroundColor: themeBgColor }
-              : { backgroundColor: globalUser.bgcolor }
-          }
+          style={style}
           className="my-10 flex h-screen flex-col items-center justify-center"
         >
           <h1 className="text-7xl font-extrabold tracking-widest">
-            {' '}
-            Your score is:{score}
+            Your score is: {score}
           </h1>
         </div>
       );

@@ -50,7 +50,7 @@ const ShowQuestion = props => {
       style={style}
       className="my-10 flex h-screen flex-col items-center justify-center"
     >
-      <span className=" pb-8 text-4xl font-medium">What was the number?</span>
+      <span className=" pb-8 text-6xl font-medium">What was the number?</span>
       <form className="flex flex-row space-x-4" onSubmit={handleSubmit}>
         <label
           htmlFor="answer"
@@ -60,14 +60,14 @@ const ShowQuestion = props => {
           type="number"
           id="answer"
           name="answer"
-          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900  placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+          className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500"
           required
           value={answer}
           onChange={e => setAnswer(e.target.value)}
           autoFocus
         />
         <button
-          className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+          className="inline-block rounded bg-neutral-600 px-3 py-1 text-xl font-medium text-white hover:bg-neutral-700"
           type="submit"
         >
           Enter

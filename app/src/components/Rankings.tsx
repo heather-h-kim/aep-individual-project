@@ -80,11 +80,7 @@ const Rankings = () => {
     if (search == '') {
       return (
         <div
-          style={
-            preview
-              ? { backgroundColor: themeBgColor }
-              : { backgroundColor: globalUser.bgcolor }
-          }
+          style={style}
           className="my-10 flex h-screen flex-col px-20 py-14 "
         >
           <div className="mb-10 mt-3 flex flex-row justify-between">
@@ -134,12 +130,12 @@ const Rankings = () => {
               {rankingsToDisplayPerPage.map(ranking => {
                 return (
                   <tr
-                    className="h-3 border-collapse border-b border-black"
+                    className="border-collapse border-b border-black"
                     key={ranking.userName}
                   >
-                    <td>{ranking.rank}</td>
-                    <td>{ranking.userName}</td>
-                    <td>{ranking.topScore}</td>
+                    <td className="py-2.5">{ranking.rank}</td>
+                    <td className="py-2.5">{ranking.userName}</td>
+                    <td className="py-2.5">{ranking.topScore}</td>
                   </tr>
                 );
               })}
@@ -153,7 +149,7 @@ const Rankings = () => {
         </div>
       );
     }
-
+    console.log('search', search);
     if (search !== '') {
       return (
         <div
@@ -183,24 +179,26 @@ const Rankings = () => {
                 })}
               </select>
             </div>
-            <form className="flex flex-row items-center">
+
+            <form className="flex flex-row items-end">
               <label>
                 Search by Username:
                 <input
-                  className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+                  className="mr-2 block min-w-min rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   type="text"
                   value={search}
                   onChange={e => setSearch(e.target.value)}
                 />
               </label>
               <button
-                className="rounded-lg bg-gray-50"
+                className="h-10 rounded-lg bg-neutral-200 px-2 py-1 text-sm hover:bg-neutral-300"
                 onClick={() => setSearch('')}
               >
-                back
+                Clear
               </button>
             </form>
           </div>
+
           <table className="table-auto text-center">
             <thead className="border-collapse border-b border-black text-xl">
               <tr>

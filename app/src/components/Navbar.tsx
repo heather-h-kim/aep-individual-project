@@ -96,7 +96,76 @@ const Navbar = () => {
       globalUser.firstName === 'first name' ||
       globalUser.lastName === 'last name'
     ) {
-      return <Navigate to="/profile" />;
+      return (
+        <div>
+          <Navigate to="/profile" />
+          <nav
+            style={navStyle}
+            className="mx-auto flex max-w-full flex-wrap items-center justify-between p-4"
+          >
+            <span
+              style={spanStyle}
+              className="self-center whitespace-nowrap text-2xl font-semibold"
+            >
+              Number Memory Game
+            </span>
+            <div
+              className="hidden w-full md:block md:w-auto"
+              id="navbar-default"
+            >
+              <ul className="mt-4 flex flex-col items-center p-4 text-xl font-medium md:mt-0 md:flex-row md:space-x-8 md:p-0">
+                <li className="mr-3">
+                  <Link
+                    style={linkStyle}
+                    className="inline-block rounded px-3 py-1 "
+                    to="/loginHome"
+                    onClick={clearGame}
+                  >
+                    Home
+                  </Link>
+                </li>
+                <li className="mr-3">
+                  <Link
+                    style={linkStyle}
+                    className="inline-block rounded px-3 py-1 "
+                    to="/demo"
+                    onClick={clearGame}
+                  >
+                    Demo
+                  </Link>
+                </li>
+                <li className="mr-3">
+                  <Dropdown />
+                </li>
+                <li className="mr-3">
+                  <Link
+                    style={linkStyle}
+                    className="inline-block rounded px-3 py-1 "
+                    to="/rankings"
+                    onClick={clearGame}
+                  >
+                    Rankings
+                  </Link>
+                </li>
+                <li className="mr-3">
+                  <Link
+                    style={linkStyle}
+                    className="inline-block rounded px-3 py-1 "
+                    to="/profile"
+                    onClick={clearGame}
+                  >
+                    Profile
+                  </Link>
+                </li>
+                <li className="mr-3">
+                  <Logout />
+                </li>
+                <Avatar />
+              </ul>
+            </div>
+          </nav>
+        </div>
+      );
     }
 
     return (

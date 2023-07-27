@@ -16,9 +16,9 @@ const ShowCorrect = () => {
   return (
     <div
       style={style}
-      className="my-10 flex h-screen flex-col items-center justify-center"
+      className="my-10 flex h-screen flex-col items-center justify-center "
     >
-      <h1 className="text-8xl font-extrabold tracking-widest">Correct!</h1>
+      <h1 className="px-8 text-7xl font-extrabold tracking-widest">Correct!</h1>
     </div>
   );
 };

@@ -1,9 +1,6 @@
-import Timer from './Timer';
 import React, { useEffect, useState } from 'react';
 import useGetGifs from '../hooks/useGetGifs';
 import useRandomFacts from '../hooks/useRandomFacts';
-import Giphy from './Giphy';
-import RandomFacts from './RandomFacts';
 import { useDistractionStore } from '../store/distractionStore';
 import DemoTimer from './DemoTimer';
 import { useUserStore } from '../store/userStore';
@@ -16,11 +13,19 @@ const Demo = () => {
     themeFgColor: state.fgcolor,
     preview: state.preview,
   }));
+  const [isHover, setIsHover] = useState(false);
   const style = {
     ...(globalUser.userId
       ? preview
         ? { backgroundColor: themeBgColor }
         : { backgroundColor: globalUser.bgcolor }
+      : { backgroundColor: '#ECFEFF' }),
+  };
+  const buttonStyle = {
+    ...(globalUser.userId
+      ? isHover
+        ? { backgroundColor: '#404040' }
+        : { backgroundColor: '#525252' }
       : { backgroundColor: '#ECFEFF' }),
   };
 
@@ -127,8 +132,6 @@ const Demo = () => {
     setAnswer('');
   };
 
-  console.log('test', globalUser);
-
   if (step == 'showNumber') {
     return (
       <div
@@ -153,7 +156,7 @@ const Demo = () => {
           style={style}
           className="my-10 flex h-screen flex-col items-center justify-center"
         >
-          <img className="h-180 w-260" src={gif[0]} alt="cat gif" />
+          <img src={gif[0]} alt="cat gif" />
         </div>
       );
     }
@@ -164,7 +167,9 @@ const Demo = () => {
           style={style}
           className="my-10 flex h-screen flex-col items-center justify-center"
         >
-          <h1 className=" px-8 pb-8 text-6xl font-medium">{randomFact[0]}</h1>
+          <h1 className="justify-center px-8 text-6xl font-medium">
+            {randomFact[0]}
+          </h1>
         </div>
       );
     }
@@ -176,7 +181,7 @@ const Demo = () => {
         style={style}
         className="my-10 flex h-screen flex-col items-center justify-center"
       >
-        <span className=" pb-8 text-4xl font-medium">What was the number?</span>
+        <span className=" pb-8 text-6xl font-medium">What was the number?</span>
         <form className="flex flex-row space-x-4" onSubmit={handleSubmit}>
           <label
             htmlFor="answer"
@@ -186,7 +191,7 @@ const Demo = () => {
             type="number"
             id="answer"
             name="answer"
-            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900  placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500"
+            className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900  placeholder-gray-700 focus:border-blue-500 focus:ring-blue-500"
             // required
             value={answer}
             onChange={e => {
@@ -194,7 +199,7 @@ const Demo = () => {
             }}
           />
           <button
-            className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+            className="inline-block rounded bg-blue-500 px-3 py-2 text-2xl font-medium text-white hover:bg-blue-700"
             type="submit"
           >
             Enter
@@ -235,9 +240,8 @@ const Demo = () => {
         style={style}
         className="my-10 flex h-screen flex-col items-center justify-center"
       >
-        <h1 className=" pb-8 text-6xl font-medium">
-          Your score is:{' '}
-          <span className="font-bold text-pink-900">{score}</span>
+        <h1 className="text-7xl font-extrabold tracking-widest">
+          Your score is: {score}
         </h1>
       </div>
     );
@@ -260,7 +264,10 @@ const Demo = () => {
       className="my-10 flex h-screen flex-col items-center justify-center "
     >
       <button
-        className="inline-block rounded border border-blue-500 bg-blue-500 px-3 py-1 text-xl font-medium text-white hover:bg-blue-700"
+        style={buttonStyle}
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+        className="inline-block rounded px-3 py-2 text-6xl font-medium text-white"
         onClick={handleClick}
       >
         START
