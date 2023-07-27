@@ -13,7 +13,7 @@ const useSetTimeout = props => {
     let delay;
     switch (state.step) {
       case 'showNumber':
-        delay = 3000;
+        delay = 4000;
         break;
       case 'showDistraction':
         delay = 15000;
