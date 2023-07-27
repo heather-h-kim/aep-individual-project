@@ -239,7 +239,10 @@ const Profile = () => {
             </div>
           </div>
           {errors.userName && (
-            <span className="ml-40 text-red-500">{errors.userName}</span>
+            <div className="mr-4  flex items-center">
+              <div className="w-1/5"></div>
+              <span className="w-4/5 text-red-900">{errors.userName}</span>
+            </div>
           )}
           <div className="mr-4 mt-4  flex items-center">
             <div className="w-1/5">
@@ -261,8 +264,10 @@ const Profile = () => {
               />
             </div>
           </div>
-
-          <span className="ml-40 text-sky-900">*Email cannot be changed</span>
+          <div className="mr-4  flex items-center">
+            <div className="w-1/5"></div>
+            <span className="w-4/5 text-sky-900">*Email cannot be changed</span>
+          </div>
 
           <div className="mb-6 mt-6 flex flex-row justify-around">
             <div className="flex flex-col">

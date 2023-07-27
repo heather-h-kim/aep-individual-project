@@ -13,11 +13,19 @@ const Demo = () => {
     themeFgColor: state.fgcolor,
     preview: state.preview,
   }));
+  const [isHover, setIsHover] = useState(false);
   const style = {
     ...(globalUser.userId
       ? preview
         ? { backgroundColor: themeBgColor }
         : { backgroundColor: globalUser.bgcolor }
+      : { backgroundColor: '#ECFEFF' }),
+  };
+  const buttonStyle = {
+    ...(globalUser.userId
+      ? isHover
+        ? { backgroundColor: '#404040' }
+        : { backgroundColor: '#525252' }
       : { backgroundColor: '#ECFEFF' }),
   };
 
@@ -256,7 +264,10 @@ const Demo = () => {
       className="my-10 flex h-screen flex-col items-center justify-center "
     >
       <button
-        className="inline-block rounded bg-blue-500 px-3 py-2 text-6xl font-medium text-white hover:bg-blue-700"
+        style={buttonStyle}
+        onMouseEnter={() => setIsHover(true)}
+        onMouseLeave={() => setIsHover(false)}
+        className="inline-block rounded px-3 py-2 text-6xl font-medium text-white"
         onClick={handleClick}
       >
         START
