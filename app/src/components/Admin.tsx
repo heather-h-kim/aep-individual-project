@@ -11,7 +11,7 @@ import LoadingSpinner from './LoadingSpinner';
 
 const Admin = () => {
   const globalUser = useUserStore(state => state.user);
-  const { themeBgColor, themeFgColor, preview } = useColorsStore(state => ({
+  const { themeBgColor, preview } = useColorsStore(state => ({
     themeBgColor: state.bgcolor,
     themeFgColor: state.fgcolor,
     preview: state.preview,
@@ -21,7 +21,7 @@ const Admin = () => {
       ? { backgroundColor: themeBgColor }
       : { backgroundColor: globalUser.bgcolor }),
   };
-  const { isLoading, isSuccess, data, isRefetching } = useQuery({
+  const { isLoading, isSuccess, data } = useQuery({
     queryKey: ['Seasons'],
     queryFn: getAllSeasons,
     onSuccess: data => {

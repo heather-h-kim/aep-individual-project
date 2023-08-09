@@ -11,7 +11,7 @@ export const CreateSeasonModal = ({
 }) => {
   const queryClient = useQueryClient();
   const [isUpdating, setIsUpdating] = useState(false);
-  const [isDisabled, setIsDisabled] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(false);
   const [errors, setErrors] = useState({
     startDate: '',
     endDate: '',
@@ -69,6 +69,11 @@ export const CreateSeasonModal = ({
         });
         setIsDisabled(true);
       } else {
+        setErrors({
+          ...errors,
+          startDate: '',
+          update: '',
+        });
         setIsDisabled(false);
       }
     }
@@ -81,6 +86,13 @@ export const CreateSeasonModal = ({
             'The start date of the new season should be later than the end date of the previous season',
         });
         setIsDisabled(true);
+      } else {
+        setErrors({
+          ...errors,
+          startDate: '',
+          update: '',
+        });
+        setIsDisabled(false);
       }
     }
 
@@ -103,6 +115,7 @@ export const CreateSeasonModal = ({
           ...errors,
           startDate: '',
           endDate: '',
+          update: '',
         });
         setIsDisabled(false);
       }
@@ -119,29 +132,20 @@ export const CreateSeasonModal = ({
     console.log('enddate', dateHours, 'startdate', dates.startDate);
     setDates({ ...dates, endDate: dateHours });
 
-    if (dates.startDate) {
-      if (dateHours < dates.startDate) {
-        setErrors({
-          ...errors,
-          endDate: 'The end date should be later than the start date',
-        });
-        setIsDisabled(true);
-      } else {
-        setErrors({
-          ...errors,
-          startDate: '',
-          endDate: '',
-        });
-        setIsDisabled(false);
-      }
-    }
-
-    if (dates.startDate < dates.endDate) {
+    if (dateHours < dates.startDate) {
+      setErrors({
+        ...errors,
+        endDate: 'The end date should be later than the start date',
+      });
+      setIsDisabled(true);
+    } else {
       setErrors({
         ...errors,
         startDate: '',
         endDate: '',
+        update: '',
       });
+      setIsDisabled(false);
     }
   };
 
@@ -150,15 +154,18 @@ export const CreateSeasonModal = ({
     e.preventDefault();
     console.log('in create season submit', dates, errors);
 
-    // if (!dates.startDate || !dates.endDate) {
-    //   setErrors({
-    //     ...errors,
-    //     update: 'The start and end dates should be selected',
-    //   });
-    //   setIsDisabled(true);
-    // } else {
-    //   setIsDisabled(false);
-    // }
+    if (!dates.startDate || !dates.endDate) {
+      setErrors({
+        ...errors,
+        update: 'The start and end dates should be selected',
+      });
+      return;
+    } else {
+      setErrors({
+        ...errors,
+        update: '',
+      });
+    }
 
     const createSeason = {
       start_date: dates.startDate,
