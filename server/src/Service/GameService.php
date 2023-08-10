@@ -18,8 +18,6 @@ use App\Dto\Outgoing\GameDto;
 class GameService extends AbstractDtoTransformers
 {
     private GameRepository $gameRepository;
-    private SeasonRepository $seasonRepository;
-    private UserRepository $userRepository;
     private LevelService $levelService;
     private RoundService $roundService;
     private SeasonService $seasonService;
@@ -50,12 +48,11 @@ class GameService extends AbstractDtoTransformers
 
         //get info for the user field
         $userId = $createGameRoundDto->getUserId();
-        $user = $this->userRepository->find($userId);
+        $user = $this->userService->getUserEntityById($userId);
 
         //get info for the played_at and season fields
         $currentDate = new DateTime('now', new DateTimeZone('UTC'));
-//        $currentDate = new DateTime('now');
-        $season = $this->seasonRepository->findOneByCurrentDate($currentDate);
+        $season = $this->seasonService->getSeasonEntityByCurrentDate($currentDate);
 
         //update newGame
         $newGame->setUser($user);
@@ -64,6 +61,13 @@ class GameService extends AbstractDtoTransformers
 
         $this->gameRepository->save($newGame, true);
 
+        $score = $this->createLevelsRounds($createGameRoundDto, $newGame);
+        return $score;
+    }
+
+
+    private function createLevelsRounds(CreateGameLevelRoundDto $createGameRoundDto, Game $newGame): int
+    {
         /**
          * @var CreateLevelDto[] $levels
          * @var CreateLevelDto $levelDto
@@ -86,13 +90,13 @@ class GameService extends AbstractDtoTransformers
 
             //create rounds played
             foreach( $rounds as $roundDto){
-               $newRound=$this->roundService->createRound($roundDto, $newLevel);
+                $newRound=$this->roundService->createRound($roundDto, $newLevel);
 
-               //calculate score
-               $unitScore = $newRound->getLevel()->getLevelLookupId()->getUnitScore();
-               if($newRound->getNumberShown() === $newRound->getNumberEntered()){
-                   $score = $score+$unitScore;
-               }
+                //calculate score
+                $unitScore = $newRound->getLevel()->getLevelLookupId()->getUnitScore();
+                if($newRound->getNumberShown() === $newRound->getNumberEntered()){
+                    $score = $score+$unitScore;
+                }
             }
         }
 
@@ -147,17 +151,6 @@ class GameService extends AbstractDtoTransformers
        return $finalArray;
 
     }
-
-//    public function getAllRankings():array
-//    {
-//        $allSeasons = $this->seasonService->getAllSeasons();
-//        $array = [];
-//        foreach($allSeasons as $season){
-//
-//            $this->getRankingBySeason($season->getId());
-//
-//        }
-//    }
 
     public function calculateScorePerGame(Game $game): int
     {

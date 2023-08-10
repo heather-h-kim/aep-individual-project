@@ -80,35 +80,33 @@ export const CreateSeasonModal = ({
       }
     }
 
-    if (dates.prevEndDate && !dates.endDate) {
-      if (dateHours < dates.prevEndDate) {
-        setErrors({
-          ...errors,
-          startDate:
-            'The start date of the new season should be later than the end date of the previous season',
-          update: '',
-        });
-        setIsDisabled(true);
-      }
+    if (dates.prevEndDate && !dates.endDate && dateHours < dates.prevEndDate) {
+      setErrors({
+        ...errors,
+        startDate:
+          'The start date of the new season should be later than the end date of the previous season',
+        update: '',
+      });
+      setIsDisabled(true);
     }
 
-    if (dates.prevEndDate && dates.endDate) {
-      if (dateHours < dates.prevEndDate) {
-        setErrors({
-          ...errors,
-          startDate:
-            'The start date of the new season should be later than the end date of the previous season',
-          update: '',
-        });
-        setIsDisabled(true);
-      } else if (dateHours > dates.endDate) {
-        setErrors({
-          ...errors,
-          startDate: 'The start date should be earlier than the end date',
-          update: '',
-        });
-        setIsDisabled(true);
-      }
+    if (dates.prevEndDate && dates.endDate && dateHours < dates.prevEndDate) {
+      setErrors({
+        ...errors,
+        startDate:
+          'The start date of the new season should be later than the end date of the previous season',
+        update: '',
+      });
+      setIsDisabled(true);
+    }
+
+    if (dates.prevEndDate && dates.endDate && dateHours > dates.endDate) {
+      setErrors({
+        ...errors,
+        startDate: 'The start date should be earlier than the end date',
+        update: '',
+      });
+      setIsDisabled(true);
     }
   };
 

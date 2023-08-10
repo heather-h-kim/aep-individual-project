@@ -5,7 +5,12 @@ import { useUserStore } from '../store/userStore';
 
 const useFormError = () => {
   const globalUser = useUserStore(state => state.user);
-  const [errors, setErrors] = useState({
+  interface errors {
+    firstName: string;
+    lastName: string;
+    userName: string;
+  }
+  const [errors, setErrors] = useState<errors>({
     firstName: '',
     lastName: '',
     userName: '',
