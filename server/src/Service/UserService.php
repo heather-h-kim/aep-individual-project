@@ -80,6 +80,11 @@ class UserService extends AbstractDtoTransformers
         return $this->transformToDto($user);
     }
 
+    public function getUserEntityById(int $id): ?User
+    {
+        return $this->userRepository->find($id);
+    }
+
     public function getUserByToken(string $token): ?UserDto
     {
         $user = $this->userRepository->findOneBy(['auth0token' => $token]);

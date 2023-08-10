@@ -33,7 +33,17 @@ const Profile = () => {
       : { backgroundColor: globalUser.bgcolor }),
   };
 
-  const [formData, setFormData] = useState({
+  interface data {
+    userId: number | undefined;
+    firstName: string | undefined;
+    lastName: string | undefined;
+    username: string | undefined;
+    email: string | undefined;
+    bgcolor: string | undefined;
+    fgcolor: string | undefined;
+  }
+
+  const [formData, setFormData] = useState<data>({
     userId: 0,
     firstName: '',
     lastName: '',
@@ -70,27 +80,15 @@ const Profile = () => {
 
   //set initial formData state with globalUser
   useEffect(() => {
-    if (
-      globalUser.auth0token &&
-      globalUser.userId &&
-      globalUser.firstName &&
-      globalUser.lastName &&
-      globalUser.username &&
-      globalUser.email &&
-      globalUser.bgcolor &&
-      globalUser.fgcolor
-    ) {
-      setFormData({
-        auth0token: globalUser.auth0token,
-        userId: globalUser.userId,
-        firstName: globalUser.firstName,
-        lastName: globalUser.lastName,
-        username: globalUser.username,
-        email: globalUser.email,
-        bgcolor: globalUser.bgcolor,
-        fgcolor: globalUser.fgcolor,
-      });
-    }
+    setFormData({
+      userId: globalUser.userId,
+      firstName: globalUser.firstName,
+      lastName: globalUser.lastName,
+      username: globalUser.username,
+      email: globalUser.email,
+      bgcolor: globalUser.bgcolor,
+      fgcolor: globalUser.fgcolor,
+    });
   }, [globalUser]);
 
   const handleChange = e => {
@@ -119,27 +117,17 @@ const Profile = () => {
     updatePreviewState(false);
 
     //reset the formData
-    if (
-      globalUser.userId &&
-      globalUser.firstName &&
-      globalUser.lastName &&
-      globalUser.username &&
-      globalUser.email &&
-      globalUser.bgcolor &&
-      globalUser.fgcolor
-    ) {
-      setFormData({
-        userId: globalUser.userId,
-        firstName: globalUser.firstName,
-        lastName: globalUser.lastName,
-        username: globalUser.username,
-        email: globalUser.email,
-        bgcolor: globalUser.bgcolor,
-        fgcolor: globalUser.fgcolor,
-      });
+    setFormData({
+      userId: globalUser.userId,
+      firstName: globalUser.firstName,
+      lastName: globalUser.lastName,
+      username: globalUser.username,
+      email: globalUser.email,
+      bgcolor: globalUser.bgcolor,
+      fgcolor: globalUser.fgcolor,
+    });
 
-      console.log('formData updated!', formData);
-    }
+    console.log('formData updated!', formData);
   };
 
   //update the user profile when update option in the modal is clicked

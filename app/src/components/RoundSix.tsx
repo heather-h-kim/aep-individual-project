@@ -21,7 +21,13 @@ const RoundSix = props => {
   }));
   const globalUser = useUserStore(state => state.user);
   const currentSeasonId = useSeasonStore(state => state.currentSeasonId);
-  const [state, setState] = useState({
+  interface state {
+    levelNumber: number;
+    roundNumber: number;
+    numberShown: number;
+    step: string;
+  }
+  const [state, setState] = useState<state>({
     levelNumber: props.level,
     roundNumber: props.round,
     numberShown: props.number,
@@ -242,9 +248,7 @@ const RoundSix = props => {
           </h1>
         </div>
       );
-    }
-
-    if (scoreIsReady) {
+    } else {
       return (
         <div
           style={style}
@@ -257,6 +261,8 @@ const RoundSix = props => {
       );
     }
   }
+
+  return <></>;
 };
 
 export default RoundSix;

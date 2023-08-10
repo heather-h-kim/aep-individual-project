@@ -55,6 +55,14 @@ class SeasonService extends AbstractDtoTransformers
     }
 
     /**
+     * @throws NonUniqueResultException
+     */
+    public function getSeasonEntityByCurrentDate(DateTime $currentDate): Season
+    {
+        return $this->seasonRepository->findOneByCurrentDate($currentDate);
+    }
+
+    /**
      * @throws \Exception
      */
     public function createSeason(CreateSeasonDto $createSeasonDto): SeasonDto

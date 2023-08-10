@@ -51,14 +51,15 @@ export const UpdateSeasonModal = ({
     setErrors({
       ...errors,
       startDate: '',
+      endDate: '',
     });
+    setIsDisabled(false);
 
     const dateHours = date.setHours(0, 0, 0);
+    setDates({ ...dates, startDate: dateHours });
+
     //input validation
     if (dates.prevEndDate) {
-      console.log(dates.prevEndDate);
-      console.log(dateHours);
-
       if (dateHours < dates.prevEndDate) {
         setErrors({
           ...errors,
@@ -66,18 +67,13 @@ export const UpdateSeasonModal = ({
             'The start date should be later than the end date of the previous season',
         });
         setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
-      }
-
-      if (dateHours > dates.endDate) {
+        console.log('update button disabled');
+      } else if (dateHours > dates.endDate) {
         setErrors({
           ...errors,
           startDate: 'The start date should be earlier than the end date',
         });
         setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
       }
     }
 
@@ -88,21 +84,21 @@ export const UpdateSeasonModal = ({
           startDate: 'The start date should be earlier than the end date',
         });
         setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
       }
     }
-
-    setDates({ ...dates, startDate: dateHours });
   };
 
   const handleOnChangeUpdateEndDate = date => {
     setErrors({
       ...errors,
+      startDate: '',
       endDate: '',
     });
+    setIsDisabled(false);
 
     const dateHours = date.setHours(23, 59, 59);
+    setDates({ ...dates, endDate: dateHours });
+
     //input validation
     if (!dates.nextStartDate) {
       if (dateHours < dates.startDate) {
@@ -111,8 +107,6 @@ export const UpdateSeasonModal = ({
           endDate: 'The end date should be later than the start date',
         });
         setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
       }
     }
 
@@ -124,21 +118,14 @@ export const UpdateSeasonModal = ({
             'The end date should be earlier than the start date of the next season',
         });
         setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
-      }
-
-      if (dateHours < dates.startDate) {
+      } else if (dateHours < dates.startDate) {
         setErrors({
           ...errors,
           endDate: 'The end date should be later than the start date',
         });
         setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
       }
     }
-    setDates({ ...dates, endDate: dateHours });
   };
 
   const handleSubmit = e => {

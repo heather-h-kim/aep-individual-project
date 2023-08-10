@@ -53,12 +53,16 @@ export const CreateSeasonModal = ({
     setErrors({
       ...errors,
       startDate: '',
+      endDate: '',
       update: '',
     });
+    setIsDisabled(false);
 
     const dateHours = date.setHours(0, 0, 0);
+    setDates({ ...dates, startDate: dateHours });
 
     //input validation
+
     if (!dates.prevEndDate && dates.endDate) {
       if (dateHours > dates.endDate) {
         setErrors({
@@ -67,60 +71,69 @@ export const CreateSeasonModal = ({
         });
         setIsDisabled(true);
       } else {
-        setIsDisabled(false);
-      }
-    }
-
-    if (dates.prevEndDate) {
-      if (dateHours < dates.prevEndDate) {
         setErrors({
           ...errors,
-          startDate:
-            'The start date of the new season should be later than the end date of the previous season',
+          startDate: '',
+          update: '',
         });
-        setIsDisabled(true);
-      } else {
         setIsDisabled(false);
-      }
-
-      if (dates.endDate) {
-        if (dateHours > dates.endDate) {
-          setErrors({
-            ...errors,
-            startDate: 'The start date should be earlier than the end date',
-          });
-          setIsDisabled(true);
-        } else {
-          setIsDisabled(false);
-        }
       }
     }
 
-    setDates({ ...dates, startDate: dateHours });
+    if (dates.prevEndDate && !dates.endDate && dateHours < dates.prevEndDate) {
+      setErrors({
+        ...errors,
+        startDate:
+          'The start date of the new season should be later than the end date of the previous season',
+        update: '',
+      });
+      setIsDisabled(true);
+    }
+
+    if (dates.prevEndDate && dates.endDate && dateHours < dates.prevEndDate) {
+      setErrors({
+        ...errors,
+        startDate:
+          'The start date of the new season should be later than the end date of the previous season',
+        update: '',
+      });
+      setIsDisabled(true);
+    }
+
+    if (dates.prevEndDate && dates.endDate && dateHours > dates.endDate) {
+      setErrors({
+        ...errors,
+        startDate: 'The start date should be earlier than the end date',
+        update: '',
+      });
+      setIsDisabled(true);
+    }
   };
 
   const handleOnChangeEndDate = date => {
     setErrors({
       ...errors,
+      startDate: '',
       endDate: '',
       update: '',
     });
+    setIsDisabled(false);
+
     const dateHours = date.setHours(23, 59, 59);
+    console.log('enddate', dateHours, 'startdate', dates.startDate);
     setDates({ ...dates, endDate: dateHours });
 
-    if (dates.startDate) {
-      if (dateHours < dates.startDate) {
-        setErrors({
-          ...errors,
-          endDate: 'The end date should be later than the start date',
-        });
-        setIsDisabled(true);
-      } else {
-        setIsDisabled(false);
-      }
+    if (dateHours < dates.startDate) {
+      setErrors({
+        ...errors,
+        endDate: 'The end date should be later than the start date',
+        update: '',
+      });
+      setIsDisabled(true);
     }
   };
 
+  console.log(errors);
   const handleSubmit = e => {
     e.preventDefault();
     console.log('in create season submit', dates, errors);
@@ -130,9 +143,7 @@ export const CreateSeasonModal = ({
         ...errors,
         update: 'The start and end dates should be selected',
       });
-      setIsDisabled(true);
-    } else {
-      setIsDisabled(false);
+      return;
     }
 
     const createSeason = {
@@ -148,6 +159,7 @@ export const CreateSeasonModal = ({
       endDate: '',
       update: '',
     });
+    setIsDisabled(true);
   };
 
   const closeModal = () => {

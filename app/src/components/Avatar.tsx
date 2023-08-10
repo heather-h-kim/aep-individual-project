@@ -11,8 +11,6 @@ const Avatar = () => {
   const themeBgColor = useColorsStore(state => state.bgcolor);
   const themeFgColor = useColorsStore(state => state.fgcolor);
   const preview = useColorsStore(state => state.preview);
-  // console.log(avatar);
-  // console.log(globalUser.bgcolor);
 
   return (
     <>
